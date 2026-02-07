@@ -15,6 +15,21 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                        {{ __('News') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.documents.index')" :active="request()->routeIs('admin.documents.*')">
+                        {{ __('Documents') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.case-studies.index')" :active="request()->routeIs('admin.case-studies.*')">
+                        {{ __('Case Studies') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.team-members.index')" :active="request()->routeIs('admin.team-members.*')">
+                        {{ __('Team') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.*')">
+                        {{ __('Contacts') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +84,21 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                {{ __('News') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.documents.index')" :active="request()->routeIs('admin.documents.*')">
+                {{ __('Documents') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.case-studies.index')" :active="request()->routeIs('admin.case-studies.*')">
+                {{ __('Case Studies') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.team-members.index')" :active="request()->routeIs('admin.team-members.*')">
+                {{ __('Team') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.*')">
+                {{ __('Contacts') }}
             </x-responsive-nav-link>
         </div>
 

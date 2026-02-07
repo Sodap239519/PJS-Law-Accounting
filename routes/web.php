@@ -40,15 +40,20 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 // Admin Routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Admin CRUD routes will be added here later
+    // Admin CRUD routes
+    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+    Route::resource('documents', \App\Http\Controllers\Admin\DocumentController::class);
+    Route::resource('case-studies', \App\Http\Controllers\Admin\CaseStudyController::class);
+    Route::resource('team-members', \App\Http\Controllers\Admin\TeamMemberController::class);
+    Route::get('contacts', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contacts.index');
+    Route::get('contacts/{id}', [\App\Http\Controllers\Admin\ContactController::class, 'show'])->name('contacts.show');
+    Route::delete('contacts/{id}', [\App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('contacts.destroy');
 });
 
 require __DIR__.'/auth.php';
