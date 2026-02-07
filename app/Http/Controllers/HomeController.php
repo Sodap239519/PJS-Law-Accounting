@@ -9,7 +9,13 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        return view('home.index');
+        $latestNews = \App\Models\News::published()
+            ->with('category')
+            ->orderBy('published_at', 'desc')
+            ->limit(3)
+            ->get();
+            
+        return view('home', compact('latestNews'));
     }
 
     public function aboutLegal(): View
@@ -24,8 +30,6 @@ class HomeController extends Controller
 
     public function vision(): View
     {
-        $visionText = 'ความเชี่ยวชาญเหนือระดับ เปลี่ยนเรื่องกฎหมายให้เป็นเรื่องง่าย เพื่อทุกความสำเร็จของคุณและธุรกิจ';
-        
-        return view('home.vision', compact('visionText'));
+        return view('vision');
     }
 }

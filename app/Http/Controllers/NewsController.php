@@ -49,6 +49,6 @@ class NewsController extends Controller
             ->limit(3)
             ->get();
 
-        return view('news.show', compact('newsItem', 'relatedNews'));
+        return view('news.show', compact('news', 'relatedNews'));
     }
 }

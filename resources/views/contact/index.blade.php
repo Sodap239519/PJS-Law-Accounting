@@ -56,7 +56,7 @@
                     </div>
                     @endif
 
-                    <form action="{{ route('contact.submit') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
                         @csrf
 
                         <!-- Name -->

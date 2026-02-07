@@ -26,29 +26,23 @@ class CaseStudyController extends Controller
             }
         }
 
-        $caseStudies = $query->paginate(9);
+        $cases = $query->paginate(9);
         $categories = Category::where('type', 'case_study')
             ->where('is_active', true)
             ->get();
 
-        return view('case-studies.index', compact('caseStudies', 'categories'));
+        return view('cases.index', compact('cases', 'categories'));
     }
 
     public function show(string $slug): View
     {
-        $caseStudy = CaseStudy::published()
+        $case = CaseStudy::published()
             ->with('category')
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $caseStudy->increment('views');
+        $case->increment('views');
 
-        $relatedCaseStudies = CaseStudy::published()
-            ->where('id', '!=', $caseStudy->id)
-            ->where('category_id', $caseStudy->category_id)
-            ->limit(3)
-            ->get();
-
-        return view('case-studies.show', compact('caseStudy', 'relatedCaseStudies'));
+        return view('cases.show', compact('case'));
     }
 }
