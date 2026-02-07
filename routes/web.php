@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\CaseStudyController;
@@ -20,9 +23,12 @@ Route::get('/lang/{locale}', function ($locale) {
 
 // Frontend Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 Route::get('/about/legal', [HomeController::class, 'aboutLegal'])->name('about.legal');
 Route::get('/about/accounting', [HomeController::class, 'aboutAccounting'])->name('about.accounting');
 Route::get('/vision', [HomeController::class, 'vision'])->name('vision');
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 
