@@ -13,14 +13,18 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $statistics = [
-            'news_count' => News::count(),
-            'documents_count' => Document::count(),
-            'case_studies_count' => CaseStudy::count(),
-            'team_members_count' => TeamMember::count(),
-            'unread_contacts_count' => Contact::where('is_read', false)->count(),
-        ];
+        $newsCount = News::count();
+        $documentsCount = Document::count();
+        $caseStudiesCount = CaseStudy::count();
+        $teamMembersCount = TeamMember::count();
+        $unreadContactsCount = Contact::where('is_read', false)->count();
 
-        return view('admin.dashboard.index', compact('statistics'));
+        return view('dashboard', compact(
+            'newsCount',
+            'documentsCount',
+            'caseStudiesCount',
+            'teamMembersCount',
+            'unreadContactsCount'
+        ));
     }
 }
