@@ -38,6 +38,11 @@ Route::get('/downloads/{id}/download', [DocumentController::class, 'download'])-
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+// Dashboard redirect (for Breeze compatibility)
+Route::middleware(['auth'])->get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->name('dashboard');
+
 // Admin Routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
