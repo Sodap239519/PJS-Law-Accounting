@@ -8,6 +8,8 @@ return [
     'news' => 'News & Activities',
     'downloads' => 'Downloads',
     'cases' => 'Case Studies',
+    'services' => 'Services',
+    'faq' => 'FAQ',
     'contact' => 'Contact Us',
     'language' => 'Language',
     'read_more' => 'Read More',
