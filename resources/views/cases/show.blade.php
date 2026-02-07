@@ -35,7 +35,7 @@
         <!-- Client Info & Meta -->
         <div class="bg-gray-50 px-8 py-6 border-b border-gray-200">
             <div class="flex flex-wrap items-center gap-6">
-                @if(!$case->is_confidential && $case->client_name)
+                @if($case->client_name)
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2 text-pjs-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -60,21 +60,6 @@
                     </svg>
                     {{ $case->view_count }} {{ __('common.views') }}
                 </div>
-
-                @if($case->is_confidential)
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-pjs-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                    <span class="text-gray-700 font-semibold">
-                        @if(app()->getLocale() === 'th')
-                            ข้อมูลเป็นความลับ
-                        @else
-                            Confidential
-                        @endif
-                    </span>
-                </div>
-                @endif
             </div>
         </div>
 
@@ -149,7 +134,7 @@
             @endif
 
             <!-- Gallery Images -->
-            @if(isset($case->gallery_images) && is_array($case->gallery_images) && count($case->gallery_images) > 0)
+            @if(isset($case->gallery) && is_array($case->gallery) && count($case->gallery) > 0)
             <section class="pt-8">
                 <h2 class="text-2xl md:text-3xl font-bold text-pjs-blue mb-6">
                     @if(app()->getLocale() === 'th')
@@ -159,7 +144,7 @@
                     @endif
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach($case->gallery_images as $image)
+                    @foreach($case->gallery as $image)
                     <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
                         <img src="{{ asset('storage/' . $image) }}" 
                              alt="{{ $case->{'title_' . app()->getLocale()} }}" 

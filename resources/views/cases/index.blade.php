@@ -73,7 +73,7 @@
                             </div>
                             @endif
 
-                            @if(!$case->is_confidential && $case->client_name)
+                            @if($case->client_name)
                             <div class="absolute bottom-4 left-4">
                                 <span class="inline-block px-3 py-1 bg-white/90 text-pjs-blue text-xs font-semibold rounded-full">
                                     {{ $case->client_name }}

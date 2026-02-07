@@ -36,16 +36,16 @@ class NewsController extends Controller
 
     public function show(string $slug): View
     {
-        $newsItem = News::published()
+        $news = News::published()
             ->with('category')
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $newsItem->increment('views');
+        $news->increment('views');
 
         $relatedNews = News::published()
-            ->where('id', '!=', $newsItem->id)
-            ->where('category_id', $newsItem->category_id)
+            ->where('id', '!=', $news->id)
+            ->where('category_id', $news->category_id)
             ->limit(3)
             ->get();
 
