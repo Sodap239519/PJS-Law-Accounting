@@ -1,59 +1,314 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PJS Law and Accounting Co., Ltd. - Corporate Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A professional corporate website built with Laravel 12 for PJS Law and Accounting Co., Ltd., featuring multi-language support (Thai/English), content management system, and modern responsive design.
 
-## About Laravel
+![Homepage Screenshot](https://github.com/user-attachments/assets/eca86470-5c6c-4c5e-a0bd-43894c1ca4f8)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🌐 Multi-Language Support
+- Thai and English language switching
+- All content stored in both languages
+- Automatic locale detection and switching
+- Language switcher in navigation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 📄 Public Pages
+- **Home/About Page** - Company introduction with legal and accounting services
+- **Vision Page** - Company vision and mission statement
+- **Team Members Page** - Professional team showcase with 4 members
+- **News & Activities** - Blog/news system with categories and pagination
+- **Case Studies** - Portfolio of successful cases
+- **Downloads** - Document library for downloadable files
+- **Contact Page** - Contact form with email notifications
 
-## Learning Laravel
+### 🔐 Admin Panel
+Secure admin panel for content management:
+- **Dashboard** - Statistics and quick actions
+- **News Management** - Full CRUD for news articles
+- **Document Management** - Upload and manage downloadable files
+- **Case Studies Management** - Manage portfolio cases
+- **Team Members Management** - Update team information and photos
+- **Contact Messages** - View and manage contact form submissions
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 🎨 Design
+- Professional design with custom color scheme:
+  - Dark Blue (#1e3a8a) - Primary color
+  - Gold (#c5a647) - Accent color
+  - White and Black - Supporting colors
+- Fully responsive mobile-first design
+- Modern Tailwind CSS styling
+- Professional corporate aesthetic
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Technology Stack
 
-## Laravel Sponsors
+- **Framework:** Laravel 12.50.0
+- **PHP:** 8.2+
+- **Database:** SQLite (easily switchable to MySQL)
+- **Frontend:** 
+  - Tailwind CSS
+  - Laravel Breeze (Authentication)
+  - Vite (Asset bundling)
+- **Image Processing:** Intervention Image
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+### Prerequisites
+- PHP 8.2 or higher
+- Composer
+- Node.js and npm
+- SQLite (or MySQL)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Setup Instructions
 
-## Contributing
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Sodap239519/PJS-Law-Accounting.git
+   cd PJS-Law-Accounting
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-## Code of Conduct
+3. **Install Node dependencies**
+   ```bash
+   npm install
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Set up environment file**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Security Vulnerabilities
+5. **Configure database**
+   - For SQLite (default):
+     ```bash
+     touch database/database.sqlite
+     ```
+   - For MySQL: Update `.env` file with your database credentials
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Run migrations and seeders**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. **Create storage link**
+   ```bash
+   php artisan storage:link
+   ```
+
+8. **Build frontend assets**
+   ```bash
+   npm run build
+   ```
+
+9. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+
+10. **Visit the application**
+    - Frontend: http://localhost:8000
+    - Admin: http://localhost:8000/login
+
+## Default Admin Credentials
+
+- **Email:** admin@pjs-law.com
+- **Password:** password
+
+**⚠️ Important:** Change these credentials immediately after first login!
+
+## Database Schema
+
+### Main Tables
+- `users` - Admin user accounts with role field
+- `team_members` - Team member information (bilingual)
+- `news` - News articles with categories and translations
+- `documents` - Downloadable files with metadata
+- `case_studies` - Portfolio case studies (bilingual)
+- `contacts` - Contact form submissions
+- `categories` - Categories for news, documents, and cases
+
+## File Storage Structure
+
+```
+storage/app/public/
+├── news/           # News featured images
+├── documents/      # Downloadable PDF/DOC files
+├── case-studies/   # Case study images
+└── team/           # Team member photos
+```
+
+## Multi-Language System
+
+### Language Files
+Located in `lang/` directory:
+- `lang/en/common.php` - English translations
+- `lang/th/common.php` - Thai translations
+
+### Adding Translations
+1. Add key-value pairs to both language files
+2. Use in views: `__('common.key')` or `@lang('common.key')`
+
+### Switching Languages
+Users can switch languages via the language switcher in the navigation menu.
+
+## Admin Panel Usage
+
+### Accessing Admin Panel
+1. Navigate to `/login`
+2. Enter admin credentials
+3. Access dashboard at `/admin/dashboard`
+
+### Managing Content
+
+#### News Articles
+1. Go to **Admin → News**
+2. Click **Create New** button
+3. Fill in both Thai and English content
+4. Upload featured image (optional)
+5. Select category
+6. Set publication status
+7. Click **Save**
+
+#### Documents
+1. Go to **Admin → Documents**
+2. Click **Create New**
+3. Fill in document details (Thai/English)
+4. Upload file (PDF, DOC, XLS)
+5. Select category
+6. Click **Save**
+
+#### Case Studies
+1. Go to **Admin → Case Studies**
+2. Click **Create New**
+3. Fill in case details (Challenge, Solution, Result)
+4. Upload featured image
+5. Click **Save**
+
+#### Team Members
+1. Go to **Admin → Team Members**
+2. Click **Create New**
+3. Fill in member information
+4. Upload photo
+5. Set display order
+6. Click **Save**
+
+#### Contact Messages
+- View messages at **Admin → Contacts**
+- Click on any message to view details
+- Messages are automatically marked as read when viewed
+
+## Email Configuration
+
+### Development (Default)
+Emails are logged to `storage/logs/laravel.log`
+
+### Production Setup
+Update `.env` file:
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=your-smtp-host
+MAIL_PORT=587
+MAIL_USERNAME=your-username
+MAIL_PASSWORD=your-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=pjs.legal2025@gmail.com
+MAIL_FROM_NAME="PJS Law and Accounting"
+```
+
+## Company Information
+
+**PJS Law and Accounting Co., Ltd.**
+- **Phone:** 092-256-9828
+- **Email:** pjs.legal2025@gmail.com
+- **Address:** 27/20 ซอยบางบอน4 ซอย4 แขวงบางบอนเหนือ เขตบางบอน กรุงเทพมหานคร 10150
+- **Address (EN):** 27/20 Soi Bang Bon 4, Soi 4, Bang Bon Nuea, Bang Bon, Bangkok 10150
+
+## Sample Data
+
+The database seeders include:
+- 1 admin user
+- 4 team members (President, Legal Expert, Asset Investigation Head, Attorney)
+- 5 news articles
+- 3 case studies
+- 6 categories (for news, documents, and case studies)
+
+## Security Features
+
+- CSRF protection on all forms
+- Authentication required for admin panel
+- File upload validation
+- SQL injection protection via Eloquent ORM
+- XSS protection via Blade templating
+
+## Development Commands
+
+```bash
+# Run development server
+php artisan serve
+
+# Watch and compile assets
+npm run dev
+
+# Build for production
+npm run build
+
+# Clear caches
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
+# Run migrations
+php artisan migrate
+
+# Rollback migrations
+php artisan migrate:rollback
+
+# Refresh database with seeders
+php artisan migrate:fresh --seed
+```
+
+## Testing
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test
+php artisan test --filter TestName
+```
+
+## Troubleshooting
+
+### Images not displaying
+```bash
+php artisan storage:link
+```
+
+### Route not found errors
+```bash
+php artisan route:clear
+php artisan config:clear
+```
+
+### Assets not loading
+```bash
+npm run build
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is proprietary software for PJS Law and Accounting Co., Ltd.
+
+## Support
+
+For technical support or questions:
+- Email: pjs.legal2025@gmail.com
+- Phone: 092-256-9828
+
+---
+
+Built with ❤️ using Laravel 12
