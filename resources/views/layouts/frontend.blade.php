@@ -54,12 +54,12 @@
                     
                     <!-- Language Switcher -->
                     <div class="ml-4 flex items-center space-x-2 border-l border-pjs-gold pl-4">
-                        <a href="{{ route('locale.switch', 'th') }}" 
+                        <a href="{{ route('lang.switch', 'th') }}" 
                            class="px-2 py-1 rounded {{ app()->getLocale() === 'th' ? 'bg-pjs-gold text-white' : 'text-gray-300 hover:text-white' }}">
                             TH
                         </a>
                         <span class="text-gray-400">|</span>
-                        <a href="{{ route('locale.switch', 'en') }}" 
+                        <a href="{{ route('lang.switch', 'en') }}" 
                            class="px-2 py-1 rounded {{ app()->getLocale() === 'en' ? 'bg-pjs-gold text-white' : 'text-gray-300 hover:text-white' }}">
                             EN
                         </a>
@@ -103,11 +103,11 @@
                     {{ __('common.contact') }}
                 </a>
                 <div class="pt-4 border-t border-pjs-gold flex space-x-4 px-3">
-                    <a href="{{ route('locale.switch', 'th') }}" 
+                    <a href="{{ route('lang.switch', 'th') }}" 
                        class="flex-1 px-4 py-2 rounded text-center {{ app()->getLocale() === 'th' ? 'bg-pjs-gold text-white' : 'bg-gray-700 text-gray-300' }}">
                         ไทย
                     </a>
-                    <a href="{{ route('locale.switch', 'en') }}" 
+                    <a href="{{ route('lang.switch', 'en') }}" 
                        class="flex-1 px-4 py-2 rounded text-center {{ app()->getLocale() === 'en' ? 'bg-pjs-gold text-white' : 'bg-gray-700 text-gray-300' }}">
                         English
                     </a>
