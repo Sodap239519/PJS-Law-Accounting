@@ -39,4 +39,9 @@ class CaseStudy extends Model
     {
         return $query->where('is_published', true);
     }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
