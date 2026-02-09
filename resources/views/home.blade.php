@@ -306,7 +306,7 @@
         </div>
         <div class="row row-post-masonry">
             <!-- Dummy Card 1 -->
-            <div class="col-md-4 post-item">
+            <div class="col-4 post-item">
                 <article class="post">
                     <div class="post-preview">
                         <img src="{{ asset('frontend/images/blog/1.jpg') }}" alt="News 1">
@@ -325,7 +325,7 @@
             </div>
             
             <!-- Dummy Card 2 -->
-            <div class="col-md-4 post-item">
+            <div class="col-4 post-item">
                 <article class="post">
                     <div class="post-preview">
                         <img src="{{ asset('frontend/images/blog/3.jpg') }}" alt="News 2">
@@ -344,7 +344,7 @@
             </div>
             
             <!-- Dummy Card 3 -->
-            <div class="col-md-4 post-item">
+            <div class="col-4 post-item">
                 <article class="post">
                     <div class="post-preview">
                         <img src="{{ asset('frontend/images/blog/3.jpg') }}" alt="News 3">
@@ -461,33 +461,57 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 m-auto">
-                    <form action="{{ route('contact.store') }}" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="text" name="name" placeholder="ชื่อผู้ติดต่อ *" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="tel" name="phone" placeholder="เบอร์ติดต่อ *" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="subject" placeholder="เรื่องที่ติดต่อ *" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" name="message" rows="5" placeholder="รายละเอียด *" required></textarea>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-lg btn-circle btn-brand" type="submit">ส่งข้อความ</button>
-                        </div>
-                    </form>
+    <div class="col-md-8 m-auto">
+        <form action="{{ route('contact.store') }}" method="POST">
+            @csrf
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" placeholder="ชื่อผู้ติดต่อ *" value="{{ old('name') }}" required>
+                        @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input class="form-control" type="tel" name="phone" placeholder="เบอร์ติดต่อ *" value="{{ old('phone') }}" required>
+                        @error('phone')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input class="form-control" type="email" name="email" placeholder="อีเมล" value="{{ old('email') }}">
+                        @error('email')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="subject" placeholder="เรื่องที่ติดต่อ *" value="{{ old('subject') }}" required>
+                        @error('subject')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="details" rows="5" placeholder="รายละเอียด *" required>{{ old('details') }}</textarea>
+                @error('details')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="text-center">
+                <button class="btn btn-lg btn-circle btn-brand" type="submit">ส่งข้อความ</button>
+            </div>
+        </form>
+    </div>
+</div>
         </div>
     </section>
     <!-- Quick Contact end -->
@@ -508,4 +532,129 @@
         </div>
     </section>
     <!-- Call to Action end -->
+
+    <!-- Success/Error Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-5">
+                    <div id="modal-icon" class="mb-4">
+                        <!-- Icon จะถูกเพิ่มด้วย JavaScript -->
+                    </div>
+                    <h3 id="modal-title" class="mb-3"></h3>
+                    <p id="modal-message" class="lead mb-4"></p>
+                    <button type="button" class="btn btn-lg btn-circle btn-brand" id="modal-close-btn">ตกลง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Success/Error Modal end -->
+
+    @push('styles')
+    <style>
+        #contactModal .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        #contactModal .modal-header {
+            padding: 20px 20px 0 20px;
+        }
+        
+        #contactModal .btn-close {
+            font-size: 12px;
+        }
+        
+        #contactModal .modal-body {
+            padding: 40px;
+        }
+        
+        #modal-icon i {
+            animation: bounceIn 0.6s;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ตัวแปร PHP ส่งมาจาก Laravel
+    const hasSuccess = {{ session('success') ? 'true' : 'false' }};
+    const hasError = {{ session('error') ? 'true' : 'false' }};
+    const successMessage = {!! session('success') ? json_encode(session('success')) : 'null' !!};
+    const errorMessage = {!! session('error') ? json_encode(session('error')) : 'null' !!};
+    
+    // แสดง Modal ตามเงื่อนไข
+    if (hasSuccess && successMessage) {
+        showContactModal('success', 'สำเร็จ!', successMessage);
+    }
+    
+    if (hasError && errorMessage) {
+        showContactModal('error', 'เกิดข้อผิดพลาด!', errorMessage);
+    }
+});
+
+function showContactModal(type, title, message) {
+    const modalElement = document.getElementById('contactModal');
+    if (!modalElement) {
+        console.error('Modal element not found');
+        return;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
+    const iconDiv = document.getElementById('modal-icon');
+    const titleElement = document.getElementById('modal-title');
+    const messageElement = document.getElementById('modal-message');
+    const closeBtn = document.getElementById('modal-close-btn');
+    
+    // ตั้งค่า Icon และสี
+    if (type === 'success') {
+        iconDiv.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size: 80px; color: #28a745;"></i>';
+        titleElement.style.color = '#28a745';
+        titleElement.textContent = title;
+    } else {
+        iconDiv.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="font-size: 80px; color: #dc3545;"></i>';
+        titleElement.style.color = '#dc3545';
+        titleElement.textContent = title;
+    }
+    
+    messageElement.textContent = message;
+    
+    // แสดง Modal
+    modal.show();
+    
+    // ปุ่มตกลง - ปิด Modal
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            modal.hide();
+        };
+    }
+    
+    // ปิดอัตโนมัติหลัง 3 วินาที
+    setTimeout(function() {
+        modal.hide();
+    }, 3000);
+    
+    // เคลียร์ฟอร์มหลังส่งสำเร็จ
+    if (type === 'success') {
+        modalElement.addEventListener('hidden.bs.modal', function () {
+            const form = document.querySelector('form[action="{{ route('contact.store') }}"]');
+            if (form) {
+                form.reset();
+            }
+        }, { once: true });
+    }
+}
+</script>
+@endpush
 @endsection

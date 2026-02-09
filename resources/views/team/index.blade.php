@@ -6,14 +6,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2>{{ __('common.team') }}</h2>
-                <p>
-                    @if(app()->getLocale() === 'th')
-                        ทีมงานมืออาชีพที่พร้อมให้บริการ
-                    @else
-                        Professional team ready to serve you
-                    @endif
-                </p>
+                <h2>ทีมงานของเรา</h2>
+                <p>ทีมงานมืออาชีพที่พร้อมให้บริการ</p>
             </div>
         </div>
     </div>
@@ -90,27 +84,13 @@
 <!-- Team Members end-->
 
 <!-- Call to Action -->
-<section class="module bg-dark">
+ <section class="module parallax text-center" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.7">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <h3 class="m-b-0">
-                    @if(app()->getLocale() === 'th')
-                        สนใจปรึกษาทีมงานของเรา?
-                    @else
-                        Interested in consulting with our team?
-                    @endif
-                </h3>
-                <p class="lead m-b-0">
-                    @if(app()->getLocale() === 'th')
-                        ติดต่อเราวันนี้เพื่อรับคำปรึกษาฟรี
-                    @else
-                        Contact us today for a free consultation
-                    @endif
-                </p>
-            </div>
-            <div class="col-md-4 text-right">
-                <a class="btn btn-white" href="{{ route('contact.index') }}">{{ __('common.contact_us') }}</a>
+            <div class="col-md-10 m-auto">
+                <h2 class="text-white mb-4" data-aos="fade-up">สนใจปรึกษาทีมงานของเราใช่ไหม?</h2>
+                <p class="lead text-white mb-4" data-aos="fade-up" data-aos-delay="200">ติดต่อเราวันนี้เพื่อรับคำปรึกษาฟรี</p>
+                <a href="{{ route('contact.index') }}" class="btn btn-outline-light btn-lg" data-aos="zoom-in" data-aos-delay="400">ติดต่อเราเลย</a>
             </div>
         </div>
     </div>

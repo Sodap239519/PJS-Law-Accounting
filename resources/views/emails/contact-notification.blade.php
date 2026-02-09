@@ -77,7 +77,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>แบบฟอร์มติดต่อใหม่</h2>
+            <div class="icon">📧</div>
+            <h2>ข้อความติดต่อใหม่</h2>
             <p>PJS Law and Accounting Co., Ltd.</p>
         </div>
         
@@ -87,34 +88,34 @@
             </p>
             
             <div class="info">
-                <span class="label">ชื่อ-นามสกุล:</span>
+                <span class="label">👤 ชื่อ-นามสกุล:</span>
                 <span class="value">{{ $contact->name }}</span>
             </div>
             
             <div class="info">
-                <span class="label">เบอร์โทรศัพท์:</span>
+                <span class="label">📱 เบอร์โทรศัพท์:</span>
                 <span class="value"><a href="tel:{{ $contact->phone }}">{{ $contact->phone }}</a></span>
             </div>
             
             @if($contact->email)
             <div class="info">
-                <span class="label">อีเมล:</span>
+                <span class="label">📧 อีเมล:</span>
                 <span class="value"><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></span>
             </div>
             @endif
             
             <div class="info">
-                <span class="label">หัวข้อ:</span>
+                <span class="label">📋 หัวข้อ:</span>
                 <span class="value">{{ $contact->subject }}</span>
             </div>
             
             <div class="info">
-                <span class="label">รายละเอียด:</span>
+                <span class="label">💬 รายละเอียด:</span>
                 <div class="details-box">{{ $contact->details }}</div>
             </div>
             
             <div class="info">
-                <span class="label">วันที่-เวลา:</span>
+                <span class="label">🕐 วันที่-เวลา:</span>
                 <span class="value">{{ $contact->created_at->format('d/m/Y H:i น.') }}</span>
             </div>
         </div>

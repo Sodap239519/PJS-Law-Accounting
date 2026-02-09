@@ -732,37 +732,40 @@ body {
 <footer class="footer footer-1 bg-dark" style="padding: 80px 0 40px 0;">
     <div class="container">
         <div class="row" style="margin-bottom: 40px;">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <h6 class="footer-title">About Us</h6>
-                <p><strong>PJS Law and Accounting Co., Ltd.</strong></p>
-                <p>Professional legal and accounting consultants ready to serve your business with expertise and experience</p>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <img src="{{ asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="PJS">
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h6 class="footer-title">เกี่ยวกับเรา</h6>
+                <p><strong>บริษัท PJS กฎหมายและการบัญชี จำกัด</strong></p>
+                <p>ที่ปรึกษากฎหมายและบัญชีมืออาชีพ พร้อมให้บริการธุรกิจของคุณด้วยความเชี่ยวชาญและประสบการณ์</p>
             </div>
             
-            <div class="col-lg-4 col-md-6 mb-4">
-                <h6 class="footer-title">Quick Links</h6>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="footer-title">แผนผังเว็บไซต์</h6>
                 <ul class="list-unstyled footer-list">
-                    <li><a href="{{ route('home') }}">Home</a></li>
-                    <li><a href="{{ route('about.index') }}">About Us</a></li>
-                    <li><a href="{{ route('services.index') }}">Services</a></li>
-                    <li><a href="{{ route('team.index') }}">Our Team</a></li>
-                    <li><a href="{{ route('news.index') }}">News & Activities</a></li>
-                    <li><a href="{{ route('cases.index') }}">Case Studies</a></li>
-                    <li><a href="{{ route('contact.index') }}">Contact Us</a></li>
+                    <li><a href="{{ route('home') }}">หน้าหลัก</a></li>
+                    <li><a href="{{ route('about.index') }}">เกี่ยวกับเรา</a></li>
+                    <li><a href="{{ route('services.index') }}">บริการ</a></li>
+                    <li><a href="{{ route('team.index') }}">ทีมงานของเรา</a></li>
+                    <li><a href="{{ route('news.index') }}">ข่าวสาร</a></li>
+                    <li><a href="{{ route('cases.index') }}">คดีตัวอย่าง</a></li>
+                    <li><a href="{{ route('contact.index') }}">ติดต่อเรา</a></li>
                 </ul>
             </div>
             
-            <div class="col-lg-4 col-md-12 mb-4">
-                <h6 class="footer-title">Contact Us</h6>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h6 class="footer-title">ติดต่อเรา</h6>
                 <ul class="list-unstyled footer-list mb-3">
-                    <li><i class="bi bi-geo-alt"></i> 27/20 Soi Bang Bon 4, Soi 4, Bang Bon, Bangkok 10150</li>
+                    <li><i class="bi bi-geo-alt"></i> 27/20 ซอย 4, แขวงบางบอน, เขตบางบอน, กรุงเทพมหานคร 10150</li>
                     <li><i class="bi bi-telephone"></i> <a href="tel:0922569828">092-256-9828</a></li>
                     <li><i class="bi bi-envelope"></i> <a href="mailto:pjs.legal2025@gmail.com">pjs.legal2025@gmail.com</a></li>
-                    <li><i class="bi bi-line"></i> LINE Official</li>
+                    <li><i class="bi bi-line"></i> @pjslegal</li>
                 </ul>
                 
                 <div class="map-responsive">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.8!2d100.4!3d13.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM5JzAwLjAiTiAxMDDCsDI0JzAwLjAiRQ!5e0!3m2!1sen!2sth!4v1234567890" 
-                            width="600" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            width="400" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
@@ -772,7 +775,7 @@ body {
         <div class="row">
             <div class="col-md-12">
                 <div class="footer-copyright text-center" style="padding: 10px 0;">
-                    <p>&copy; {{ date('Y') }} PJS Law and Accounting Co., Ltd. All rights reserved.</p>
+                    <p>&copy; 2025 PJS Law and Accounting Co., Ltd. All rights reserved.</p>
                 </div>
             </div>
         </div>
@@ -784,7 +787,7 @@ body {
         <div class="widget-menu" id="widgetMenu">
             <h6>ติดต่อเรา</h6>
             
-            <a href="#" class="widget-item">
+            <a href="{{ route('contact.index') }}" class="widget-item">
                 <div class="widget-icon chat">
                     <i class="bi bi-chat-dots"></i>
                 </div>
@@ -805,11 +808,11 @@ body {
                 <div class="widget-text">โทรหาเรา</div>
             </a>
             
-            <a href="https://line.me/R/ti/p/@YOUR_LINE" target="_blank" class="widget-item">
+            <a href="https://line.me/R/ti/p/@pjslegal" target="_blank" class="widget-item">
                 <div class="widget-icon line">
                     <i class="bi bi-line"></i>
                 </div>
-                <div class="widget-text">LINE Official</div>
+                <div class="widget-text">Line Official</div>
             </a>
         </div>
         
@@ -948,5 +951,6 @@ body {
             }
         });
     </script>
+@stack('scripts')
 </body>
 </html>

@@ -50,7 +50,7 @@
 
         <div class="row">
             <div class="col-md-8">
-                <form id="contact-form" action="{{ route('contact.store') }}" method="POST">
+                <form action="{{ route('contact.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">

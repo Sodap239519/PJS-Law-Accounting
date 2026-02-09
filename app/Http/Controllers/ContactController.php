@@ -20,7 +20,8 @@ class ContactController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:10',
+            'email' => 'nullable|email|max:255',
             'subject' => 'required|string|max:255',
             'details' => 'required|string',
         ]);
@@ -30,12 +31,12 @@ class ContactController extends Controller
 
             $this->sendNotificationEmail($contact);
 
-            return redirect()->back()->with('success', __('common.contact_form.success'));
+            return redirect()->back()->with('success', 'ส่งข้อความสำเร็จ! เราจะติดต่อกลับโดยเร็วที่สุด');
         } catch (\Exception $e) {
             Log::error('Contact form submission failed: ' . $e->getMessage());
             
             return redirect()->back()
-                ->with('error', __('common.contact_form.error'))
+                ->with('error', 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
                 ->withInput();
         }
     }
