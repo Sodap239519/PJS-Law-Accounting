@@ -1,19 +1,15 @@
 @extends('layouts.boomerang')
 
+@section('title', 'ติดต่อเรา')
+
 @section('content')
 <!-- Hero -->
-<section class="module-cover parallax text-center" data-background="{{ asset('frontend/images/module-6.jpg') }}" data-overlay="0.5">
+<section class="module-cover parallax text-center" data-background="{{ asset('frontend/images/Banner.png') }}" data-overlay="0.5">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2>{{ __('common.contact_us') }}</h2>
-                <p>
-                    @if(app()->getLocale() === 'th')
-                        ติดต่อเราเพื่อรับคำปรึกษาฟรี
-                    @else
-                        Contact us for a free consultation
-                    @endif
-                </p>
+                <h2 class="text-white">ติดต่อเรา</h2>
+                <p class="text-white-50">ติดต่อเราเพื่อรับคำปรึกษาฟรี</p>
             </div>
         </div>
     </div>
@@ -26,14 +22,8 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="text-center m-b-60">
-                    <h2>{{ __('common.contact_form.title') }}</h2>
-                    <p class="lead">
-                        @if(app()->getLocale() === 'th')
-                            กรอกข้อมูลด้านล่างและเราจะติดต่อกลับโดยเร็วที่สุด
-                        @else
-                            Fill in the form below and we will get back to you as soon as possible
-                        @endif
-                    </p>
+                    <h2>ส่งข้อความถึงเรา</h2>
+                    <p class="lead">กรอกข้อมูลด้านล่างและเราจะติดต่อกลับโดยเร็วที่สุด</p>
                 </div>
             </div>
         </div>
@@ -42,7 +32,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle"></i> {{ session('success') }}
+                    <i class="bi bi-check-circle"></i> {{ session('success') }}
                 </div>
             </div>
         </div>
@@ -52,7 +42,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+                    <i class="bi bi-exclamation-circle"></i> {{ session('error') }}
                 </div>
             </div>
         </div>
@@ -64,16 +54,16 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <input class="form-control" type="text" name="name" placeholder="{{ __('common.contact_form.name') }}" value="{{ old('name') }}" required>
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="text" name="name" placeholder="ชื่อ-นามสกุล" value="{{ old('name') }}" required>
                                 @error('name')
                                     <p class="help-block text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <input class="form-control" type="tel" name="phone" placeholder="{{ __('common.contact_form.phone') }}" value="{{ old('phone') }}" required>
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="tel" name="phone" placeholder="เบอร์โทรศัพท์" value="{{ old('phone') }}" required>
                                 @error('phone')
                                     <p class="help-block text-danger">{{ $message }}</p>
                                 @enderror
@@ -82,16 +72,16 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <input class="form-control" type="email" name="email" placeholder="{{ __('common.contact_form.email') }} (@if(app()->getLocale() === 'th')ถ้ามี@else Optional@endif)" value="{{ old('email') }}">
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="email" name="email" placeholder="อีเมล (ถ้ามี)" value="{{ old('email') }}">
                                 @error('email')
                                     <p class="help-block text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <input class="form-control" type="text" name="subject" placeholder="{{ __('common.contact_form.subject') }}" value="{{ old('subject') }}" required>
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="text" name="subject" placeholder="หัวข้อ" value="{{ old('subject') }}" required>
                                 @error('subject')
                                     <p class="help-block text-danger">{{ $message }}</p>
                                 @enderror
@@ -100,8 +90,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea class="form-control" name="details" placeholder="{{ __('common.contact_form.details') }}" rows="6" required>{{ old('details') }}</textarea>
+                            <div class="form-group mb-3">
+                                <textarea class="form-control" name="details" placeholder="รายละเอียด" rows="10" required>{{ old('details') }}</textarea>
                                 @error('details')
                                     <p class="help-block text-danger">{{ $message }}</p>
                                 @enderror
@@ -110,7 +100,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <button class="btn btn-dark btn-block btn-round" type="submit">{{ __('common.contact_form.send') }}</button>
+                            <button class="btn btn-dark btn-block btn-round" type="submit">ส่งข้อความ</button>
                         </div>
                     </div>
                 </form>
@@ -119,63 +109,59 @@
             <!-- Contact Info Sidebar -->
             <div class="col-md-4">
                 <div class="widget">
-                    <h5 class="widget-title">{{ __('common.footer.contact_info') }}</h5>
+                    <h5 class="widget-title">ข้อมูลติดต่อ</h5>
                     <ul class="list-unstyled">
-                        <li class="m-b-20">
+                        <li>
                             <div class="icon-box icon-box-left">
-                                <div class="icon-box-icon"><i class="fas fa-phone"></i></div>
+                                <div class="icon-box-icon"><i class="bi bi-telephone"></i></div>
                                 <div class="icon-box-content">
-                                    <h6>
-                                        @if(app()->getLocale() === 'th')
-                                            โทรศัพท์
-                                        @else
-                                            Phone
-                                        @endif
-                                    </h6>
-                                    <a href="tel:{{ __('common.company_info.phone') }}">{{ __('common.company_info.phone') }}</a>
+                                    <h6>โทรศัพท์</h6>
+                                    <a href="tel:0922569828">092-256-9828</a>
                                 </div>
                             </div>
                         </li>
-                        <li class="m-b-20">
+                        <li>
                             <div class="icon-box icon-box-left">
-                                <div class="icon-box-icon"><i class="fas fa-envelope"></i></div>
+                                <div class="icon-box-icon"><i class="bi bi-envelope"></i></div>
                                 <div class="icon-box-content">
-                                    <h6>
-                                        @if(app()->getLocale() === 'th')
-                                            อีเมล
-                                        @else
-                                            Email
-                                        @endif
-                                    </h6>
-                                    <a href="mailto:{{ __('common.company_info.email') }}">{{ __('common.company_info.email') }}</a>
+                                    <h6>อีเมล</h6>
+                                    <a href="mailto:pjs.legal2025@gmail.com">pjs.legal2025@gmail.com</a>
                                 </div>
                             </div>
                         </li>
-                        <li class="m-b-20">
+                        <li>
                             <div class="icon-box icon-box-left">
-                                <div class="icon-box-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div class="icon-box-icon"><i class="bi bi-geo-alt"></i></div>
                                 <div class="icon-box-content">
-                                    <h6>
-                                        @if(app()->getLocale() === 'th')
-                                            ที่อยู่
-                                        @else
-                                            Address
-                                        @endif
-                                    </h6>
-                                    <p>{{ __('common.company_info.address') }}</p>
+                                    <h6>ที่อยู่</h6>
+                                    <p>27/20 Soi Bang Bon 4, Soi 4, Bang Son Nua, Bang Bon, Bangkok 10150</p>
                                 </div>
                             </div>
                         </li>
-                        <li class="m-b-20">
+                        <li>
                             <div class="icon-box icon-box-left">
-                                <div class="icon-box-icon"><i class="fab fa-line"></i></div>
+                                <div class="icon-box-icon"><i class="bi bi-line"></i></div>
                                 <div class="icon-box-content">
                                     <h6>LINE</h6>
-                                    <p>{{ __('common.company_info.line') }}</p>
+                                    <p>LINE Official</p>
                                 </div>
                             </div>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="module p-0">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="map-responsive">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.8!2d100.4!3d13.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM5JzAwLjAiTiAxMDDCsDI0JzAwLjAiRQ!5e0!3m2!1sen!2sth!4v1234567890" 
+                            width="600" height="450" style="border:0; width: 100%;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>

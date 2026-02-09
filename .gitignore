@@ -24,4 +24,5 @@ Homestead.yaml
 Thumbs.db
 *.zip 
  
- 
+/storage/framework/views/*.php
+!/storage/framework/views/.gitignore
