@@ -44,7 +44,7 @@ class ContactController extends Controller
     {
         try {
             Mail::send('emails.contact-notification', ['contact' => $contact], function ($message) use ($contact) {
-                $message->to('pjs.legal2025@gmail.com')
+                $message->to('Nn.piyarat2410@gmail.com')
                     ->subject('New Contact Form Submission - ' . $contact->subject);
             });
         } catch (\Exception $e) {
