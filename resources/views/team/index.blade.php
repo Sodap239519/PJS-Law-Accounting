@@ -17,68 +17,103 @@
 <!-- Team Members -->
 <section class="module">
     <div class="container">
-        @if(isset($teamMembers) && $teamMembers->count() > 0)
         <div class="row">
-            @foreach($teamMembers as $member)
+            <!-- Team Member 1: ประธานบริษัท -->
             <div class="col-md-4">
                 <div class="team-item">
                     <div class="team-image">
-                        @if($member->photo)
-                            <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->{'name_' . app()->getLocale()} }}">
-                        @else
-                            <img src="{{ asset('frontend/images/team/default.jpg') }}" alt="{{ $member->{'name_' . app()->getLocale()} }}">
-                        @endif
+                        <img src="{{ asset('frontend/images/team/1.jpg') }}" alt="นายธนากร ตั้งกิจโสภา">
                         <div class="team-wrap">
                             <div class="team-content">
-                                <h6 class="team-name">{{ $member->{'name_' . app()->getLocale()} }}</h6>
-                                <div class="team-role">{{ $member->{'position_' . app()->getLocale()} }}</div>
+                                <h6 class="team-name">นายธนากร ตั้งกิจโสภา</h6>
+                                <div class="team-role">ประธานบริษัท</div>
                             </div>
-                            @if($member->email || $member->phone)
                             <div class="team-content-social">
                                 <ul>
-                                    @if($member->email)
-                                    <li><a href="mailto:{{ $member->email }}"><i class="fas fa-envelope"></i></a></li>
-                                    @endif
-                                    @if($member->phone)
-                                    <li><a href="tel:{{ $member->phone }}"><i class="fas fa-phone"></i></a></li>
-                                    @endif
+                                    <li><a href="mailto:thanagon@example.com"><i class="fas fa-envelope"></i></a></li>
+                                    <li><a href="tel:0812345678"><i class="fas fa-phone"></i></a></li>
                                 </ul>
                             </div>
-                            @endif
                         </div>
                     </div>
-                    @if($member->{'bio_' . app()->getLocale()})
                     <div class="team-descr">
-                        <p>{{ $member->{'bio_' . app()->getLocale()} }}</p>
+                        <p>ผู้นำองค์กรด้วยวิสัยทัศน์และประสบการณ์กว่า 15 ปี ในการบริหารจัดการและพัฒนาธุรกิจ</p>
                     </div>
-                    @endif
                 </div>
             </div>
-            @endforeach
-        </div>
-        @else
-        <!-- Empty State -->
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="space" data-MY="60px"></div>
-                <h3>
-                    @if(app()->getLocale() === 'th')
-                        ยังไม่มีข้อมูลทีมงาน
-                    @else
-                        No team members yet
-                    @endif
-                </h3>
-                <p>
-                    @if(app()->getLocale() === 'th')
-                        กรุณากลับมาตรวจสอบอีกครั้งในภายหลัง
-                    @else
-                        Please check back later
-                    @endif
-                </p>
-                <div class="space" data-MY="60px"></div>
+
+            <!-- Team Member 2: ที่ปรึกษาผู้เชี่ยวชาญทางด้านกฎหมาย -->
+            <div class="col-md-4">
+                <div class="team-item">
+                    <div class="team-image">
+                        <img src="{{ asset('frontend/images/team/1.jpg') }}" alt="นายอธิวัฒน์ ชิดอรุณธนวัฒน์">
+                        <div class="team-wrap">
+                            <div class="team-content">
+                                <h6 class="team-name">นายอธิวัฒน์ ชิดอรุณธนวัฒน์</h6>
+                                <div class="team-role">ที่ปรึกษาผู้เชี่ยวชาญทางด้านกฎหมาย</div>
+                            </div>
+                            <div class="team-content-social">
+                                <ul>
+                                    <li><a href="mailto:athiwat@example.com"><i class="fas fa-envelope"></i></a></li>
+                                    <li><a href="tel:0823456789"><i class="fas fa-phone"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-descr">
+                        <p>ผู้เชี่ยวชาญด้านกฎหมายธุรกิจและกฎหมายแพ่งพาณิชย์ ให้คำปรึกษาด้วยความเชี่ยวชาญและความละเอียดรอบคอบ</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 3: หัวหน้าฝ่ายสืบทรัพย์และบังคับคดี -->
+            <div class="col-md-4">
+                <div class="team-item">
+                    <div class="team-image">
+                        <img src="{{ asset('frontend/images/team/1.jpg') }}" alt="นายจักรพันธ์ อยู่ยืน">
+                        <div class="team-wrap">
+                            <div class="team-content">
+                                <h6 class="team-name">นายจักรพันธ์ อยู่ยืน</h6>
+                                <div class="team-role">หัวหน้าฝ่ายสืบทรัพย์และบังคับคดี</div>
+                            </div>
+                            <div class="team-content-social">
+                                <ul>
+                                    <li><a href="mailto:jukkapun@example.com"><i class="fas fa-envelope"></i></a></li>
+                                    <li><a href="tel:0834567890"><i class="fas fa-phone"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-descr">
+                        <p>ผู้เชี่ยวชาญด้านการสืบทรัพย์และบังคับคดี มีประสบการณ์ในการดำเนินคดีและติดตามทรัพย์สินอย่างมีประสิทธิภาพ</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 4: ทนายความ -->
+            <div class="col-md-4">
+                <div class="team-item">
+                    <div class="team-image">
+                        <img src="{{ asset('frontend/images/team/2.jpg') }}" alt="นางสาวพลอยไพลิน อยู่ยืน">
+                        <div class="team-wrap">
+                            <div class="team-content">
+                                <h6 class="team-name">นางสาวพลอยไพลิน อยู่ยืน</h6>
+                                <div class="team-role">ทนายความ</div>
+                            </div>
+                            <div class="team-content-social">
+                                <ul>
+                                    <li><a href="mailto:ploypailin@example.com"><i class="fas fa-envelope"></i></a></li>
+                                    <li><a href="tel:0845678901"><i class="fas fa-phone"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-descr">
+                        <p>ทนายความผู้มีความเชี่ยวชาญในคดีแพ่งและอาญา พร้อมให้คำปรึกษาและดำเนินคดีด้วยความรอบคอบ</p>
+                    </div>
+                </div>
             </div>
         </div>
-        @endif
     </div>
 </section>
 <!-- Team Members end-->
