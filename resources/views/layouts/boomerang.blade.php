@@ -794,12 +794,12 @@ body {
                 <div class="widget-text">ติดต่อเราที่นี่เลยค่ะ</div>
             </a>
             
-            <a href="https://m.me/YOUR_FB_PAGE" target="_blank" class="widget-item">
+            {{-- <a href="https://m.me/YOUR_FB_PAGE" target="_blank" class="widget-item">
                 <div class="widget-icon facebook">
                     <i class="bi bi-messenger"></i>
                 </div>
                 <div class="widget-text">พูดคุยผ่าน Facebook</div>
-            </a>
+            </a> --}}
             
             <a href="tel:0922569828" class="widget-item">
                 <div class="widget-icon phone">
@@ -808,12 +808,12 @@ body {
                 <div class="widget-text">โทรหาเรา</div>
             </a>
             
-            <a href="https://line.me/R/ti/p/@pjslegal" target="_blank" class="widget-item">
+            {{-- <a href="https://line.me/ti/p/sLjBmLc4UW" target="_blank" class="widget-item">
                 <div class="widget-icon line">
                     <i class="bi bi-line"></i>
                 </div>
                 <div class="widget-text">Line Official</div>
-            </a>
+            </a> --}}
         </div>
         
         <div class="widget-toggle" id="widgetToggle">

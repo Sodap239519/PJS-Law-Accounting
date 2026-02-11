@@ -143,7 +143,7 @@
                                 <div class="icon-box-icon"><i class="bi bi-line"></i></div>
                                 <div class="icon-box-content">
                                     <h6>LINE</h6>
-                                    <p>LINE Official</p>
+                                    <p>@pjslegal</p>
                                 </div>
                             </div>
                         </li>
