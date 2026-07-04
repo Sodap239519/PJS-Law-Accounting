@@ -1,19 +1,11 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
+import { ref } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
+    canResetPassword: { type: Boolean },
+    status: { type: String },
 });
 
 const form = useForm({
@@ -21,6 +13,8 @@ const form = useForm({
     password: '',
     remember: false,
 });
+
+const showPassword = ref(false);
 
 const submit = () => {
     form.post(route('login'), {
@@ -31,70 +25,88 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
+        <Head title="เข้าสู่ระบบ" />
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
+        <div class="overflow-hidden rounded-3xl bg-white shadow-soft">
+            <!-- Brand header -->
+            <div class="bg-gradient-to-br from-pjs-navy to-pjs-blue px-8 py-9 text-center text-white">
+                <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
+                    <i class="fi fi-rr-briefcase text-2xl leading-none"></i>
+                </div>
+                <h1 class="text-lg font-bold tracking-wide">PJS Law &amp; Accounting</h1>
+                <p class="mt-1 text-sm text-blue-100/80">เข้าสู่ระบบจัดการเว็บไซต์</p>
+            </div>
+
+            <form class="space-y-5 px-8 py-8" @submit.prevent="submit">
+                <div v-if="status" class="rounded-xl bg-green-50 px-4 py-2 text-sm font-medium text-green-600">
+                    {{ status }}
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-slate-600">อีเมล</label>
+                    <div class="relative">
+                        <i class="fi fi-rr-envelope pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input
+                            v-model="form.email"
+                            type="email"
+                            required
+                            autofocus
+                            autocomplete="username"
+                            placeholder="you@example.com"
+                            class="w-full rounded-xl border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-slate-700 focus:border-pjs-blue focus:bg-white focus:ring-pjs-blue"
+                        />
+                    </div>
+                    <p v-if="form.errors.email" class="mt-1.5 text-sm text-red-500">{{ form.errors.email }}</p>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-slate-600">รหัสผ่าน</label>
+                    <div class="relative">
+                        <i class="fi fi-rr-lock pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input
+                            v-model="form.password"
+                            :type="showPassword ? 'text' : 'password'"
+                            required
+                            autocomplete="current-password"
+                            placeholder="••••••••"
+                            class="w-full rounded-xl border-slate-200 bg-slate-50 py-3 pl-11 pr-11 text-slate-700 focus:border-pjs-blue focus:bg-white focus:ring-pjs-blue"
+                        />
+                        <button
+                            type="button"
+                            class="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 hover:text-pjs-blue"
+                            @click="showPassword = !showPassword"
+                        >
+                            <i :class="showPassword ? 'fi fi-rr-eye-crossed' : 'fi fi-rr-eye'" class="leading-none"></i>
+                        </button>
+                    </div>
+                    <p v-if="form.errors.password" class="mt-1.5 text-sm text-red-500">{{ form.errors.password }}</p>
+                </div>
+
+                <!-- Remember / forgot -->
+                <div class="flex items-center justify-between">
+                    <label class="flex cursor-pointer items-center gap-2 text-sm text-slate-500">
+                        <input v-model="form.remember" type="checkbox" class="rounded border-slate-300 text-pjs-blue focus:ring-pjs-blue" />
+                        จดจำฉันไว้
+                    </label>
+                    <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm text-pjs-blue hover:underline">
+                        ลืมรหัสผ่าน?
+                    </Link>
+                </div>
+
+                <!-- Submit -->
+                <button
+                    type="submit"
+                    :disabled="form.processing"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-pjs-blue to-pjs-blue-dark py-3 font-medium text-white shadow-lg shadow-pjs-blue/30 transition hover:opacity-95 disabled:opacity-50"
+                >
+                    <i class="fi fi-rr-sign-in-alt leading-none"></i>
+                    {{ form.processing ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ' }}
+                </button>
+            </form>
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
+        <p class="mt-6 text-center text-xs text-slate-400">© PJS Law and Accounting Co., Ltd.</p>
     </GuestLayout>
 </template>

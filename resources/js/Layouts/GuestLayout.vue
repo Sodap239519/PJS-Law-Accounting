@@ -1,21 +1,15 @@
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
+// พื้นหลังนุ่มโทนน้ำเงินโมเดิร์น สำหรับหน้า auth ทั้งหมด
 </script>
 
 <template>
-    <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
-    >
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
-            </Link>
-        </div>
+    <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-pjs-bg px-4 py-10">
+        <!-- decorative blobs -->
+        <div class="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-pjs-blue/10"></div>
+        <div class="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-pjs-blue/10"></div>
+        <div class="pointer-events-none absolute left-1/2 top-10 h-40 w-40 -translate-x-1/2 rounded-full bg-pjs-blue/5"></div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
+        <div class="relative w-full max-w-md">
             <slot />
         </div>
     </div>
