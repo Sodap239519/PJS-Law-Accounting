@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLinks;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class News extends Model
+class News extends Model implements HasMedia
 {
+    use InteractsWithMedia, HasLinks;
+
     protected $fillable = [
-        'title_th',
-        'title_en',
+        'title',
         'slug',
-        'excerpt_th',
-        'excerpt_en',
-        'content_th',
-        'content_en',
-        'featured_image',
+        'excerpt',
+        'content',
         'category_id',
         'is_published',
         'published_at',
@@ -37,8 +38,15 @@ class News extends Model
         return $query->where('is_published', true);
     }
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('cover')->singleFile();   // 16:9
+        $this->addMediaCollection('gallery');
+        $this->addMediaCollection('attachments');
     }
 }

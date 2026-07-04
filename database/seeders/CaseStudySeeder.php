@@ -8,63 +8,48 @@ use Illuminate\Database\Seeder;
 
 class CaseStudySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $businessLawCategory = Category::where('slug', 'business-law')->first();
-        $generalLawCategory = Category::where('slug', 'general-law')->first();
+        $businessLaw = Category::where('slug', 'business-law')->first();
+        $generalLaw = Category::where('slug', 'general-law')->first();
 
-        $caseStudies = [
+        $cases = [
             [
-                'title_th' => 'คดีพิพาทสัญญาซื้อขายที่ดินมูลค่าสูง',
-                'title_en' => 'High-Value Land Purchase Contract Dispute Case',
+                'title' => 'คดีพิพาทสัญญาซื้อขายที่ดินมูลค่าสูง',
                 'slug' => 'high-value-land-dispute-case',
-                'client_name' => 'Confidential',
-                'challenge_th' => 'ลูกความถูกฟ้องเรียกค่าเสียหายจากการผิดสัญญาซื้อขายที่ดินมูลค่า 50 ล้านบาท โดยคู่กรณีอ้างว่าลูกความไม่ได้ชำระเงินตามเงื่อนไขที่ตกลงไว้',
-                'challenge_en' => 'Client was sued for damages from breach of a 50 million baht land purchase contract, with the opposing party claiming non-payment according to agreed terms.',
-                'solution_th' => 'ทีมทนายความได้รวบรวมพยานหลักฐานการโอนเงินและเอกสารสัญญาทั้งหมด พบว่าลูกความได้ชำระเงินครบถ้วนตามสัญญา และนำเสนอพยานหลักฐานต่อศาลอย่างเป็นระบบ',
-                'solution_en' => 'The legal team compiled all payment transfer evidence and contract documents, discovering that the client had fully paid according to the contract, and systematically presented evidence to the court.',
-                'result_th' => 'ศาลตัดสินให้ลูกความชนะคดี และยกฟ้อง นอกจากนี้ศาลยังสั่งให้คู่กรณีชดใช้ค่าทนายความและค่าฤชาธรรมเนียมศาลให้แก่ลูกความอีกด้วย',
-                'result_en' => 'The court ruled in favor of the client and dismissed the case. Additionally, the court ordered the opposing party to compensate the client for attorney fees and court costs.',
-                'category_id' => $businessLawCategory->id,
+                'client_name' => 'ปกปิดข้อมูล',
+                'content' => '<h3>ความท้าทาย</h3><p>ลูกความถูกฟ้องเรียกค่าเสียหายจากการผิดสัญญาซื้อขายที่ดินมูลค่า 50 ล้านบาท โดยคู่กรณีอ้างว่าลูกความไม่ได้ชำระเงินตามเงื่อนไข</p>'
+                    .'<h3>แนวทางแก้ไข</h3><p>ทีมทนายความรวบรวมพยานหลักฐานการโอนเงินและเอกสารสัญญาทั้งหมด พบว่าลูกความชำระเงินครบถ้วนตามสัญญา และนำเสนอต่อศาลอย่างเป็นระบบ</p>'
+                    .'<h3>ผลลัพธ์</h3><p>ศาลตัดสินให้ลูกความชนะคดีและยกฟ้อง อีกทั้งสั่งให้คู่กรณีชดใช้ค่าทนายความและค่าฤชาธรรมเนียมศาล</p>',
+                'category_id' => $businessLaw->id,
                 'is_published' => true,
                 'views' => 180,
             ],
             [
-                'title_th' => 'คดีละเมิดลิขสิทธิ์ซอฟต์แวร์',
-                'title_en' => 'Software Copyright Infringement Case',
+                'title' => 'คดีละเมิดลิขสิทธิ์ซอฟต์แวร์',
                 'slug' => 'software-copyright-infringement-case',
-                'client_name' => 'Technology Startup',
-                'challenge_th' => 'บริษัทสตาร์ทอัพด้านเทคโนโลยีถูกฟ้องละเมิดลิขสิทธิ์ซอฟต์แวร์ โดยคู่กรณีอ้างว่าซอฟต์แวร์ของลูกความลอกเลียนแบบผลิตภัณฑ์ของตน',
-                'challenge_en' => 'A technology startup was sued for software copyright infringement, with the opposing party claiming the client\'s software copied their product.',
-                'solution_th' => 'ทีมงานได้วิเคราะห์โค้ดซอร์สโค้ดและเอกสารการพัฒนาทั้งหมด พบว่าซอฟต์แวร์ของลูกความถูกพัฒนาขึ้นเองโดยสมบูรณ์ และมีหลักฐานการพัฒนาที่ชัดเจนตั้งแต่เริ่มต้นโครงการ',
-                'solution_en' => 'The team analyzed all source code and development documentation, finding that the client\'s software was completely independently developed with clear evidence of development from project inception.',
-                'result_th' => 'ศาลตัดสินให้ลูกความชนะคดี และคู่กรณีต้องชดใช้ค่าเสียหายและค่าใช้จ่ายในการดำเนินคดีทั้งหมดให้แก่ลูกความ',
-                'result_en' => 'The court ruled in favor of the client, and the opposing party was required to compensate all damages and litigation costs to the client.',
-                'category_id' => $businessLawCategory->id,
+                'client_name' => 'บริษัทเทคโนโลยีสตาร์ทอัพ',
+                'content' => '<h3>ความท้าทาย</h3><p>บริษัทสตาร์ทอัพถูกฟ้องละเมิดลิขสิทธิ์ซอฟต์แวร์ โดยคู่กรณีอ้างว่าซอฟต์แวร์ของลูกความลอกเลียนแบบผลิตภัณฑ์ของตน</p>'
+                    .'<h3>แนวทางแก้ไข</h3><p>ทีมงานวิเคราะห์ซอร์สโค้ดและเอกสารการพัฒนาทั้งหมด พบว่าซอฟต์แวร์ถูกพัฒนาขึ้นเองโดยสมบูรณ์ มีหลักฐานการพัฒนาชัดเจนตั้งแต่เริ่มโครงการ</p>'
+                    .'<h3>ผลลัพธ์</h3><p>ศาลตัดสินให้ลูกความชนะคดี คู่กรณีต้องชดใช้ค่าเสียหายและค่าใช้จ่ายในการดำเนินคดีทั้งหมด</p>',
+                'category_id' => $businessLaw->id,
                 'is_published' => true,
                 'views' => 145,
             ],
             [
-                'title_th' => 'คดีสืบทรัพย์และบังคับคดีหนี้ค้างชำระ',
-                'title_en' => 'Asset Investigation and Debt Collection Case',
+                'title' => 'คดีสืบทรัพย์และบังคับคดีหนี้ค้างชำระ',
                 'slug' => 'asset-investigation-debt-collection',
-                'client_name' => 'Private Company',
-                'challenge_th' => 'ลูกความมีลูกหนี้ค้างชำระเงินกู้จำนวน 30 ล้านบาท โดยลูกหนี้ได้ซ่อนทรัพย์สินและหลบหนี ทำให้ไม่สามารถติดตามทวงถามหนี้ได้',
-                'challenge_en' => 'Client had a debtor owing 30 million baht in outstanding loans, with the debtor hiding assets and evading contact, making debt collection impossible.',
-                'solution_th' => 'ทีมสืบทรัพย์ได้ดำเนินการตรวจสอบและสืบค้นทรัพย์สินของลูกหนี้อย่างละเอียด พบทรัพย์สินหลายรายการที่ถูกโอนให้บุคคลที่สาม และยื่นคำร้องต่อศาลให้เพิกถอนการโอนทรัพย์สิน',
-                'solution_en' => 'The asset investigation team thoroughly examined and traced the debtor\'s assets, discovering multiple properties transferred to third parties, and filed a petition to the court to revoke the asset transfers.',
-                'result_th' => 'ศาลสั่งเพิกถอนการโอนทรัพย์สินและอนุญาตให้บังคับคดียึดทรัพย์สิน ลูกความได้รับเงินคืนครบถ้วน 100% พร้อมดอกเบี้ยและค่าเสียหาย',
-                'result_en' => 'The court ordered the asset transfers revoked and authorized execution to seize the properties. The client received full 100% repayment plus interest and damages.',
-                'category_id' => $generalLawCategory->id,
+                'client_name' => 'บริษัทเอกชน',
+                'content' => '<h3>ความท้าทาย</h3><p>ลูกความมีลูกหนี้ค้างชำระเงินกู้ 30 ล้านบาท ลูกหนี้ซ่อนทรัพย์สินและหลบหนี ทำให้ติดตามทวงถามหนี้ไม่ได้</p>'
+                    .'<h3>แนวทางแก้ไข</h3><p>ทีมสืบทรัพย์ตรวจสอบและสืบค้นทรัพย์สินของลูกหนี้อย่างละเอียด พบทรัพย์สินหลายรายการที่ถูกโอนให้บุคคลที่สาม และยื่นคำร้องให้ศาลเพิกถอนการโอน</p>'
+                    .'<h3>ผลลัพธ์</h3><p>ศาลสั่งเพิกถอนการโอนทรัพย์สินและอนุญาตให้บังคับคดียึดทรัพย์ ลูกความได้รับเงินคืนครบ 100% พร้อมดอกเบี้ยและค่าเสียหาย</p>',
+                'category_id' => $generalLaw->id,
                 'is_published' => true,
                 'views' => 220,
             ],
         ];
 
-        foreach ($caseStudies as $case) {
+        foreach ($cases as $case) {
             CaseStudy::create($case);
         }
     }

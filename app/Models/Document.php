@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Document extends Model
+class Document extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
-        'title_th',
-        'title_en',
-        'description_th',
-        'description_en',
-        'file_path',
-        'file_name',
-        'file_size',
+        'title',
+        'description',
         'category_id',
         'downloads',
         'is_active',
@@ -29,8 +28,19 @@ class Document extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function incrementDownloads(): void
     {
         $this->increment('downloads');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        // ไฟล์ word/pdf/excel/ppt/image
+        $this->addMediaCollection('file')->singleFile();
     }
 }

@@ -8,12 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     protected $fillable = [
-        'name_th',
-        'name_en',
+        'name',
         'slug',
         'type',
-        'description_th',
-        'description_en',
+        'description',
         'is_active',
     ];
 
@@ -26,13 +24,23 @@ class Category extends Model
         return $this->hasMany(News::class);
     }
 
-    public function documents(): HasMany
+    public function announcements(): HasMany
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Announcement::class);
     }
 
     public function caseStudies(): HasMany
     {
         return $this->hasMany(CaseStudy::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function scopeType($query, string $type)
+    {
+        return $query->where('type', $type);
     }
 }

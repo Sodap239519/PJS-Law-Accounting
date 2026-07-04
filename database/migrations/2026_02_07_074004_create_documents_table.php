@@ -13,18 +13,14 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->string('title_th');
-            $table->string('title_en');
-            $table->text('description_th')->nullable();
-            $table->text('description_en')->nullable();
-            $table->string('file_path');
-            $table->string('file_name');
-            $table->integer('file_size'); // in bytes
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
-            $table->integer('downloads')->default(0);
+            $table->unsignedInteger('downloads')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
+        // ไฟล์เอกสาร (word/pdf/excel/ppt/image) เก็บผ่าน spatie medialibrary collection 'file'
     }
 
     /**
