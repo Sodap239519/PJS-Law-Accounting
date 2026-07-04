@@ -21,6 +21,7 @@ class CaseStudyRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('case_studies', 'slug')->ignore($id)],
             'client_name' => ['nullable', 'string', 'max:255'],
             'content' => ['nullable', 'string'],
+            'translations' => ['nullable', 'array'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'is_published' => ['boolean'],
 

@@ -17,6 +17,7 @@ class ServiceRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:100'],
             'content' => ['nullable', 'string'],
+            'translations' => ['nullable', 'array'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
 

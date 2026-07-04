@@ -51,6 +51,7 @@ class ServiceController extends Controller
                 'title' => $service->title,
                 'icon' => $service->icon,
                 'content' => $service->content,
+                'translations' => $service->translations,
                 'sort_order' => $service->sort_order,
                 'is_active' => $service->is_active,
                 ...$this->mediaPayload($service, withLinks: false),
@@ -79,6 +80,7 @@ class ServiceController extends Controller
             'title' => $request->input('title'),
             'icon' => $request->input('icon'),
             'content' => $request->input('content'),
+            'translations' => $request->input('translations'),
             'sort_order' => (int) $request->input('sort_order', 0),
             'is_active' => $request->boolean('is_active'),
         ];

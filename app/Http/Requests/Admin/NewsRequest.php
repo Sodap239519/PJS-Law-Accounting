@@ -21,6 +21,7 @@ class NewsRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('news', 'slug')->ignore($newsId)],
             'excerpt' => ['nullable', 'string'],
             'content' => ['required', 'string'],
+            'translations' => ['nullable', 'array'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'is_published' => ['boolean'],
             'published_at' => ['nullable', 'date'],

@@ -16,10 +16,12 @@ class Service extends Model implements HasMedia
         'content',
         'sort_order',
         'is_active',
+        'translations',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'translations' => 'array',
     ];
 
     public function scopeActive($query)

@@ -21,6 +21,7 @@ class AnnouncementRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('announcements', 'slug')->ignore($id)],
             'excerpt' => ['nullable', 'string'],
             'content' => ['required', 'string'],
+            'translations' => ['nullable', 'array'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'is_published' => ['boolean'],
             'published_at' => ['nullable', 'date'],

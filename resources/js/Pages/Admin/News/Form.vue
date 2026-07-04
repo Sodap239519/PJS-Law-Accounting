@@ -7,6 +7,7 @@ import CoverUploader from '@/Components/Admin/CoverUploader.vue';
 import GalleryUploader from '@/Components/Admin/GalleryUploader.vue';
 import FileAttachments from '@/Components/Admin/FileAttachments.vue';
 import LinksRepeater from '@/Components/Admin/LinksRepeater.vue';
+import TranslationFields from '@/Components/Admin/TranslationFields.vue';
 
 const props = defineProps({
     news: { type: Object, default: null },
@@ -29,6 +30,7 @@ const form = useForm({
     attachments: [],
     deleted_media: [],
     links: props.news?.links ? [...props.news.links] : [],
+    translations: props.news?.translations || null,
 });
 
 const deletedGallery = ref([]);
@@ -67,6 +69,17 @@ const submit = () => {
                         <label class="mb-1 mt-4 block text-sm font-medium text-gray-700">เนื้อหา *</label>
                         <RichEditor v-model="form.content" />
                         <p v-if="form.errors.content" class="mt-1 text-sm text-red-600">{{ form.errors.content }}</p>
+                    </div>
+
+                    <div class="rounded-xl border bg-white p-5 shadow-sm">
+                        <TranslationFields
+                            v-model="form.translations"
+                            :fields="[
+                                { key: 'title', label: 'หัวข้อ', type: 'text' },
+                                { key: 'excerpt', label: 'เกริ่นนำ', type: 'textarea' },
+                                { key: 'content', label: 'เนื้อหา', type: 'rich' },
+                            ]"
+                        />
                     </div>
 
                     <div class="rounded-xl border bg-white p-5 shadow-sm">

@@ -20,10 +20,12 @@ class CaseStudy extends Model implements HasMedia
         'category_id',
         'is_published',
         'views',
+        'translations',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
+        'translations' => 'array',
     ];
 
     public function category(): BelongsTo

@@ -21,11 +21,13 @@ class News extends Model implements HasMedia
         'is_published',
         'published_at',
         'views',
+        'translations',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'published_at' => 'datetime',
+        'translations' => 'array',
     ];
 
     public function category(): BelongsTo

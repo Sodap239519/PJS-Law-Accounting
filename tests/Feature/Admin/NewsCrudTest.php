@@ -88,6 +88,24 @@ class NewsCrudTest extends TestCase
         $this->assertTrue($fresh->is_published);
     }
 
+    public function test_admin_can_save_translations(): void
+    {
+        $this->actingAs($this->admin())
+            ->post('/admin/news', [
+                'title' => 'ข่าวไทย',
+                'content' => '<p>เนื้อหาไทย</p>',
+                'translations' => [
+                    'en' => ['title' => 'English News', 'content' => '<p>English body</p>'],
+                    'zh' => ['title' => '中文新闻'],
+                ],
+            ])
+            ->assertRedirect(route('admin.news.index'));
+
+        $news = News::first();
+        $this->assertSame('English News', $news->translations['en']['title']);
+        $this->assertSame('中文新闻', $news->translations['zh']['title']);
+    }
+
     public function test_admin_can_delete(): void
     {
         $news = News::create(['title' => 'ลบ', 'slug' => 'del', 'content' => 'x']);

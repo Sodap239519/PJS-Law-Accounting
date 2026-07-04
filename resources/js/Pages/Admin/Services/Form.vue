@@ -4,6 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import RichEditor from '@/Components/Admin/RichEditor.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
+import TranslationFields from '@/Components/Admin/TranslationFields.vue';
 
 const props = defineProps({
     service: { type: Object, default: null },
@@ -19,6 +20,7 @@ const form = useForm({
     is_active: props.service?.is_active ?? true,
     cover: null,
     remove_cover: false,
+    translations: props.service?.translations || null,
 });
 
 const submit = () => {
@@ -61,6 +63,16 @@ const submit = () => {
                 <label class="mb-2 mt-4 flex items-center gap-2 text-sm font-medium text-gray-700">
                     <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
                 </label>
+            </div>
+
+            <div class="rounded-xl border bg-white p-5 shadow-sm">
+                <TranslationFields
+                    v-model="form.translations"
+                    :fields="[
+                        { key: 'title', label: 'ชื่อบริการ', type: 'text' },
+                        { key: 'content', label: 'รายละเอียด', type: 'rich' },
+                    ]"
+                />
             </div>
 
             <div class="rounded-xl border bg-white p-5 shadow-sm">
