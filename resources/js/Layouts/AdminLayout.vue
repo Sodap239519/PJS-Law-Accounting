@@ -10,6 +10,7 @@ const unread = computed(() => page.props.unreadMessages || 0);
 
 const mobileOpen = ref(false);
 const openGroup = ref(null);
+const profileOpen = ref(false);
 
 // เรียงตามลำดับหน้า frontend; เมนูระบบรวมใน "ตั้งค่าระบบ"
 const nav = [
@@ -122,13 +123,31 @@ const logout = () => router.post(route('logout'));
                         <span v-if="unread > 0" class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">{{ unread > 99 ? '99+' : unread }}</span>
                     </component>
 
-                    <Link :href="route('profile.edit')" class="flex h-9 w-9 items-center justify-center rounded-full transition hover:ring-2 hover:ring-pjs-blue/30" title="แก้ไขโปรไฟล์">
-                        <img v-if="user?.avatar" :src="user.avatar" class="h-8 w-8 rounded-full object-cover" />
-                        <span v-else class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-person text-sm"></i></span>
-                    </Link>
-                    <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100" title="ออกจากระบบ" @click="logout">
-                        <i class="bi bi-box-arrow-right"></i>
-                    </button>
+                    <!-- Profile dropdown -->
+                    <div class="relative">
+                        <button class="flex h-9 w-9 items-center justify-center rounded-full transition hover:ring-2 hover:ring-pjs-blue/30" title="โปรไฟล์" @click="profileOpen = !profileOpen">
+                            <img v-if="user?.avatar" :src="user.avatar" class="h-8 w-8 rounded-full object-cover" />
+                            <span v-else class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-person text-sm"></i></span>
+                        </button>
+                        <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
+                            <div v-if="profileOpen" class="absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
+                                <div class="flex items-center gap-2.5 border-b border-slate-100 px-3 py-2.5">
+                                    <img v-if="user?.avatar" :src="user.avatar" class="h-9 w-9 rounded-full object-cover" />
+                                    <span v-else class="flex h-9 w-9 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-person"></i></span>
+                                    <div class="min-w-0">
+                                        <p class="truncate text-sm font-semibold text-slate-800">{{ user?.name }}</p>
+                                        <p class="text-[11px] text-slate-400">{{ user?.role === 'super_admin' ? 'Super Admin' : 'ผู้ดูแลระบบ' }}</p>
+                                    </div>
+                                </div>
+                                <Link :href="route('profile.edit')" class="mt-1 flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50" @click="profileOpen = false">
+                                    <i class="bi bi-person-gear text-pjs-blue/70"></i> แก้ไขโปรไฟล์
+                                </Link>
+                                <button class="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50" @click="logout">
+                                    <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
+                                </button>
+                            </div>
+                        </Transition>
+                    </div>
                     <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 lg:hidden" @click="mobileOpen = !mobileOpen">
                         <i class="bi bi-list text-lg"></i>
                     </button>
@@ -136,7 +155,7 @@ const logout = () => router.post(route('logout'));
             </div>
 
             <!-- click-away backdrop -->
-            <div v-if="openGroup" class="fixed inset-0 z-30" @click="openGroup = null"></div>
+            <div v-if="openGroup || profileOpen" class="fixed inset-0 z-30" @click="openGroup = null; profileOpen = false"></div>
 
             <!-- Mobile nav -->
             <Transition enter-active-class="transition" enter-from-class="opacity-0" leave-active-class="transition" leave-to-class="opacity-0">
@@ -161,8 +180,8 @@ const logout = () => router.post(route('logout'));
 
         <!-- Page -->
         <main class="mx-auto max-w-6xl px-4 py-5">
-            <div class="mb-4">
-                <h1 class="text-lg font-semibold text-slate-800"><slot name="title">หลังบ้าน</slot></h1>
+            <div v-if="$slots.title" class="mb-4">
+                <h1 class="text-lg font-semibold text-slate-800"><slot name="title" /></h1>
             </div>
             <slot />
         </main>

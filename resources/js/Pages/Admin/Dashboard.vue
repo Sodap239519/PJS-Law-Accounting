@@ -54,8 +54,6 @@ const quickActions = [
 <template>
     <Head title="แดชบอร์ด" />
     <AdminLayout>
-        <template #title>แดชบอร์ด</template>
-
         <!-- Welcome + big numbers -->
         <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
