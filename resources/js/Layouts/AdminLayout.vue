@@ -17,11 +17,13 @@ const nav = [
     { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'bi bi-info-circle' },
     { label: 'บริการของเรา', name: 'admin.services.index', icon: 'bi bi-briefcase' },
     { label: 'ทีมงาน', name: 'admin.team-members.index', icon: 'bi bi-people' },
-    { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
-    { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+    { label: 'ข่าวสาร', icon: 'bi bi-newspaper', items: [
+        { label: 'ข่าวสารและกิจกรรม', name: 'admin.news.index', icon: 'bi bi-newspaper' },
+        { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+    ] },
     { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
     { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'bi bi-telephone' },
-    { label: 'ตั้งค่าระบบ', icon: 'bi bi-gear', items: [
+    { label: 'ตั้งค่าระบบ', icon: 'bi bi-gear', align: 'right', items: [
         { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
         { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
         { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope' },
@@ -86,7 +88,7 @@ const logout = () => router.post(route('logout'));
                                 <i class="bi bi-chevron-down text-[9px]"></i>
                             </button>
                             <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
-                                <div v-if="openGroup === g.label" class="absolute right-0 z-50 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
+                                <div v-if="openGroup === g.label" class="absolute z-50 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft" :class="g.align === 'right' ? 'right-0' : 'left-0'">
                                     <template v-for="item in g.items" :key="item.name">
                                         <Link
                                             v-if="hasRoute(item.name)"
@@ -120,10 +122,9 @@ const logout = () => router.post(route('logout'));
                         <span v-if="unread > 0" class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">{{ unread > 99 ? '99+' : unread }}</span>
                     </component>
 
-                    <Link :href="route('profile.edit')" class="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 hover:bg-slate-100">
+                    <Link :href="route('profile.edit')" class="flex h-9 w-9 items-center justify-center rounded-full transition hover:ring-2 hover:ring-pjs-blue/30" title="แก้ไขโปรไฟล์">
                         <img v-if="user?.avatar" :src="user.avatar" class="h-8 w-8 rounded-full object-cover" />
                         <span v-else class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-person text-sm"></i></span>
-                        <span class="hidden text-sm text-slate-600 xl:block">{{ user?.name }}</span>
                     </Link>
                     <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100" title="ออกจากระบบ" @click="logout">
                         <i class="bi bi-box-arrow-right"></i>
