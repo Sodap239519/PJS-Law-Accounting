@@ -10,29 +10,29 @@ const sidebarOpen = ref(false);
 
 const menu = [
     { section: 'ภาพรวม', items: [
-        { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'fi fi-rr-dashboard' },
+        { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
     ] },
     { section: 'เนื้อหาเว็บ', items: [
-        { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'fi fi-rr-picture' },
-        { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'fi fi-rr-info' },
-        { label: 'บริการ', name: 'admin.services.index', icon: 'fi fi-rr-briefcase' },
+        { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
+        { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'bi bi-info-circle' },
+        { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
     ] },
     { section: 'ข่าว & สื่อ', items: [
-        { label: 'ข่าวสารและกิจกรรม', name: 'admin.news.index', icon: 'fi fi-rr-document' },
-        { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'fi fi-rr-megaphone' },
-        { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'fi fi-rr-gavel' },
+        { label: 'ข่าวสารและกิจกรรม', name: 'admin.news.index', icon: 'bi bi-newspaper' },
+        { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+        { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
     ] },
     { section: 'ข้อมูลองค์กร', items: [
-        { label: 'บุคลากร', name: 'admin.team-members.index', icon: 'fi fi-rr-users' },
-        { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'fi fi-rr-cloud-download-alt' },
+        { label: 'บุคลากร', name: 'admin.team-members.index', icon: 'bi bi-people' },
+        { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
     ] },
     { section: 'ติดต่อ', items: [
-        { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'fi fi-rr-phone-call' },
-        { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'fi fi-rr-envelope' },
+        { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'bi bi-telephone' },
+        { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope' },
     ] },
     { section: 'ระบบ', items: [
-        { label: 'ตั้งค่าเว็บไซต์', name: 'admin.settings.edit', icon: 'fi fi-rr-settings' },
-        { label: 'ผู้ใช้ระบบ', name: 'admin.users.index', icon: 'fi fi-rr-shield-check', superAdmin: true },
+        { label: 'ตั้งค่าเว็บไซต์', name: 'admin.settings.edit', icon: 'bi bi-gear' },
+        { label: 'ผู้ใช้ระบบ', name: 'admin.users.index', icon: 'bi bi-shield-check', superAdmin: true },
     ] },
 ];
 
@@ -60,7 +60,7 @@ const logout = () => router.post(route('logout'));
         >
             <div class="flex h-16 items-center gap-3 px-5">
                 <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-pjs-blue text-white">
-                    <i class="fi fi-rr-briefcase text-base leading-none"></i>
+                    <i class="bi bi-briefcase text-base leading-none"></i>
                 </div>
                 <div class="leading-tight">
                     <p class="text-sm font-bold tracking-wide">PJS Admin</p>
@@ -96,13 +96,13 @@ const logout = () => router.post(route('logout'));
         <div class="lg:pl-64">
             <header class="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur">
                 <button class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 lg:hidden" @click="sidebarOpen = true">
-                    <i class="fi fi-rr-menu-burger leading-none"></i>
+                    <i class="bi bi-list leading-none"></i>
                 </button>
                 <h1 class="text-base font-semibold text-slate-800"><slot name="title">หลังบ้าน</slot></h1>
                 <div class="ml-auto flex items-center gap-2">
                     <Link :href="route('profile.edit')" class="hidden items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm hover:bg-slate-100 sm:flex">
                         <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue">
-                            <i class="fi fi-rr-user text-sm leading-none"></i>
+                            <i class="bi bi-person text-sm leading-none"></i>
                         </span>
                         <span class="text-slate-600">{{ user?.name }}</span>
                         <span class="rounded-full bg-pjs-blue/10 px-2 py-0.5 text-[11px] font-medium text-pjs-blue-dark">
@@ -110,7 +110,7 @@ const logout = () => router.post(route('logout'));
                         </span>
                     </Link>
                     <button class="flex h-9 items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm text-slate-500 hover:bg-slate-50" @click="logout">
-                        <i class="fi fi-rr-sign-out-alt leading-none"></i>
+                        <i class="bi bi-box-arrow-right leading-none"></i>
                         <span class="hidden sm:inline">ออกจากระบบ</span>
                     </button>
                 </div>
@@ -118,10 +118,10 @@ const logout = () => router.post(route('logout'));
 
             <div v-if="flash.success || flash.error" class="px-4 pt-4 sm:px-6">
                 <div v-if="flash.success" class="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
-                    <i class="fi fi-rr-check-circle leading-none"></i>{{ flash.success }}
+                    <i class="bi bi-check-circle leading-none"></i>{{ flash.success }}
                 </div>
                 <div v-if="flash.error" class="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                    <i class="fi fi-rr-cross-circle leading-none"></i>{{ flash.error }}
+                    <i class="bi bi-x-circle leading-none"></i>{{ flash.error }}
                 </div>
             </div>
 

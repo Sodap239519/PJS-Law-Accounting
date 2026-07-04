@@ -8,14 +8,14 @@ const props = defineProps({
 });
 
 const cards = computed(() => [
-    { label: 'ข่าวสาร/กิจกรรม', value: props.stats.news ?? 0, route: 'admin.news.index', icon: 'fi fi-rr-document' },
-    { label: 'ประชาสัมพันธ์', value: props.stats.announcements ?? 0, route: 'admin.announcements.index', icon: 'fi fi-rr-megaphone' },
-    { label: 'คดีตัวอย่าง', value: props.stats.caseStudies ?? 0, route: 'admin.case-studies.index', icon: 'fi fi-rr-gavel' },
-    { label: 'บริการ', value: props.stats.services ?? 0, route: 'admin.services.index', icon: 'fi fi-rr-briefcase' },
-    { label: 'เอกสารดาวน์โหลด', value: props.stats.documents ?? 0, route: 'admin.documents.index', icon: 'fi fi-rr-cloud-download-alt' },
-    { label: 'บุคลากร', value: props.stats.team ?? 0, route: 'admin.team-members.index', icon: 'fi fi-rr-users' },
-    { label: 'แบนเนอร์', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'fi fi-rr-picture' },
-    { label: 'ข้อความยังไม่อ่าน', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'fi fi-rr-envelope', highlight: true },
+    { label: 'ข่าวสาร/กิจกรรม', value: props.stats.news ?? 0, route: 'admin.news.index', icon: 'bi bi-newspaper' },
+    { label: 'ประชาสัมพันธ์', value: props.stats.announcements ?? 0, route: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+    { label: 'คดีตัวอย่าง', value: props.stats.caseStudies ?? 0, route: 'admin.case-studies.index', icon: 'bi bi-bank' },
+    { label: 'บริการ', value: props.stats.services ?? 0, route: 'admin.services.index', icon: 'bi bi-briefcase' },
+    { label: 'เอกสารดาวน์โหลด', value: props.stats.documents ?? 0, route: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
+    { label: 'บุคลากร', value: props.stats.team ?? 0, route: 'admin.team-members.index', icon: 'bi bi-people' },
+    { label: 'แบนเนอร์', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'bi bi-image' },
+    { label: 'ข้อความยังไม่อ่าน', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope', highlight: true },
 ]);
 
 const hasRoute = (name) => route().has(name);

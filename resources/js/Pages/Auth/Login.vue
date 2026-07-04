@@ -31,7 +31,7 @@ const submit = () => {
             <!-- Brand header -->
             <div class="bg-gradient-to-br from-pjs-navy to-pjs-blue px-8 py-9 text-center text-white">
                 <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
-                    <i class="fi fi-rr-briefcase text-2xl leading-none"></i>
+                    <i class="bi bi-briefcase text-2xl leading-none"></i>
                 </div>
                 <h1 class="text-lg font-bold tracking-wide">PJS Law &amp; Accounting</h1>
                 <p class="mt-1 text-sm text-blue-100/80">เข้าสู่ระบบจัดการเว็บไซต์</p>
@@ -46,7 +46,7 @@ const submit = () => {
                 <div>
                     <label class="mb-1.5 block text-sm font-medium text-slate-600">อีเมล</label>
                     <div class="relative">
-                        <i class="fi fi-rr-envelope pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <i class="bi bi-envelope pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         <input
                             v-model="form.email"
                             type="email"
@@ -64,7 +64,7 @@ const submit = () => {
                 <div>
                     <label class="mb-1.5 block text-sm font-medium text-slate-600">รหัสผ่าน</label>
                     <div class="relative">
-                        <i class="fi fi-rr-lock pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <i class="bi bi-lock pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         <input
                             v-model="form.password"
                             :type="showPassword ? 'text' : 'password'"
@@ -78,7 +78,7 @@ const submit = () => {
                             class="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 hover:text-pjs-blue"
                             @click="showPassword = !showPassword"
                         >
-                            <i :class="showPassword ? 'fi fi-rr-eye-crossed' : 'fi fi-rr-eye'" class="leading-none"></i>
+                            <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'" class="leading-none"></i>
                         </button>
                     </div>
                     <p v-if="form.errors.password" class="mt-1.5 text-sm text-red-500">{{ form.errors.password }}</p>
@@ -101,7 +101,7 @@ const submit = () => {
                     :disabled="form.processing"
                     class="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-pjs-blue to-pjs-blue-dark py-3 font-medium text-white shadow-lg shadow-pjs-blue/30 transition hover:opacity-95 disabled:opacity-50"
                 >
-                    <i class="fi fi-rr-sign-in-alt leading-none"></i>
+                    <i class="bi bi-box-arrow-in-right leading-none"></i>
                     {{ form.processing ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ' }}
                 </button>
             </form>
