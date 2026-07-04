@@ -6,16 +6,17 @@ import LoadingIndicator from '@/Components/Admin/LoadingIndicator.vue';
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
 const flash = computed(() => page.props.flash || {});
+const unread = computed(() => page.props.unreadMessages || 0);
 
 const mobileOpen = ref(false);
 const openGroup = ref(null);
 
-// เรียงตามลำดับหน้า frontend; เมนูที่ไม่ใช่หน้า frontend รวมไว้ใน "ตั้งค่าระบบ"
+// เรียงตามลำดับหน้า frontend; เมนูระบบรวมใน "ตั้งค่าระบบ"
 const nav = [
     { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
     { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'bi bi-info-circle' },
-    { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
-    { label: 'บุคลากร', name: 'admin.team-members.index', icon: 'bi bi-people' },
+    { label: 'บริการของเรา', name: 'admin.services.index', icon: 'bi bi-briefcase' },
+    { label: 'ทีมงาน', name: 'admin.team-members.index', icon: 'bi bi-people' },
     { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
     { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
     { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
@@ -50,44 +51,42 @@ const logout = () => router.post(route('logout'));
     <div class="min-h-screen bg-pjs-bg text-slate-700">
         <LoadingIndicator />
 
-        <!-- Top bar -->
-        <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur">
-            <div class="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
+        <!-- Floating pill header -->
+        <header class="sticky top-0 z-40 px-3 pt-3">
+            <div class="mx-auto flex h-14 max-w-6xl items-center gap-1 rounded-full border border-slate-200/70 bg-white/90 pl-4 pr-2 shadow-sm backdrop-blur">
                 <!-- Brand -->
-                <Link :href="route('admin.dashboard')" class="flex items-center gap-2">
-                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-pjs-blue text-white"><i class="bi bi-briefcase text-sm"></i></span>
-                    <span class="text-sm font-bold text-slate-800">PJS Admin</span>
+                <Link :href="route('admin.dashboard')" class="flex shrink-0 items-center gap-2">
+                    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue text-white"><i class="bi bi-briefcase text-sm"></i></span>
+                    <span class="hidden text-sm font-bold text-slate-800 xl:block">PJS Admin</span>
                 </Link>
 
-                <!-- Desktop tabs -->
-                <nav class="ml-2 hidden min-w-0 flex-1 items-center gap-0.5 overflow-x-auto lg:flex [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <!-- Tabs (centered) -->
+                <nav class="mx-1 hidden flex-1 items-center justify-center gap-0.5 lg:flex">
                     <template v-for="g in visibleNav" :key="g.label">
-                        <!-- single -->
                         <template v-if="!g.items">
                             <Link
                                 v-if="hasRoute(g.name)"
                                 :href="route(g.name)"
-                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-xs transition"
-                                :class="groupActive(g) ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
+                                class="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition"
+                                :class="groupActive(g) ? 'bg-pjs-blue text-white shadow' : 'text-slate-500 hover:bg-slate-100'"
                             >
-                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                                <i :class="g.icon" class="text-[11px]"></i>{{ g.label }}
                             </Link>
-                            <span v-else class="flex shrink-0 cursor-default items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-xs text-slate-300" title="เร็วๆนี้">
-                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                            <span v-else class="flex shrink-0 cursor-default items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs text-slate-300" title="เร็วๆนี้">
+                                <i :class="g.icon" class="text-[11px]"></i>{{ g.label }}
                             </span>
                         </template>
-                        <!-- dropdown -->
-                        <div v-else class="relative">
+                        <div v-else class="relative shrink-0">
                             <button
-                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-xs transition"
-                                :class="groupActive(g) || openGroup === g.label ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
+                                class="flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition"
+                                :class="groupActive(g) || openGroup === g.label ? 'bg-pjs-blue text-white shadow' : 'text-slate-500 hover:bg-slate-100'"
                                 @click="toggleGroup(g.label)"
                             >
-                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
-                                <i class="bi bi-chevron-down text-[10px]"></i>
+                                <i :class="g.icon" class="text-[11px]"></i>{{ g.label }}
+                                <i class="bi bi-chevron-down text-[9px]"></i>
                             </button>
                             <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
-                                <div v-if="openGroup === g.label" class="absolute right-0 z-50 mt-1.5 w-60 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
+                                <div v-if="openGroup === g.label" class="absolute right-0 z-50 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
                                     <template v-for="item in g.items" :key="item.name">
                                         <Link
                                             v-if="hasRoute(item.name)"
@@ -99,8 +98,7 @@ const logout = () => router.post(route('logout'));
                                             <i :class="item.icon" class="text-pjs-blue/70"></i>{{ item.label }}
                                         </Link>
                                         <div v-else class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-slate-300">
-                                            <i :class="item.icon"></i>{{ item.label }}
-                                            <span class="ml-auto text-[9px]">เร็วๆนี้</span>
+                                            <i :class="item.icon"></i>{{ item.label }}<span class="ml-auto text-[9px]">เร็วๆนี้</span>
                                         </div>
                                     </template>
                                 </div>
@@ -110,11 +108,22 @@ const logout = () => router.post(route('logout'));
                 </nav>
 
                 <!-- Right -->
-                <div class="ml-auto flex items-center gap-2">
-                    <Link :href="route('profile.edit')" class="hidden items-center gap-2 rounded-full py-0.5 pl-0.5 pr-3 hover:bg-slate-100 sm:flex">
+                <div class="ml-auto flex shrink-0 items-center gap-1 lg:ml-0">
+                    <!-- Messages -->
+                    <component
+                        :is="hasRoute('admin.contacts.index') ? Link : 'button'"
+                        :href="hasRoute('admin.contacts.index') ? route('admin.contacts.index') : undefined"
+                        class="relative flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100"
+                        title="กล่องข้อความ"
+                    >
+                        <i class="bi bi-envelope text-base"></i>
+                        <span v-if="unread > 0" class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">{{ unread > 99 ? '99+' : unread }}</span>
+                    </component>
+
+                    <Link :href="route('profile.edit')" class="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 hover:bg-slate-100">
                         <img v-if="user?.avatar" :src="user.avatar" class="h-8 w-8 rounded-full object-cover" />
                         <span v-else class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-person text-sm"></i></span>
-                        <span class="text-sm text-slate-600">{{ user?.name }}</span>
+                        <span class="hidden text-sm text-slate-600 xl:block">{{ user?.name }}</span>
                     </Link>
                     <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100" title="ออกจากระบบ" @click="logout">
                         <i class="bi bi-box-arrow-right"></i>
@@ -125,12 +134,12 @@ const logout = () => router.post(route('logout'));
                 </div>
             </div>
 
-            <!-- click-away backdrop for dropdowns -->
+            <!-- click-away backdrop -->
             <div v-if="openGroup" class="fixed inset-0 z-30" @click="openGroup = null"></div>
 
             <!-- Mobile nav -->
             <Transition enter-active-class="transition" enter-from-class="opacity-0" leave-active-class="transition" leave-to-class="opacity-0">
-                <nav v-if="mobileOpen" class="border-t border-slate-100 bg-white px-4 py-3 lg:hidden">
+                <nav v-if="mobileOpen" class="mx-auto mt-2 max-w-6xl rounded-2xl border border-slate-100 bg-white p-3 shadow-soft lg:hidden">
                     <div v-for="g in visibleNav" :key="g.label" class="mb-2">
                         <p class="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ g.label }}</p>
                         <template v-for="item in (g.items || [g])" :key="item.name">
@@ -144,14 +153,14 @@ const logout = () => router.post(route('logout'));
         </header>
 
         <!-- Flash -->
-        <div v-if="flash.success || flash.error" class="mx-auto max-w-7xl px-4 pt-4">
+        <div v-if="flash.success || flash.error" class="mx-auto max-w-6xl px-4 pt-4">
             <div v-if="flash.success" class="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm text-green-800"><i class="bi bi-check-circle"></i>{{ flash.success }}</div>
             <div v-if="flash.error" class="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-800"><i class="bi bi-x-circle"></i>{{ flash.error }}</div>
         </div>
 
         <!-- Page -->
-        <main class="mx-auto max-w-7xl px-4 py-5">
-            <div class="mb-4 flex items-center justify-between">
+        <main class="mx-auto max-w-6xl px-4 py-5">
+            <div class="mb-4">
                 <h1 class="text-lg font-semibold text-slate-800"><slot name="title">หลังบ้าน</slot></h1>
             </div>
             <slot />

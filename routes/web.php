@@ -62,8 +62,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('case-studies', \App\Http\Controllers\Admin\CaseStudyController::class)->except(['show']);
     Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->except(['show']);
 
+    // กล่องข้อความ (inbox ในระบบ)
+    Route::get('contacts', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contacts.index');
+    Route::get('contacts/{contact}', [\App\Http\Controllers\Admin\ContactController::class, 'show'])->name('contacts.show');
+    Route::delete('contacts/{contact}', [\App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('contacts.destroy');
+
     // TODO (Phase 2+): banners, about, team-members, documents, contact-channels, settings
-    // TODO (Phase 3+): contacts, users
+    // TODO (Phase 3+): users, menus
 });
 
 // Profile (แก้โปรไฟล์ตัวเอง — ทุก admin) — คงชื่อ profile.* ให้หน้า Vue ของ Breeze ใช้ได้
