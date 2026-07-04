@@ -130,9 +130,12 @@ const submit = () => {
                             <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
                         </select>
 
-                        <label class="mb-1 mt-4 block text-sm font-medium text-gray-700">Slug (URL)</label>
-                        <input v-model="form.slug" type="text" placeholder="เว้นว่างให้สร้างอัตโนมัติ" class="w-full rounded-lg border-gray-300 text-sm" />
-                        <p v-if="form.errors.slug" class="mt-1 text-sm text-red-600">{{ form.errors.slug }}</p>
+                        <details class="mt-4 rounded-lg border border-slate-200 px-3 py-2">
+                            <summary class="cursor-pointer select-none text-xs font-medium text-slate-500">ตั้งค่าขั้นสูง</summary>
+                            <label class="mb-1 mt-3 block text-xs text-slate-500">Slug (URL) — เว้นว่างให้ระบบสร้างให้อัตโนมัติ</label>
+                            <input v-model="form.slug" type="text" class="w-full rounded-lg border-gray-300 text-sm" />
+                            <p v-if="form.errors.slug" class="mt-1 text-sm text-red-600">{{ form.errors.slug }}</p>
+                        </details>
                     </div>
 
                     <div class="flex flex-col gap-2">

@@ -16,7 +16,7 @@ const initials = computed(() => (user.value.name || '?').trim().charAt(0).toUppe
 
 const maxCount = computed(() => Math.max(...props.contentByType.map((c) => c.value), 1));
 
-const R = 42;
+const R = 34;
 const CIRC = 2 * Math.PI * R;
 const publishRatio = computed(() => {
     const total = props.stats.news || 0;
@@ -27,15 +27,15 @@ const dash = computed(() => `${publishRatio.value * CIRC} ${CIRC}`);
 const hasRoute = (n) => route().has(n);
 
 const bigStats = computed(() => [
-    { label: 'เนื้อหาทั้งหมด', value: props.meta.totalContent ?? 0, icon: 'bi bi-collection' },
-    { label: 'ยอดเข้าชมรวม', value: (props.meta.totalViews ?? 0).toLocaleString(), icon: 'bi bi-eye' },
-    { label: 'บุคลากร', value: props.stats.team ?? 0, icon: 'bi bi-people' },
+    { label: 'เนื้อหาทั้งหมด', value: props.meta.totalContent ?? 0 },
+    { label: 'ยอดเข้าชม', value: (props.meta.totalViews ?? 0).toLocaleString() },
+    { label: 'บุคลากร', value: props.stats.team ?? 0 },
 ]);
 
 const tasks = computed(() => [
-    { label: 'ข้อความรอตอบกลับ', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope' },
+    { label: 'ข้อความรอตอบ', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope' },
     { label: 'ข่าวฉบับร่าง', value: props.meta.draftNews ?? 0, route: 'admin.news.index', icon: 'bi bi-file-earmark' },
-    { label: 'แบนเนอร์บนหน้าแรก', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'bi bi-image' },
+    { label: 'แบนเนอร์', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'bi bi-image' },
 ]);
 
 const quickActions = [
@@ -50,152 +50,98 @@ const quickActions = [
     <AdminLayout>
         <template #title>แดชบอร์ด</template>
 
-        <!-- Welcome -->
-        <div class="mb-5">
-            <h2 class="text-2xl font-bold text-slate-800 sm:text-3xl">ยินดีต้อนรับ, {{ user.name }}</h2>
-            <p class="mt-1 text-sm text-slate-500">ภาพรวมการจัดการเว็บไซต์ PJS Law &amp; Accounting</p>
+        <!-- Welcome + big numbers -->
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="text-xl font-bold text-slate-800">ยินดีต้อนรับ, {{ user.name }}</h2>
+                <p class="text-xs text-slate-400">ภาพรวมการจัดการเว็บไซต์</p>
+            </div>
+            <div class="flex gap-6">
+                <div v-for="s in bigStats" :key="s.label" class="text-center">
+                    <p class="text-2xl font-bold text-pjs-navy">{{ s.value }}</p>
+                    <p class="text-[11px] text-slate-400">{{ s.label }}</p>
+                </div>
+            </div>
         </div>
 
-        <div class="grid grid-cols-12 gap-4">
-            <!-- Profile card -->
-            <div class="col-span-12 sm:col-span-6 lg:col-span-4 lg:row-span-2">
-                <div class="flex h-full flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-pjs-navy to-pjs-blue text-white shadow-soft">
-                    <div class="flex flex-1 flex-col items-center justify-center px-6 pt-8">
-                        <img v-if="user.avatar" :src="user.avatar" class="h-28 w-28 rounded-full object-cover ring-4 ring-white/20" />
-                        <div v-else class="flex h-28 w-28 items-center justify-center rounded-full bg-white/15 text-4xl font-bold ring-4 ring-white/20">
-                            {{ initials }}
-                        </div>
-                        <h3 class="mt-4 text-lg font-bold">{{ user.name }}</h3>
-                        <span class="mt-1 rounded-full bg-white/15 px-3 py-0.5 text-xs">{{ roleLabel }}</span>
-                    </div>
-                    <div class="m-4 flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3 backdrop-blur">
-                        <div>
-                            <p class="text-xs text-blue-100/70">จัดการเนื้อหา</p>
-                            <p class="text-lg font-bold">{{ meta.totalContent ?? 0 }} รายการ</p>
-                        </div>
-                        <Link :href="route('profile.edit')" class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 hover:bg-white/25">
-                            <i class="bi bi-pencil text-sm"></i>
-                        </Link>
-                    </div>
-                </div>
+        <!-- 4 cards in one row -->
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Profile -->
+            <div class="flex flex-col items-center rounded-2xl bg-gradient-to-br from-pjs-blue to-pjs-blue-light p-4 text-white shadow-sm">
+                <img v-if="user.avatar" :src="user.avatar" class="h-16 w-16 rounded-full object-cover ring-4 ring-white/20" />
+                <div v-else class="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-2xl font-bold ring-4 ring-white/20">{{ initials }}</div>
+                <h3 class="mt-2 text-sm font-bold">{{ user.name }}</h3>
+                <span class="mt-0.5 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">{{ roleLabel }}</span>
+                <Link :href="route('profile.edit')" class="mt-3 w-full rounded-lg bg-white/15 py-1.5 text-center text-xs hover:bg-white/25">แก้ไขโปรไฟล์</Link>
             </div>
 
-            <!-- Big stats -->
-            <div class="col-span-12 lg:col-span-8">
-                <div class="grid h-full grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div v-for="s in bigStats" :key="s.label" class="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pjs-blue/10 text-pjs-blue">
-                            <i :class="s.icon" class="text-xl"></i>
-                        </span>
-                        <div class="min-w-0">
-                            <p class="truncate text-2xl font-bold text-pjs-navy">{{ s.value }}</p>
-                            <p class="truncate text-xs text-slate-400">{{ s.label }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Content bar chart -->
-            <div class="col-span-12 lg:col-span-8">
-                <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                    <h3 class="mb-4 font-semibold text-slate-800">เนื้อหาแยกประเภท</h3>
-                    <div class="space-y-3.5">
-                        <component
-                            :is="hasRoute(row.route) ? Link : 'div'"
-                            v-for="row in contentByType"
-                            :key="row.label"
-                            :href="hasRoute(row.route) ? route(row.route) : undefined"
-                            class="block"
-                        >
-                            <div class="mb-1 flex items-center justify-between text-sm">
-                                <span class="text-slate-600">{{ row.label }}</span>
-                                <span class="font-semibold text-slate-800">{{ row.value }}</span>
-                            </div>
-                            <div class="h-2.5 overflow-hidden rounded-full bg-slate-100">
-                                <div class="h-full rounded-full bg-gradient-to-r from-pjs-blue to-pjs-blue-light transition-all duration-500" :style="{ width: (row.value / maxCount) * 100 + '%' }"></div>
-                            </div>
-                        </component>
-                    </div>
+            <!-- Content chart -->
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <h3 class="mb-3 text-sm font-semibold text-slate-700">เนื้อหาแยกประเภท</h3>
+                <div class="space-y-2.5">
+                    <component :is="hasRoute(row.route) ? Link : 'div'" v-for="row in contentByType" :key="row.label" :href="hasRoute(row.route) ? route(row.route) : undefined" class="block">
+                        <div class="mb-0.5 flex justify-between text-[11px]"><span class="text-slate-500">{{ row.label }}</span><span class="font-semibold text-slate-700">{{ row.value }}</span></div>
+                        <div class="h-1.5 overflow-hidden rounded-full bg-slate-100"><div class="h-full rounded-full bg-pjs-blue transition-all duration-500" :style="{ width: (row.value / maxCount) * 100 + '%' }"></div></div>
+                    </component>
                 </div>
             </div>
 
             <!-- Donut -->
-            <div class="col-span-6 lg:col-span-4">
-                <div class="flex h-full flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                    <h3 class="mb-2 self-start font-semibold text-slate-800">สถานะข่าว</h3>
-                    <div class="relative">
-                        <svg width="130" height="130" viewBox="0 0 100 100" class="-rotate-90">
-                            <circle cx="50" cy="50" :r="R" fill="none" stroke="#e2e8f0" stroke-width="9" />
-                            <circle cx="50" cy="50" :r="R" fill="none" stroke="#2563eb" stroke-width="9" stroke-linecap="round" :stroke-dasharray="dash" class="transition-all duration-700" />
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span class="text-2xl font-bold text-pjs-navy">{{ Math.round(publishRatio * 100) }}%</span>
-                            <span class="text-[10px] text-slate-400">เผยแพร่</span>
-                        </div>
+            <div class="flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <h3 class="mb-1 self-start text-sm font-semibold text-slate-700">สถานะข่าว</h3>
+                <div class="relative">
+                    <svg width="104" height="104" viewBox="0 0 100 100" class="-rotate-90">
+                        <circle cx="50" cy="50" :r="R" fill="none" stroke="#e8eefc" stroke-width="10" />
+                        <circle cx="50" cy="50" :r="R" fill="none" stroke="#2563eb" stroke-width="10" stroke-linecap="round" :stroke-dasharray="dash" class="transition-all duration-700" />
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-lg font-bold text-pjs-navy">{{ Math.round(publishRatio * 100) }}%</span>
+                        <span class="text-[9px] text-slate-400">เผยแพร่</span>
                     </div>
-                    <div class="mt-2 flex gap-4 text-xs">
-                        <span class="flex items-center gap-1 text-slate-500"><span class="h-2 w-2 rounded-full bg-pjs-blue"></span>เผยแพร่ {{ meta.publishedNews ?? 0 }}</span>
-                        <span class="flex items-center gap-1 text-slate-500"><span class="h-2 w-2 rounded-full bg-slate-300"></span>ร่าง {{ meta.draftNews ?? 0 }}</span>
-                    </div>
+                </div>
+                <div class="mt-1 flex gap-3 text-[10px] text-slate-500">
+                    <span class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-pjs-blue"></span>เผยแพร่ {{ meta.publishedNews ?? 0 }}</span>
+                    <span class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span>ร่าง {{ meta.draftNews ?? 0 }}</span>
                 </div>
             </div>
 
-            <!-- Dark task card -->
-            <div class="col-span-12 sm:col-span-6 lg:col-span-4">
-                <div class="h-full rounded-2xl bg-pjs-navy p-6 text-white shadow-soft">
-                    <h3 class="mb-4 font-semibold">สิ่งที่ต้องจัดการ</h3>
-                    <ul class="space-y-2.5">
-                        <component
-                            :is="hasRoute(t.route) ? Link : 'div'"
-                            v-for="t in tasks"
-                            :key="t.label"
-                            :href="hasRoute(t.route) ? route(t.route) : undefined"
-                            class="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-2.5 text-sm transition hover:bg-white/10"
-                        >
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10"><i :class="t.icon"></i></span>
-                            <span class="flex-1 text-blue-100/90">{{ t.label }}</span>
-                            <span class="rounded-full bg-pjs-blue px-2 py-0.5 text-xs font-semibold">{{ t.value }}</span>
-                        </component>
-                    </ul>
-                </div>
+            <!-- Tasks (soft blue) -->
+            <div class="rounded-2xl border border-pjs-blue/15 bg-pjs-blue/5 p-4 shadow-sm">
+                <h3 class="mb-3 text-sm font-semibold text-pjs-blue-dark">สิ่งที่ต้องจัดการ</h3>
+                <ul class="space-y-2">
+                    <component :is="hasRoute(t.route) ? Link : 'div'" v-for="t in tasks" :key="t.label" :href="hasRoute(t.route) ? route(t.route) : undefined" class="flex items-center gap-2 rounded-xl bg-white px-2.5 py-2 text-xs shadow-sm transition hover:shadow">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-pjs-blue/10 text-pjs-blue"><i :class="t.icon" class="text-xs"></i></span>
+                        <span class="flex-1 text-slate-600">{{ t.label }}</span>
+                        <span class="rounded-full bg-pjs-blue px-1.5 py-0.5 text-[10px] font-semibold text-white">{{ t.value }}</span>
+                    </component>
+                </ul>
             </div>
+        </div>
 
-            <!-- Recent news -->
-            <div class="col-span-12 sm:col-span-6 lg:col-span-4">
-                <div class="h-full rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                    <div class="mb-3 flex items-center justify-between">
-                        <h3 class="font-semibold text-slate-800">ข่าวล่าสุด</h3>
-                        <Link v-if="hasRoute('admin.news.index')" :href="route('admin.news.index')" class="text-xs text-pjs-blue hover:underline">ดูทั้งหมด</Link>
-                    </div>
-                    <ul class="divide-y divide-slate-100">
-                        <li v-for="n in recentNews.slice(0, 4)" :key="n.id" class="flex items-center gap-3 py-2">
-                            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-newspaper text-sm"></i></span>
-                            <div class="min-w-0 flex-1">
-                                <p class="truncate text-sm font-medium text-slate-700">{{ n.title }}</p>
-                                <p class="text-xs text-slate-400">{{ n.date }} · {{ n.views }} วิว</p>
-                            </div>
-                        </li>
-                        <li v-if="!recentNews.length" class="py-8 text-center text-sm text-slate-400">ยังไม่มีข่าว</li>
-                    </ul>
+        <!-- Recent + quick actions -->
+        <div class="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm lg:col-span-2">
+                <div class="mb-2 flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-slate-700">ข่าวล่าสุด</h3>
+                    <Link v-if="hasRoute('admin.news.index')" :href="route('admin.news.index')" class="text-xs text-pjs-blue hover:underline">ดูทั้งหมด</Link>
                 </div>
+                <ul class="divide-y divide-slate-100">
+                    <li v-for="n in recentNews.slice(0, 4)" :key="n.id" class="flex items-center gap-2.5 py-1.5">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-newspaper text-xs"></i></span>
+                        <p class="min-w-0 flex-1 truncate text-xs font-medium text-slate-600">{{ n.title }}</p>
+                        <p class="shrink-0 text-[10px] text-slate-400">{{ n.date }}</p>
+                    </li>
+                    <li v-if="!recentNews.length" class="py-6 text-center text-xs text-slate-400">ยังไม่มีข่าว</li>
+                </ul>
             </div>
-
-            <!-- Quick actions -->
-            <div class="col-span-12 sm:col-span-6 lg:col-span-4">
-                <div class="h-full rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                    <h3 class="mb-3 font-semibold text-slate-800">ทางลัด</h3>
-                    <div class="space-y-2">
-                        <Link
-                            v-for="a in quickActions"
-                            :key="a.route"
-                            :href="hasRoute(a.route) ? route(a.route) : '#'"
-                            class="flex items-center gap-3 rounded-xl border border-slate-100 px-3 py-2.5 text-sm text-slate-600 transition hover:border-pjs-blue/30 hover:bg-pjs-blue/5"
-                        >
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-pjs-blue/10 text-pjs-blue"><i :class="a.icon"></i></span>
-                            {{ a.label }}
-                            <i class="bi bi-chevron-right ml-auto text-xs text-slate-300"></i>
-                        </Link>
-                    </div>
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <h3 class="mb-2 text-sm font-semibold text-slate-700">ทางลัด</h3>
+                <div class="space-y-1.5">
+                    <Link v-for="a in quickActions" :key="a.route" :href="hasRoute(a.route) ? route(a.route) : '#'" class="flex items-center gap-2.5 rounded-xl border border-slate-100 px-2.5 py-2 text-xs text-slate-600 transition hover:border-pjs-blue/30 hover:bg-pjs-blue/5">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-pjs-blue/10 text-pjs-blue"><i :class="a.icon" class="text-xs"></i></span>
+                        {{ a.label }}
+                        <i class="bi bi-chevron-right ml-auto text-[10px] text-slate-300"></i>
+                    </Link>
                 </div>
             </div>
         </div>
