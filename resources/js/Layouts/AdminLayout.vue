@@ -13,18 +13,19 @@ const openGroup = ref(null);
 // เรียงตามลำดับหน้า frontend; เมนูที่ไม่ใช่หน้า frontend รวมไว้ใน "ตั้งค่าระบบ"
 const nav = [
     { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
-    { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
     { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'bi bi-info-circle' },
     { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
     { label: 'บุคลากร', name: 'admin.team-members.index', icon: 'bi bi-people' },
     { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
     { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
     { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
-    { label: 'ดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
     { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'bi bi-telephone' },
     { label: 'ตั้งค่าระบบ', icon: 'bi bi-gear', items: [
+        { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
+        { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
         { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope' },
-        { label: 'ตั้งค่าเว็บไซต์', name: 'admin.settings.edit', icon: 'bi bi-sliders' },
+        { label: 'จัดการเมนู', name: 'admin.menus.index', icon: 'bi bi-list-nested', superAdmin: true },
+        { label: 'จัดการโลโก้/ชื่อเว็บ', name: 'admin.settings.edit', icon: 'bi bi-sliders' },
         { label: 'ผู้ใช้ระบบ', name: 'admin.users.index', icon: 'bi bi-shield-check', superAdmin: true },
     ] },
 ];
@@ -66,19 +67,19 @@ const logout = () => router.post(route('logout'));
                             <Link
                                 v-if="hasRoute(g.name)"
                                 :href="route(g.name)"
-                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs transition"
+                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-xs transition"
                                 :class="groupActive(g) ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
                             >
                                 <i :class="g.icon" class="text-xs"></i>{{ g.label }}
                             </Link>
-                            <span v-else class="flex shrink-0 cursor-default items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs text-slate-300" title="เร็วๆนี้">
+                            <span v-else class="flex shrink-0 cursor-default items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-xs text-slate-300" title="เร็วๆนี้">
                                 <i :class="g.icon" class="text-xs"></i>{{ g.label }}
                             </span>
                         </template>
                         <!-- dropdown -->
                         <div v-else class="relative">
                             <button
-                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs transition"
+                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-xs transition"
                                 :class="groupActive(g) || openGroup === g.label ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
                                 @click="toggleGroup(g.label)"
                             >
@@ -86,7 +87,7 @@ const logout = () => router.post(route('logout'));
                                 <i class="bi bi-chevron-down text-[10px]"></i>
                             </button>
                             <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
-                                <div v-if="openGroup === g.label" class="absolute left-0 z-50 mt-1.5 w-56 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
+                                <div v-if="openGroup === g.label" class="absolute right-0 z-50 mt-1.5 w-60 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
                                     <template v-for="item in g.items" :key="item.name">
                                         <Link
                                             v-if="hasRoute(item.name)"

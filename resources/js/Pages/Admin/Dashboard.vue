@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import LineChart from '@/Components/Admin/LineChart.vue';
 import MiniCalendar from '@/Components/Admin/MiniCalendar.vue';
@@ -37,6 +37,12 @@ const tasks = computed(() => [
     { label: 'ข่าวฉบับร่าง', value: props.meta.draftNews ?? 0, route: 'admin.news.index', icon: 'bi bi-file-earmark' },
     { label: 'แบนเนอร์', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'bi bi-image' },
 ]);
+
+const addPr = (date) => {
+    if (hasRoute('admin.announcements.create')) {
+        router.get(route('admin.announcements.create'), { date });
+    }
+};
 
 const quickActions = [
     { label: 'เพิ่มข่าว', route: 'admin.news.create', icon: 'bi bi-newspaper' },
@@ -133,10 +139,14 @@ const quickActions = [
                 <h3 class="mb-2 text-sm font-semibold text-slate-700">ปฏิทินการประชาสัมพันธ์</h3>
                 <MiniCalendar
                     :month-label="prCalendar.monthLabel"
+                    :year="prCalendar.year"
+                    :month="prCalendar.month"
                     :days-in-month="prCalendar.daysInMonth"
                     :start-weekday="prCalendar.startWeekday"
                     :today="prCalendar.today"
                     :events="prCalendar.events || {}"
+                    :clickable="hasRoute('admin.announcements.create')"
+                    @add-event="addPr"
                 />
             </div>
 

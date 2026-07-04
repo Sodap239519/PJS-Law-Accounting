@@ -12,6 +12,7 @@ import TranslationFields from '@/Components/Admin/TranslationFields.vue';
 const props = defineProps({
     announcement: { type: Object, default: null },
     categories: { type: Array, default: () => [] },
+    prefillDate: { type: String, default: null },
 });
 
 const isEdit = computed(() => !!props.announcement);
@@ -23,7 +24,7 @@ const form = useForm({
     excerpt: props.announcement?.excerpt || '',
     content: props.announcement?.content || '',
     is_published: props.announcement?.is_published ?? false,
-    published_at: props.announcement?.published_at || '',
+    published_at: props.announcement?.published_at || (props.prefillDate ? props.prefillDate + 'T09:00' : ''),
     cover: null,
     remove_cover: false,
     gallery: [],

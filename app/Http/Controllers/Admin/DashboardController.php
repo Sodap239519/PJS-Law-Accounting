@@ -89,6 +89,8 @@ class DashboardController extends Controller
 
         return [
             'monthLabel' => $month->locale('th')->translatedFormat('F Y'),
+            'year' => $month->year,
+            'month' => $month->month,
             'daysInMonth' => $month->daysInMonth,
             'startWeekday' => (int) $month->dayOfWeek, // 0 = อาทิตย์
             'today' => today()->month === $month->month ? today()->day : null,

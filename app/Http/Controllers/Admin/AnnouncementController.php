@@ -41,10 +41,11 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
         return Inertia::render('Admin/Announcements/Form', [
             'categories' => $this->categories(),
+            'prefillDate' => $request->query('date'),
         ]);
     }
 
