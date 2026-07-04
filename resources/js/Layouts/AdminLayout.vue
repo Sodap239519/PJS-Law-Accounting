@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
+import LoadingIndicator from '@/Components/Admin/LoadingIndicator.vue';
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
@@ -50,6 +51,8 @@ const logout = () => router.post(route('logout'));
 
 <template>
     <div class="min-h-screen bg-pjs-bg text-slate-700">
+        <LoadingIndicator />
+
         <!-- Mobile overlay -->
         <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm lg:hidden" @click="sidebarOpen = false" />
 
@@ -101,7 +104,8 @@ const logout = () => router.post(route('logout'));
                 <h1 class="text-base font-semibold text-slate-800"><slot name="title">หลังบ้าน</slot></h1>
                 <div class="ml-auto flex items-center gap-2">
                     <Link :href="route('profile.edit')" class="hidden items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm hover:bg-slate-100 sm:flex">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue">
+                        <img v-if="user?.avatar" :src="user.avatar" class="h-8 w-8 rounded-full object-cover" />
+                        <span v-else class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue">
                             <i class="bi bi-person text-sm leading-none"></i>
                         </span>
                         <span class="text-slate-600">{{ user?.name }}</span>
