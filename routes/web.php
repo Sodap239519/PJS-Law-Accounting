@@ -56,8 +56,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', fn () => redirect()->route('admin.dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // TODO (Phase 1+): banners, about, news, announcements, case-studies, services,
-    // team-members, contact-channels, settings, documents, contacts, users
+    // Phase 1 — โมดูลเนื้อหาหลัก
+    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->except(['show']);
+
+    // TODO (Phase 1+): announcements, case-studies, services
+    // TODO (Phase 2+): banners, about, team-members, documents, contact-channels, settings
+    // TODO (Phase 3+): contacts, users
 });
 
 // Profile (แก้โปรไฟล์ตัวเอง — ทุก admin) — คงชื่อ profile.* ให้หน้า Vue ของ Breeze ใช้ได้
