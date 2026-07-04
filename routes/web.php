@@ -58,8 +58,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Phase 1 — โมดูลเนื้อหาหลัก
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->except(['show']);
+    Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class)->except(['show']);
+    Route::resource('case-studies', \App\Http\Controllers\Admin\CaseStudyController::class)->except(['show']);
+    Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->except(['show']);
 
-    // TODO (Phase 1+): announcements, case-studies, services
     // TODO (Phase 2+): banners, about, team-members, documents, contact-channels, settings
     // TODO (Phase 3+): contacts, users
 });

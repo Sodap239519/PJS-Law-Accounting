@@ -2,116 +2,139 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesMediaAndLinks;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CaseStudyRequest;
 use App\Models\CaseStudy;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CaseStudyController extends Controller
 {
-    public function index()
-    {
-        $caseStudies = CaseStudy::with('category')->latest()->paginate(15);
-        return view('admin.case-studies.index', compact('caseStudies'));
-    }
+    use HandlesMediaAndLinks;
 
-    public function create()
+    public function index(Request $request): Response
     {
-        $categories = Category::all();
-        return view('admin.case-studies.create', compact('categories'));
-    }
+        $items = CaseStudy::query()
+            ->with('category')
+            ->when($request->search, fn ($q, $s) => $q->where('title', 'like', "%{$s}%"))
+            ->when($request->status !== null && $request->status !== '', fn ($q) => $q->where('is_published', $request->status === 'published'))
+            ->latest()
+            ->paginate(12)
+            ->withQueryString()
+            ->through(fn (CaseStudy $c) => [
+                'id' => $c->id,
+                'title' => $c->title,
+                'client_name' => $c->client_name,
+                'category' => $c->category?->name,
+                'is_published' => $c->is_published,
+                'views' => $c->views,
+                'cover' => $c->getFirstMediaUrl('cover'),
+            ]);
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title_th' => 'required|string|max:255',
-            'title_en' => 'required|string|max:255',
-            'slug' => 'nullable|string|unique:case_studies,slug',
-            'client_name' => 'nullable|string|max:255',
-            'challenge_th' => 'nullable|string',
-            'challenge_en' => 'nullable|string',
-            'solution_th' => 'nullable|string',
-            'solution_en' => 'nullable|string',
-            'result_th' => 'nullable|string',
-            'result_en' => 'nullable|string',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'nullable|exists:categories,id',
-            'is_published' => 'boolean',
+        return Inertia::render('Admin/CaseStudies/Index', [
+            'cases' => $items,
+            'filters' => $request->only('search', 'status'),
         ]);
-
-        $validated['slug'] = $validated['slug'] ?? Str::slug($validated['title_en']);
-
-        if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request->file('featured_image')->store('case-studies', 'public');
-        }
-
-        CaseStudy::create($validated);
-
-        return redirect()->route('admin.case-studies.index')
-            ->with('success', 'Case study created successfully.');
     }
 
-    public function show(string $id)
+    public function create(): Response
     {
-        $caseStudy = CaseStudy::with('category')->findOrFail($id);
-        return view('admin.case-studies.show', compact('caseStudy'));
-    }
-
-    public function edit(string $id)
-    {
-        $caseStudy = CaseStudy::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.case-studies.edit', compact('caseStudy', 'categories'));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $caseStudy = CaseStudy::findOrFail($id);
-
-        $validated = $request->validate([
-            'title_th' => 'required|string|max:255',
-            'title_en' => 'required|string|max:255',
-            'slug' => 'nullable|string|unique:case_studies,slug,' . $id,
-            'client_name' => 'nullable|string|max:255',
-            'challenge_th' => 'nullable|string',
-            'challenge_en' => 'nullable|string',
-            'solution_th' => 'nullable|string',
-            'solution_en' => 'nullable|string',
-            'result_th' => 'nullable|string',
-            'result_en' => 'nullable|string',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'nullable|exists:categories,id',
-            'is_published' => 'boolean',
+        return Inertia::render('Admin/CaseStudies/Form', [
+            'categories' => $this->categories(),
         ]);
-
-        $validated['slug'] = $validated['slug'] ?? Str::slug($validated['title_en']);
-
-        if ($request->hasFile('featured_image')) {
-            if ($caseStudy->featured_image) {
-                Storage::disk('public')->delete($caseStudy->featured_image);
-            }
-            $validated['featured_image'] = $request->file('featured_image')->store('case-studies', 'public');
-        }
-
-        $caseStudy->update($validated);
-
-        return redirect()->route('admin.case-studies.index')
-            ->with('success', 'Case study updated successfully.');
     }
 
-    public function destroy(string $id)
+    public function store(CaseStudyRequest $request)
     {
-        $caseStudy = CaseStudy::findOrFail($id);
+        $item = CaseStudy::create($this->data($request));
 
-        if ($caseStudy->featured_image) {
-            Storage::disk('public')->delete($caseStudy->featured_image);
-        }
+        $this->syncCover($item, $request);
+        $this->addFiles($item, $request, 'gallery', 'gallery');
+        $this->addFiles($item, $request, 'attachments', 'attachments');
+        $this->syncLinks($item, $request);
 
+        return redirect()->route('admin.case-studies.index')->with('success', 'สร้างคดีตัวอย่างเรียบร้อยแล้ว');
+    }
+
+    public function edit(CaseStudy $caseStudy): Response
+    {
+        return Inertia::render('Admin/CaseStudies/Form', [
+            'categories' => $this->categories(),
+            'caseStudy' => [
+                'id' => $caseStudy->id,
+                'title' => $caseStudy->title,
+                'slug' => $caseStudy->slug,
+                'client_name' => $caseStudy->client_name,
+                'content' => $caseStudy->content,
+                'category_id' => $caseStudy->category_id,
+                'is_published' => $caseStudy->is_published,
+                ...$this->mediaPayload($caseStudy),
+            ],
+        ]);
+    }
+
+    public function update(CaseStudyRequest $request, CaseStudy $caseStudy)
+    {
+        $caseStudy->update($this->data($request));
+
+        $this->deleteRemovedMedia($caseStudy, $request);
+        $this->syncCover($caseStudy, $request);
+        $this->addFiles($caseStudy, $request, 'gallery', 'gallery');
+        $this->addFiles($caseStudy, $request, 'attachments', 'attachments');
+        $this->syncLinks($caseStudy, $request);
+
+        return redirect()->route('admin.case-studies.index')->with('success', 'อัปเดตคดีตัวอย่างเรียบร้อยแล้ว');
+    }
+
+    public function destroy(CaseStudy $caseStudy)
+    {
         $caseStudy->delete();
 
-        return redirect()->route('admin.case-studies.index')
-            ->with('success', 'Case study deleted successfully.');
+        return redirect()->route('admin.case-studies.index')->with('success', 'ลบคดีตัวอย่างเรียบร้อยแล้ว');
+    }
+
+    private function data(CaseStudyRequest $request): array
+    {
+        $existing = $request->route('case_study');
+        $slugInput = $request->input('slug');
+
+        $slug = ($existing && ! $slugInput)
+            ? $existing->slug
+            : $this->resolveSlug($slugInput, $request->input('title'), $existing?->id);
+
+        return [
+            'title' => $request->input('title'),
+            'client_name' => $request->input('client_name'),
+            'content' => $request->input('content'),
+            'category_id' => $request->input('category_id'),
+            'is_published' => $request->boolean('is_published'),
+            'slug' => $slug,
+        ];
+    }
+
+    private function categories(): array
+    {
+        return Category::where('type', 'case_study')->where('is_active', true)
+            ->orderBy('name')->get(['id', 'name'])->toArray();
+    }
+
+    private function resolveSlug(?string $slug, string $title, ?int $ignoreId = null): string
+    {
+        $base = $slug ? Str::slug($slug) : Str::slug($title);
+        if ($base === '') {
+            $base = 'case-'.mb_substr(md5($title.microtime()), 0, 8);
+        }
+
+        $candidate = $base;
+        $i = 2;
+        while (CaseStudy::where('slug', $candidate)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $candidate = $base.'-'.$i++;
+        }
+
+        return $candidate;
     }
 }
