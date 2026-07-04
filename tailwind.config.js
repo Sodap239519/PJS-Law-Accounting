@@ -12,7 +12,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Prompt', 'Figtree', ...defaultTheme.fontFamily.sans],
+                prompt: ['Prompt', 'sans-serif'],
             },
             colors: {
                 'pjs-blue': {
@@ -31,4 +32,3 @@ export default {
 
     plugins: [forms],
 };
-

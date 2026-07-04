@@ -11263,11 +11263,19 @@ img.img-shadow, .feature .feature-thumb img {
 
 .module,
 .module-cover {
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-color: #fff;
-  background-size: cover;
-  padding: 120px 0 100px;
+    position: relative;
+    min-height: 300px; /* ปรับตามเหมาะสม */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 0;
+    background-color: transparent;
+}
+@media (max-width: 767px) {
+    .module-cover {
+        min-height: 160px;
+        padding: 30px 0;
+    }
 }
 
 .parallax {
@@ -11284,7 +11292,7 @@ img.img-shadow, .feature .feature-thumb img {
 }
 
 .overlay-background {
-  background: #333333;
+  background: rgba(0,0,0,0.5);
   position: absolute;
   height: 100%;
   width: 100%;
@@ -11347,7 +11355,8 @@ img.img-shadow, .feature .feature-thumb img {
   position: relative;
   padding: 240px 0 240px;
 }
-.module-cover .container {
+.module-cover .container,
+.module-cover .container-fluid {
   position: relative;
   z-index: 1;
 }

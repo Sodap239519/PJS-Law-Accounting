@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
+                        {{-- <li>
                             <div class="icon-box icon-box-left">
                                 <div class="icon-box-icon"><i class="bi bi-line"></i></div>
                                 <div class="icon-box-content">
@@ -146,7 +146,7 @@
                                     <p>@pjslegal</p>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>

@@ -40,11 +40,18 @@ Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+// ===== News (static pages — served live) =====
+Route::view('/news', 'news.index-news')->name('news.index');
+Route::view('/news/news-show-1', 'news.news-show-1')->name('news.show1');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
-Route::get('/case-studies', [CaseStudyController::class, 'index'])->name('cases.index');
+// ===== Case Studies (static pages — served live) =====
+Route::view('/case-index', 'cases.case-index')->name('cases.index');
+Route::view('/case', 'cases.case-index')->name('case.index'); // alias used by "back" links on show pages
+Route::view('/case/case-studies-show-1', 'cases.case-studies-show-1')->name('cases.show.case1');
+Route::view('/case/case-studies-show-2', 'cases.case-studies-show-2')->name('cases.show.case2');
 Route::get('/case-studies/{slug}', [CaseStudyController::class, 'show'])->name('cases.show');
+
 
 Route::get('/downloads', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/downloads/{id}/download', [DocumentController::class, 'download'])->name('documents.download');

@@ -8,8 +8,9 @@
     <title>@yield('title', 'PJS Law & Accounting')</title>
     
     <!-- Favicons -->
-    <link rel="shortcut icon" href="{{ asset('frontend/images/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('frontend/images/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('frontend/images/apple-touch-icon-72x72.png') }}">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('frontend/images/apple-touch-icon-114x114.png') }}">
     
@@ -28,6 +29,14 @@
 
     <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+	
+	<link href="{{ asset('force-prompt-font.css') }}" rel="stylesheet">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+	
+	<!-- Fancybox CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
+
     
     <!-- Custom Styles -->
     <style>
@@ -294,6 +303,15 @@
         .widget-icon.facebook { background: #1877f2; }
         .widget-icon.phone { background: #00c853; }
         .widget-icon.line { background: #00c300; }
+		.widget-icon.instagram {
+			background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d62463 60%, #285AEB 100%);
+			color: white;
+		}
+		.widget-icon.tiktok {
+			background: #000; /* สีดำ */
+			color: white;
+			border: 2px solid #25F4EE; /* ขอบฟ้า TikTok */
+		}
 
         .widget-text {
             color: #333;
@@ -317,6 +335,14 @@
             position: absolute;
             border-radius: 8px;
         }
+		
+		.team-swiper {
+  width: 100%;
+}
+
+.team-swiper .swiper-slide {
+  height: auto; /* ให้การ์ดสูงตามเนื้อหา */
+}
         
         /* ===== Google Translate - ซ่อนหมด ===== */
 .goog-te-banner-frame {
@@ -701,10 +727,9 @@ body {
                         <li><a href="{{ route('about.index') }}"><span class="menu-item-span">เกี่ยวกับเรา</span></a></li>
                         <li><a href="{{ route('services.index') }}"><span class="menu-item-span">บริการ</span></a></li>
                         <li><a href="{{ route('team.index') }}"><span class="menu-item-span">ทีมงาน</span></a></li>
-                        <!-- <li><a href="{{ route('news.index') }}"><span class="menu-item-span">ข่าวสาร</span></a></li> -->
-                        <li><a href="{{ route('home') }}#latest-news"><span class="menu-item-span">ข่าวสาร</span></a></li>
-                        <!-- <li><a href="{{ route('cases.index') }}"><span class="menu-item-span">คดีตัวอย่าง</span></a></li> -->
-                        <li><a href="{{ route('home') }}#case-studies"><span class="menu-item-span">คดีตัวอย่าง</span></a></li>
+                        <li><a href="{{ route('news.index') }}"><span class="menu-item-span">ข่าวสาร</span></a></li>
+                        <li><a href="{{ route('cases.index') }}"><span class="menu-item-span">คดีตัวอย่าง</span></a></li>
+                        <!-- <li><a href="{{ route('home') }}#case-studies"><span class="menu-item-span">คดีตัวอย่าง</span></a></li> -->
                         <li><a href="{{ route('contact.index') }}"><span class="menu-item-span">ติดต่อเรา</span></a></li>
                     </ul>
                 </div>
@@ -714,6 +739,8 @@ body {
                 <a href="javascript:void(0)" onclick="changeLanguage('th')" id="lang-th" class="active">TH</a>
                 <span>|</span>
                 <a href="javascript:void(0)" onclick="changeLanguage('en')" id="lang-en">EN</a>
+				<span>|</span>
+    			<a href="javascript:void(0)" onclick="changeLanguage('zh-CN')" id="lang-zh-CN">CHN</a>
             </div>
             
             <div class="nav-toggle">
@@ -760,7 +787,7 @@ body {
                     <li><i class="bi bi-geo-alt"></i> 27/20 ซอย 4, แขวงบางบอน, เขตบางบอน, กรุงเทพมหานคร 10150</li>
                     <li><i class="bi bi-telephone"></i> <a href="tel:0922569828">092-256-9828</a></li>
                     <li><i class="bi bi-envelope"></i> <a href="mailto:pjs.legal2025@gmail.com">pjs.legal2025@gmail.com</a></li>
-                    <li><i class="bi bi-line"></i> @pjslegal</li>
+                   {{-- <li><i class="bi bi-line"></i> @pjslegal</li> --}}
                 </ul>
                 
                 <div class="map-responsive">
@@ -794,12 +821,26 @@ body {
                 <div class="widget-text">ติดต่อเราที่นี่เลยค่ะ</div>
             </a>
             
-            {{-- <a href="https://m.me/YOUR_FB_PAGE" target="_blank" class="widget-item">
+            <a href="https://www.facebook.com/profile.php?id=61583725895144" target="_blank" class="widget-item">
                 <div class="widget-icon facebook">
                     <i class="bi bi-messenger"></i>
                 </div>
                 <div class="widget-text">พูดคุยผ่าน Facebook</div>
-            </a> --}}
+            </a>
+			
+			<a href="https://www.instagram.com/pjs_legal?igsh=MmlzMWN2bjdzN3c4&utm_source=qr" target="_blank" class="widget-item">
+                <div class="widget-icon instagram">
+                    <i class="bi bi-instagram"></i>
+                </div>
+                <div class="widget-text">ติดตาม Instagram</div>
+            </a>
+			
+			<a href="https://www.tiktok.com/@pjs_legal?lang=th-TH" target="_blank" class="widget-item">
+                <div class="widget-icon tiktok">
+                    <i class="bi bi-tiktok"></i>
+                </div>
+                <div class="widget-text">ติดตาม TikTok</div>
+            </a>
             
             <a href="tel:0922569828" class="widget-item">
                 <div class="widget-icon phone">
@@ -827,6 +868,10 @@ body {
     <script src="{{ asset('frontend/js/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('frontend/js/custom/plugins.min.js') }}"></script>
     <script src="{{ asset('frontend/js/custom/custom.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+	
+	<!-- Fancybox JS -->
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
     
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -843,11 +888,12 @@ body {
     <!-- Google Translate -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'th',
-                includedLanguages: 'th,en'
-            }, 'google_translate_element');
-        }
+			new google.translate.TranslateElement({
+				pageLanguage: 'th',
+				includedLanguages: 'th,en,zh-CN',
+				autoDisplay: false
+			}, 'google_translate_element');
+		}
         
         function changeLanguage(lang) {
             var selectField = document.querySelector("select.goog-te-combo");
@@ -862,20 +908,25 @@ body {
         }
         
         function updateLanguageUI(lang) {
-            document.querySelectorAll('.lang-switcher a').forEach(function(el) {
-                el.classList.remove('active');
-            });
-            document.getElementById('lang-' + lang).classList.add('active');
-        }
-        
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                var savedLang = localStorage.getItem('preferredLanguage');
-                if (savedLang && savedLang !== 'th') {
-                    changeLanguage(savedLang);
-                }
-            }, 1000);
-        });
+			document.querySelectorAll('.lang-switcher a').forEach(function(el) {
+				el.classList.remove('active');
+			});
+
+			// id ของ zh-CN มี dash ต้องตรงตาม id
+			var activeEl = document.getElementById('lang-' + lang);
+			if (activeEl) activeEl.classList.add('active');
+		}
+
+		window.addEventListener('load', function() {
+			setTimeout(function() {
+				var savedLang = localStorage.getItem('preferredLanguage');
+				if (savedLang && savedLang !== 'th') {
+					changeLanguage(savedLang);
+				} else {
+					updateLanguageUI('th');
+				}
+			}, 1000);
+		});
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     

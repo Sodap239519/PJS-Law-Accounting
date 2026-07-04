@@ -116,8 +116,14 @@
             
             <div class="info">
                 <span class="label">🕐 วันที่-เวลา:</span>
-                <span class="value">{{ $contact->created_at->format('d/m/Y H:i น.') }}</span>
-            </div>
+                <span class="value">
+                          @if($contact->created_at)
+                                  {{ $contact->created_at->timezone('Asia/Bangkok')->format('d/m/Y H:i') }} น.
+                          @else
+                                  {{ now()->timezone('Asia/Bangkok')->format('d/m/Y H:i') }} น.
+                          @endif
+                </span>
+             </div>
         </div>
         
         <div class="footer">

@@ -26,3 +26,8 @@ Thumbs.db
  
 /storage/framework/views/*.php
 !/storage/framework/views/.gitignore
+
+# Plesk / server-generated files (not part of the app)
+/index.html
+/.well-known/
+*.old
