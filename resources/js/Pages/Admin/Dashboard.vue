@@ -2,12 +2,16 @@
 import { computed } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import LineChart from '@/Components/Admin/LineChart.vue';
+import MiniCalendar from '@/Components/Admin/MiniCalendar.vue';
 
 const props = defineProps({
     stats: { type: Object, default: () => ({}) },
     meta: { type: Object, default: () => ({}) },
     contentByType: { type: Array, default: () => [] },
     recentNews: { type: Array, default: () => [] },
+    chart: { type: Object, default: () => ({ labels: [], views: [], messages: [] }) },
+    prCalendar: { type: Object, default: () => ({}) },
 });
 
 const user = computed(() => usePage().props.auth?.user || {});
@@ -15,21 +19,17 @@ const roleLabel = computed(() => (user.value.role === 'super_admin' ? 'Super Adm
 const initials = computed(() => (user.value.name || '?').trim().charAt(0).toUpperCase());
 
 const maxCount = computed(() => Math.max(...props.contentByType.map((c) => c.value), 1));
-
-const R = 34;
-const CIRC = 2 * Math.PI * R;
-const publishRatio = computed(() => {
-    const total = props.stats.news || 0;
-    return total ? (props.meta.publishedNews || 0) / total : 0;
-});
-const dash = computed(() => `${publishRatio.value * CIRC} ${CIRC}`);
-
 const hasRoute = (n) => route().has(n);
 
 const bigStats = computed(() => [
     { label: 'เนื้อหาทั้งหมด', value: props.meta.totalContent ?? 0 },
     { label: 'ยอดเข้าชม', value: (props.meta.totalViews ?? 0).toLocaleString() },
     { label: 'บุคลากร', value: props.stats.team ?? 0 },
+]);
+
+const chartSeries = computed(() => [
+    { name: 'ผู้เข้าชม', color: '#2563eb', data: props.chart.views || [] },
+    { name: 'ข้อความ', color: '#f59e0b', data: props.chart.messages || [] },
 ]);
 
 const tasks = computed(() => [
@@ -64,18 +64,30 @@ const quickActions = [
             </div>
         </div>
 
-        <!-- 4 cards in one row -->
+        <!-- Row 1: 4 cards -->
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Profile -->
-            <div class="flex flex-col items-center rounded-2xl bg-gradient-to-br from-pjs-blue to-pjs-blue-light p-4 text-white shadow-sm">
-                <img v-if="user.avatar" :src="user.avatar" class="h-16 w-16 rounded-full object-cover ring-4 ring-white/20" />
-                <div v-else class="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-2xl font-bold ring-4 ring-white/20">{{ initials }}</div>
-                <h3 class="mt-2 text-sm font-bold">{{ user.name }}</h3>
-                <span class="mt-0.5 rounded-full bg-white/20 px-2 py-0.5 text-[10px]">{{ roleLabel }}</span>
-                <Link :href="route('profile.edit')" class="mt-3 w-full rounded-lg bg-white/15 py-1.5 text-center text-xs hover:bg-white/25">แก้ไขโปรไฟล์</Link>
+            <!-- Profile (photo prominent) -->
+            <div class="relative min-h-[15rem] overflow-hidden rounded-2xl shadow-sm">
+                <img v-if="user.avatar" :src="user.avatar" class="absolute inset-0 h-full w-full object-cover" />
+                <div v-else class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-pjs-blue to-pjs-blue-light">
+                    <span class="text-6xl font-bold text-white/90">{{ initials }}</span>
+                </div>
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 pt-10 text-white">
+                    <span class="mb-1 inline-block rounded-full bg-white/20 px-2 py-0.5 text-[10px] backdrop-blur">{{ roleLabel }}</span>
+                    <h3 class="text-base font-bold leading-tight">{{ user.name }}</h3>
+                    <Link :href="route('profile.edit')" class="mt-2 inline-flex items-center gap-1 text-xs text-white/90 hover:text-white">
+                        <i class="bi bi-pencil"></i> แก้ไขโปรไฟล์
+                    </Link>
+                </div>
             </div>
 
-            <!-- Content chart -->
+            <!-- Line chart -->
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <h3 class="mb-1 text-sm font-semibold text-slate-700">ผู้เข้าชม &amp; ข้อความ (14 วัน)</h3>
+                <LineChart :labels="chart.labels" :series="chartSeries" />
+            </div>
+
+            <!-- Content bars -->
             <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
                 <h3 class="mb-3 text-sm font-semibold text-slate-700">เนื้อหาแยกประเภท</h3>
                 <div class="space-y-2.5">
@@ -86,26 +98,7 @@ const quickActions = [
                 </div>
             </div>
 
-            <!-- Donut -->
-            <div class="flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-                <h3 class="mb-1 self-start text-sm font-semibold text-slate-700">สถานะข่าว</h3>
-                <div class="relative">
-                    <svg width="104" height="104" viewBox="0 0 100 100" class="-rotate-90">
-                        <circle cx="50" cy="50" :r="R" fill="none" stroke="#e8eefc" stroke-width="10" />
-                        <circle cx="50" cy="50" :r="R" fill="none" stroke="#2563eb" stroke-width="10" stroke-linecap="round" :stroke-dasharray="dash" class="transition-all duration-700" />
-                    </svg>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center">
-                        <span class="text-lg font-bold text-pjs-navy">{{ Math.round(publishRatio * 100) }}%</span>
-                        <span class="text-[9px] text-slate-400">เผยแพร่</span>
-                    </div>
-                </div>
-                <div class="mt-1 flex gap-3 text-[10px] text-slate-500">
-                    <span class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-pjs-blue"></span>เผยแพร่ {{ meta.publishedNews ?? 0 }}</span>
-                    <span class="flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span>ร่าง {{ meta.draftNews ?? 0 }}</span>
-                </div>
-            </div>
-
-            <!-- Tasks (soft blue) -->
+            <!-- Tasks -->
             <div class="rounded-2xl border border-pjs-blue/15 bg-pjs-blue/5 p-4 shadow-sm">
                 <h3 class="mb-3 text-sm font-semibold text-pjs-blue-dark">สิ่งที่ต้องจัดการ</h3>
                 <ul class="space-y-2">
@@ -118,9 +111,9 @@ const quickActions = [
             </div>
         </div>
 
-        <!-- Recent + quick actions -->
+        <!-- Row 2: recent | calendar | quick -->
         <div class="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
-            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm lg:col-span-2">
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
                 <div class="mb-2 flex items-center justify-between">
                     <h3 class="text-sm font-semibold text-slate-700">ข่าวล่าสุด</h3>
                     <Link v-if="hasRoute('admin.news.index')" :href="route('admin.news.index')" class="text-xs text-pjs-blue hover:underline">ดูทั้งหมด</Link>
@@ -134,6 +127,19 @@ const quickActions = [
                     <li v-if="!recentNews.length" class="py-6 text-center text-xs text-slate-400">ยังไม่มีข่าว</li>
                 </ul>
             </div>
+
+            <!-- PR Calendar -->
+            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <h3 class="mb-2 text-sm font-semibold text-slate-700">ปฏิทินการประชาสัมพันธ์</h3>
+                <MiniCalendar
+                    :month-label="prCalendar.monthLabel"
+                    :days-in-month="prCalendar.daysInMonth"
+                    :start-weekday="prCalendar.startWeekday"
+                    :today="prCalendar.today"
+                    :events="prCalendar.events || {}"
+                />
+            </div>
+
             <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
                 <h3 class="mb-2 text-sm font-semibold text-slate-700">ทางลัด</h3>
                 <div class="space-y-1.5">

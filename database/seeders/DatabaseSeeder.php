@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TeamMemberSeeder::class,
             NewsSeeder::class,
             CaseStudySeeder::class,
+            DailyStatSeeder::class,
         ]);
     }
 }

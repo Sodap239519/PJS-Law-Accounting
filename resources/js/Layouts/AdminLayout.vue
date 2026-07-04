@@ -10,28 +10,21 @@ const flash = computed(() => page.props.flash || {});
 const mobileOpen = ref(false);
 const openGroup = ref(null);
 
+// เรียงตามลำดับหน้า frontend; เมนูที่ไม่ใช่หน้า frontend รวมไว้ใน "ตั้งค่าระบบ"
 const nav = [
     { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
-    { label: 'เนื้อหา', icon: 'bi bi-collection', items: [
-        { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
-        { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'bi bi-info-circle' },
-        { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
-    ] },
-    { label: 'ข่าว & สื่อ', icon: 'bi bi-newspaper', items: [
-        { label: 'ข่าวสารและกิจกรรม', name: 'admin.news.index', icon: 'bi bi-newspaper' },
-        { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
-        { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
-    ] },
-    { label: 'องค์กร', icon: 'bi bi-people', items: [
-        { label: 'บุคลากร', name: 'admin.team-members.index', icon: 'bi bi-people' },
-        { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
-    ] },
-    { label: 'ติดต่อ', icon: 'bi bi-telephone', items: [
-        { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'bi bi-telephone' },
+    { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
+    { label: 'เกี่ยวกับเรา', name: 'admin.about.edit', icon: 'bi bi-info-circle' },
+    { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
+    { label: 'บุคลากร', name: 'admin.team-members.index', icon: 'bi bi-people' },
+    { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
+    { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+    { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
+    { label: 'ดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
+    { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'bi bi-telephone' },
+    { label: 'ตั้งค่าระบบ', icon: 'bi bi-gear', items: [
         { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope' },
-    ] },
-    { label: 'ระบบ', icon: 'bi bi-gear', items: [
-        { label: 'ตั้งค่าเว็บไซต์', name: 'admin.settings.edit', icon: 'bi bi-gear' },
+        { label: 'ตั้งค่าเว็บไซต์', name: 'admin.settings.edit', icon: 'bi bi-sliders' },
         { label: 'ผู้ใช้ระบบ', name: 'admin.users.index', icon: 'bi bi-shield-check', superAdmin: true },
     ] },
 ];
@@ -66,21 +59,26 @@ const logout = () => router.post(route('logout'));
                 </Link>
 
                 <!-- Desktop tabs -->
-                <nav class="ml-3 hidden items-center gap-0.5 lg:flex">
+                <nav class="ml-2 hidden min-w-0 flex-1 items-center gap-0.5 overflow-x-auto lg:flex [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     <template v-for="g in visibleNav" :key="g.label">
                         <!-- single -->
-                        <Link
-                            v-if="!g.items"
-                            :href="route(g.name)"
-                            class="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition"
-                            :class="groupActive(g) ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
-                        >
-                            <i :class="g.icon" class="text-xs"></i>{{ g.label }}
-                        </Link>
+                        <template v-if="!g.items">
+                            <Link
+                                v-if="hasRoute(g.name)"
+                                :href="route(g.name)"
+                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs transition"
+                                :class="groupActive(g) ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
+                            >
+                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                            </Link>
+                            <span v-else class="flex shrink-0 cursor-default items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs text-slate-300" title="เร็วๆนี้">
+                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                            </span>
+                        </template>
                         <!-- dropdown -->
                         <div v-else class="relative">
                             <button
-                                class="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition"
+                                class="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs transition"
                                 :class="groupActive(g) || openGroup === g.label ? 'bg-pjs-blue text-white' : 'text-slate-500 hover:bg-slate-100'"
                                 @click="toggleGroup(g.label)"
                             >

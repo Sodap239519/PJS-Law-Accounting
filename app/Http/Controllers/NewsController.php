@@ -42,6 +42,7 @@ class NewsController extends Controller
             ->firstOrFail();
 
         $news->increment('views');
+        \App\Models\DailyStat::record('views');
 
         $relatedNews = News::published()
             ->where('id', '!=', $news->id)

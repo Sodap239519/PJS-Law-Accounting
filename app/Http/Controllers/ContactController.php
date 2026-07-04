@@ -28,6 +28,7 @@ class ContactController extends Controller
 
         try {
             $contact = Contact::create($validated);
+            \App\Models\DailyStat::record('messages');
 
             $this->sendNotificationEmail($contact);
 
