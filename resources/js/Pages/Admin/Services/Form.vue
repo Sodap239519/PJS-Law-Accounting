@@ -2,9 +2,8 @@
 import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import RichEditor from '@/Components/Admin/RichEditor.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
-import TranslationFields from '@/Components/Admin/TranslationFields.vue';
+import LocalizedContent from '@/Components/Admin/LocalizedContent.vue';
 
 const props = defineProps({
     service: { type: Object, default: null },
@@ -37,59 +36,56 @@ const submit = () => {
     <AdminLayout>
         <template #title>{{ isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ' }}</template>
 
-        <form class="mx-auto max-w-3xl space-y-6" @submit.prevent="submit">
-            <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <label class="mb-1 block text-sm font-medium text-slate-600">ชื่อบริการ *</label>
-                <input v-model="form.title" type="text" class="w-full rounded-lg border-slate-200" />
-                <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title }}</p>
+        <form class="space-y-6" @submit.prevent="submit">
+            <div class="grid gap-6 lg:grid-cols-3">
+                <!-- LEFT: title + content + icon -->
+                <div class="lg:col-span-2">
+                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+                        <LocalizedContent
+                            v-model:title="form.title"
+                            v-model:content="form.content"
+                            v-model:translations="form.translations"
+                            title-label="ชื่อบริการ"
+                            content-label="รายละเอียด"
+                            :title-error="form.errors.title"
+                            :content-error="form.errors.content"
+                            :content-height="440"
+                        />
 
-                <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ไอคอน (Bootstrap Icon)</label>
-                        <input v-model="form.icon" type="text" placeholder="เช่น bi bi-briefcase" class="w-full rounded-lg border-slate-200" />
-                        <p class="mt-1 text-xs text-slate-400">
-                            ดูรายชื่อไอคอนได้ที่ icons.getbootstrap.com — <i v-if="form.icon" :class="form.icon" class="text-pjs-blue"></i>
-                        </p>
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ลำดับการแสดง</label>
-                        <input v-model="form.sort_order" type="number" class="w-full rounded-lg border-slate-200" />
+                        <label class="mb-1 mt-5 block text-sm font-medium text-slate-600">
+                            ไอคอน (Bootstrap Icon) <i v-if="form.icon" :class="form.icon" class="ml-1 text-pjs-blue"></i>
+                        </label>
+                        <input v-model="form.icon" type="text" placeholder="เช่น bi bi-briefcase" class="field sm:max-w-md" />
+                        <p class="mt-1 text-xs text-slate-400">ดูรายชื่อไอคอนได้ที่ icons.getbootstrap.com</p>
                     </div>
                 </div>
 
-                <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">รายละเอียด</label>
-                <RichEditor v-model="form.content" />
+                <!-- RIGHT: cover + actions -->
+                <div class="space-y-5">
+                    <CoverUploader
+                        card
+                        :ratio="16 / 9"
+                        :existing="service?.cover"
+                        label="รูปประกอบ (ไม่ใส่ก็ได้)"
+                        hint="ถ้ามีรูป จะแสดงแทนไอคอนบนหน้าเว็บ"
+                        @update:file="form.cover = $event"
+                        @update:remove="form.remove_cover = $event"
+                    />
 
-                <label class="mb-2 mt-4 flex items-center gap-2 text-sm font-medium text-slate-600">
-                    <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
-                </label>
-            </div>
+                    <!-- Settings + actions -->
+                    <div class="pjs-card p-5">
+                        <label class="mb-1 block text-sm font-medium text-slate-600">ลำดับการแสดง</label>
+                        <input v-model="form.sort_order" type="number" class="field mb-4" />
 
-            <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <TranslationFields
-                    v-model="form.translations"
-                    :fields="[
-                        { key: 'title', label: 'ชื่อบริการ', type: 'text' },
-                        { key: 'content', label: 'รายละเอียด', type: 'rich' },
-                    ]"
-                />
-            </div>
-
-            <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <CoverUploader
-                    :ratio="16 / 9"
-                    :existing="service?.cover"
-                    label="รูปประกอบ (ไม่ใส่ก็ได้)"
-                    @update:file="form.cover = $event"
-                    @update:remove="form.remove_cover = $event"
-                />
-            </div>
-
-            <div class="flex gap-2">
-                <button type="submit" :disabled="form.processing" class="rounded-lg bg-pjs-blue px-5 py-2.5 text-sm font-medium text-white hover:bg-pjs-blue-dark disabled:opacity-50">
-                    {{ isEdit ? 'บันทึกการแก้ไข' : 'สร้างบริการ' }}
-                </button>
-                <Link :href="route('admin.services.index')" class="rounded-lg border px-5 py-2.5 text-center text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
+                                <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
+                            </label>
+                            <Link :href="route('admin.services.index')" class="btn-outline ml-auto">ยกเลิก</Link>
+                            <button type="submit" :disabled="form.processing" class="btn-primary">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </AdminLayout>

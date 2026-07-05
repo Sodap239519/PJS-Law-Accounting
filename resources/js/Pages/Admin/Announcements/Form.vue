@@ -2,12 +2,11 @@
 import { ref, computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import RichEditor from '@/Components/Admin/RichEditor.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
 import GalleryUploader from '@/Components/Admin/GalleryUploader.vue';
 import FileAttachments from '@/Components/Admin/FileAttachments.vue';
 import LinksRepeater from '@/Components/Admin/LinksRepeater.vue';
-import TranslationFields from '@/Components/Admin/TranslationFields.vue';
+import LocalizedContent from '@/Components/Admin/LocalizedContent.vue';
 
 const props = defineProps({
     announcement: { type: Object, default: null },
@@ -17,14 +16,20 @@ const props = defineProps({
 
 const isEdit = computed(() => !!props.announcement);
 
+const nowLocal = () => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
 const form = useForm({
     title: props.announcement?.title || '',
     slug: props.announcement?.slug || '',
     category_id: props.announcement?.category_id || null,
-    excerpt: props.announcement?.excerpt || '',
+    excerpt: props.announcement?.excerpt || '', // คงค่าเดิม (ไม่มีช่องกรอกแล้ว)
     content: props.announcement?.content || '',
     is_published: props.announcement?.is_published ?? false,
-    published_at: props.announcement?.published_at || (props.prefillDate ? props.prefillDate + 'T09:00' : ''),
+    published_at: props.announcement?.published_at || (props.prefillDate ? props.prefillDate + 'T09:00' : nowLocal()),
     cover: null,
     remove_cover: false,
     gallery: [],
@@ -55,85 +60,84 @@ const submit = () => {
     <AdminLayout>
         <template #title>{{ isEdit ? 'แก้ไขประชาสัมพันธ์' : 'เพิ่มประชาสัมพันธ์' }}</template>
 
-        <form class="mx-auto max-w-4xl space-y-6" @submit.prevent="submit">
+        <form class="space-y-6" @submit.prevent="submit">
             <div class="grid gap-6 lg:grid-cols-3">
-                <div class="space-y-5 lg:col-span-2">
+                <!-- LEFT: title + content -->
+                <div class="lg:col-span-2">
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <label class="mb-1 block text-sm font-medium text-slate-600">หัวข้อ *</label>
-                        <input v-model="form.title" type="text" class="w-full rounded-lg border-slate-200" />
-                        <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title }}</p>
-
-                        <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">เกริ่นนำ (ย่อ)</label>
-                        <textarea v-model="form.excerpt" rows="2" class="w-full rounded-lg border-slate-200"></textarea>
-
-                        <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">เนื้อหา *</label>
-                        <RichEditor v-model="form.content" />
-                        <p v-if="form.errors.content" class="mt-1 text-sm text-red-500">{{ form.errors.content }}</p>
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <TranslationFields
-                            v-model="form.translations"
-                            :fields="[
-                                { key: 'title', label: 'หัวข้อ', type: 'text' },
-                                { key: 'excerpt', label: 'เกริ่นนำ', type: 'textarea' },
-                                { key: 'content', label: 'เนื้อหา', type: 'rich' },
-                            ]"
+                        <LocalizedContent
+                            v-model:title="form.title"
+                            v-model:content="form.content"
+                            v-model:translations="form.translations"
+                            title-label="หัวข้อ"
+                            content-label="เนื้อหา"
+                            :title-error="form.errors.title"
+                            :content-error="form.errors.content"
+                            :content-height="560"
                         />
-                    </div>
 
-                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <CoverUploader
-                            :ratio="4 / 5"
-                            :existing="announcement?.cover"
-                            label="รูปปก (4:5)"
-                            @update:file="form.cover = $event"
-                            @update:remove="form.remove_cover = $event"
-                        />
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <GalleryUploader :existing="announcement?.gallery || []" @update:files="form.gallery = $event" @update:order="form.gallery_order = $event" @update:deleted="deletedGallery = $event" />
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <FileAttachments :existing="announcement?.attachments || []" @update:files="form.attachments = $event" @update:deleted="deletedAttachments = $event" />
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <LinksRepeater v-model="form.links" />
+                        <details class="mt-5 rounded-lg border border-slate-200 px-3 py-2">
+                            <summary class="cursor-pointer select-none text-xs font-medium text-slate-500">ตั้งค่าขั้นสูง</summary>
+                            <label class="mb-1 mt-3 block text-xs text-slate-500">Slug (URL) — เว้นว่างให้ระบบสร้างให้อัตโนมัติ</label>
+                            <input v-model="form.slug" type="text" class="field sm:max-w-md" />
+                            <p v-if="form.errors.slug" class="field-error">{{ form.errors.slug }}</p>
+                        </details>
                     </div>
                 </div>
 
+                <!-- RIGHT: cover + media + links + actions -->
                 <div class="space-y-5">
+                    <CoverUploader
+                        card
+                        :ratio="4 / 5"
+                        :existing="announcement?.cover"
+                        label="รูปปก (4:5)"
+                        hint="ภาพหลักของประชาสัมพันธ์บนหน้าเว็บ"
+                        @update:file="form.cover = $event"
+                        @update:remove="form.remove_cover = $event"
+                    />
+
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <label class="mb-2 flex items-center gap-2 text-sm font-medium text-slate-600">
-                            <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
-                        </label>
-                        <label class="mb-1 mt-3 block text-sm font-medium text-slate-600">วันเวลาที่เผยแพร่</label>
-                        <input v-model="form.published_at" type="datetime-local" class="w-full rounded-lg border-slate-200 text-sm" />
-                        <p v-if="isScheduled" class="mt-1.5 flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs text-amber-700">
-                            <i class="bi bi-clock"></i> ตั้งเวลาโพสต์ — จะเผยแพร่อัตโนมัติเมื่อถึงวันเวลานี้
-                        </p>
-                        <p v-else class="mt-1 text-xs text-slate-400">ใส่วันเวลาในอนาคตเพื่อตั้งเวลาโพสต์ล่วงหน้า</p>
-                        <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">หมวดหมู่</label>
-                        <select v-model="form.category_id" class="w-full rounded-lg border-slate-200 text-sm">
+                        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700"><i class="bi bi-images text-pjs-blue/70"></i> ภาพประกอบ</h3>
+                        <GalleryUploader :existing="announcement?.gallery || []" label="" @update:files="form.gallery = $event" @update:order="form.gallery_order = $event" @update:deleted="deletedGallery = $event" />
+                    </div>
+
+                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+                        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700"><i class="bi bi-paperclip text-pjs-blue/70"></i> ไฟล์แนบ</h3>
+                        <FileAttachments :existing="announcement?.attachments || []" label="" @update:files="form.attachments = $event" @update:deleted="deletedAttachments = $event" />
+                    </div>
+
+                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+                        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700"><i class="bi bi-link-45deg text-pjs-blue/70"></i> ลิงก์แนบ</h3>
+                        <LinksRepeater v-model="form.links" />
+                    </div>
+
+                    <!-- Publish settings + actions -->
+                    <div class="pjs-card p-5">
+                        <label class="mb-1 block text-sm font-medium text-slate-600">หมวดหมู่</label>
+                        <select v-model="form.category_id" class="field mb-3">
                             <option :value="null">— ไม่ระบุ —</option>
                             <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
                         </select>
-                        <details class="mt-4 rounded-lg border border-slate-200 px-3 py-2">
-                            <summary class="cursor-pointer select-none text-xs font-medium text-slate-500">ตั้งค่าขั้นสูง</summary>
-                            <label class="mb-1 mt-3 block text-xs text-slate-500">Slug (URL) — เว้นว่างให้ระบบสร้างให้อัตโนมัติ</label>
-                            <input v-model="form.slug" type="text" class="w-full rounded-lg border-slate-200 text-sm" />
-                            <p v-if="form.errors.slug" class="mt-1 text-sm text-red-500">{{ form.errors.slug }}</p>
-                        </details>
-                    </div>
 
-                    <div class="flex flex-col gap-2">
-                        <button type="submit" :disabled="form.processing" class="rounded-lg bg-pjs-blue px-4 py-2.5 text-sm font-medium text-white hover:bg-pjs-blue-dark disabled:opacity-50">
-                            {{ isEdit ? 'บันทึกการแก้ไข' : 'สร้าง' }}
-                        </button>
-                        <Link :href="route('admin.announcements.index')" class="rounded-lg border px-4 py-2.5 text-center text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
+                        <label class="mb-1 block text-sm font-medium text-slate-600">วันเวลาที่เผยแพร่</label>
+                        <input v-model="form.published_at" type="datetime-local" class="field" />
+                        <p v-if="isScheduled" class="mt-1.5 flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs text-amber-700">
+                            <i class="bi bi-clock"></i> ตั้งเวลาโพสต์ — จะเผยแพร่อัตโนมัติเมื่อถึงวันเวลานี้
+                        </p>
+                        <p v-else class="mt-1 mb-3 text-xs text-slate-400">ใส่วันเวลาในอนาคตเพื่อตั้งเวลาโพสต์ล่วงหน้า</p>
+
+                        <p class="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                            หากไม่เลือก <strong>“เผยแพร่”</strong> ระบบจะบันทึกเป็น<strong>ร่าง</strong>เท่านั้น (ยังไม่แสดงบนหน้าเว็บ)
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
+                                <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
+                            </label>
+                            <Link :href="route('admin.announcements.index')" class="btn-outline ml-auto">ยกเลิก</Link>
+                            <button type="submit" :disabled="form.processing" class="btn-primary">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                        </div>
                     </div>
                 </div>
             </div>
