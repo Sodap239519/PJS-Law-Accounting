@@ -48,6 +48,8 @@ const toggleGroup = (label) => (openGroup.value = openGroup.value === label ? nu
 const closeMenus = () => { openGroup.value = null; mobileOpen.value = false; };
 
 const logout = () => router.post(route('logout'));
+
+const currentYear = new Date().getFullYear();
 </script>
 
 <template>
@@ -185,5 +187,13 @@ const logout = () => router.post(route('logout'));
             </div>
             <slot />
         </main>
+
+        <!-- Footer / license -->
+        <footer class="mx-auto max-w-6xl px-4 pb-6 pt-2">
+            <div class="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-center text-xs text-slate-400 sm:flex-row sm:text-left">
+                <p>© {{ currentYear }} PJS Law and Accounting Co., Ltd. — สงวนลิขสิทธิ์</p>
+                <p>ระบบจัดการเว็บไซต์ <span class="text-slate-300">·</span> เวอร์ชัน 1.0</p>
+            </div>
+        </footer>
     </div>
 </template>
