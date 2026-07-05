@@ -99,19 +99,15 @@ const submit = () => {
 
                 <!-- RIGHT: cover (top) + gallery + attachments + links -->
                 <div class="space-y-5">
-                    <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
-                            <i class="bi bi-image text-pjs-blue/70"></i> ภาพปกข่าว
-                        </h3>
-                        <CoverUploader
-                            :ratio="16 / 9"
-                            :existing="news?.cover"
-                            label="รูปปก (16:9)"
-                            hint="ภาพหลักของข่าวบนหน้าเว็บและการ์ดข่าว"
-                            @update:file="form.cover = $event"
-                            @update:remove="form.remove_cover = $event"
-                        />
-                    </div>
+                    <CoverUploader
+                        card
+                        :ratio="16 / 9"
+                        :existing="news?.cover"
+                        label="ภาพปกข่าว"
+                        hint="ภาพหลักของข่าวบนหน้าเว็บและการ์ดข่าว"
+                        @update:file="form.cover = $event"
+                        @update:remove="form.remove_cover = $event"
+                    />
 
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
                         <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
