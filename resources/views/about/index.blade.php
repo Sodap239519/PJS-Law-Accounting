@@ -51,10 +51,31 @@
     </div>
 </section>
 
+@if(!empty($about->content))
+<!-- About content from database -->
+<section class="module bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 m-auto">
+                <div class="about-content-body">{!! $about->content !!}</div>
+            </div>
+        </div>
+        @if($about->getMedia('gallery')->count())
+        <div class="row mt-5">
+            @foreach($about->getMedia('gallery') as $img)
+            <div class="col-md-4 mb-4">
+                <img src="{{ $img->getUrl() }}" alt="" class="img-fluid rounded shadow">
+            </div>
+            @endforeach
+        </div>
+        @endif
+    </div>
+</section>
+@else
 <!-- Services Details -->
 <section class="module bg-light">
     <div class="container">
-        
+
         <!-- ด้านกฎหมาย -->
         <div class="row align-items-center mb-5 pb-5">
             <div class="col-lg-6 mb-4 mb-lg-0">
@@ -109,9 +130,10 @@
                 <img src="{{ asset('frontend/images/main/accounting.jpg') }}" alt="Accounting Services" class="img-fluid rounded shadow">
             </div>
         </div>
-        
+
     </div>
 </section>
+@endif
 
 <!-- Call to Action -->
 <section class="module parallax text-center" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.7">

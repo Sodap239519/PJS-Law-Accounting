@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\AboutPage;
 
 class AboutController extends Controller
 {
     public function index()
     {
-        return view('about.index');
+        $about = AboutPage::singleton();
+
+        return view('about.index', compact('about'));
     }
 }

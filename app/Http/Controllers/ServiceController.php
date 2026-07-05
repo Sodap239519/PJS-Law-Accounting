@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Service;
 
 class ServiceController extends Controller
 {
     public function index()
     {
-        return view('services.index');
+        $services = Service::where('is_active', true)
+            ->orderBy('sort_order')->orderBy('id')
+            ->get();
+
+        return view('services.index', compact('services'));
     }
 }

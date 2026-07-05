@@ -28,6 +28,30 @@
     </div>
 </section>
 
+@if($services->count())
+<!-- Services from database -->
+<section class="module bg-light">
+    <div class="container">
+        <div class="row">
+            @foreach($services as $s)
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        @if($s->getFirstMediaUrl('cover'))
+                            <img src="{{ $s->getFirstMediaUrl('cover') }}" alt="{{ $s->title }}" class="mb-3 rounded" style="height:72px;width:72px;object-fit:cover;">
+                        @else
+                            <i class="{{ $s->icon ?: 'bi bi-briefcase' }}" style="font-size: 48px; color: #d4af37;"></i>
+                        @endif
+                        <h4 class="mt-3">{{ $s->title }}</h4>
+                        <div class="text-muted">{{ \Illuminate\Support\Str::limit(strip_tags($s->content), 150) }}</div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@else
 <!-- Legal Services -->
 <section class="module bg-light">
     <div class="container">
@@ -177,6 +201,7 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- Call to Action -->
 <section class="module parallax text-center" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.7">

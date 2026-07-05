@@ -5,25 +5,39 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="module-cover parallax text-center fullscreen" data-background="{{ asset('frontend/images/Banner.png') }}" data-overlay="0.6">
+    @php($hero = ($banners ?? collect())->first())
+    <section class="module-cover parallax text-center fullscreen" data-background="{{ $hero && $hero->getFirstMediaUrl('image') ? $hero->getFirstMediaUrl('image') : asset('frontend/images/Banner.png') }}" data-overlay="0.6">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="m-b-20">
-                        <strong>
-                            ความเชี่ยวชาญเหนือระดับ<br>
-                            เปลี่ยนเรื่องกฎหมายให้เป็นเรื่องง่าย<br>
-                            เพื่อทุกความสำเร็จของคุณและธุรกิจ
-                        </strong>
-                    </h1>
-                    <p class="m-b-40">
-                        บริษัทกฎหมายที่ยึดมั่นในความถูกต้องและรักษาผลประโยชน์สูงสุดของลูกความเป็นสำคัญ<br>
-                        ด้วยทีมทนายความผู้เชี่ยวชาญที่มีประสบการณ์สะสมมาอย่างยาวนาน
-                    </p>
-                    <p>
-                        <a class="btn btn-lg btn-circle btn-brand" href="{{ route('contact.index') }}">ปรึกษาคดีด่วน</a>
-                        <a class="btn btn-lg btn-circle btn-outline-new-white" href="{{ route('about.index') }}">เรียนรู้เพิ่มเติม</a>
-                    </p>
+                    @if($hero && $hero->title)
+                        <h1 class="m-b-20"><strong>{!! nl2br(e($hero->title)) !!}</strong></h1>
+                        @if($hero->subtitle)
+                            <p class="m-b-40">{!! nl2br(e($hero->subtitle)) !!}</p>
+                        @endif
+                        <p>
+                            @if($hero->link_url)
+                                <a class="btn btn-lg btn-circle btn-brand" href="{{ $hero->link_url }}">ดูเพิ่มเติม</a>
+                            @endif
+                            <a class="btn btn-lg btn-circle btn-outline-new-white" href="{{ route('contact.index') }}">ปรึกษาคดีด่วน</a>
+                        </p>
+                    @else
+                        <h1 class="m-b-20">
+                            <strong>
+                                ความเชี่ยวชาญเหนือระดับ<br>
+                                เปลี่ยนเรื่องกฎหมายให้เป็นเรื่องง่าย<br>
+                                เพื่อทุกความสำเร็จของคุณและธุรกิจ
+                            </strong>
+                        </h1>
+                        <p class="m-b-40">
+                            บริษัทกฎหมายที่ยึดมั่นในความถูกต้องและรักษาผลประโยชน์สูงสุดของลูกความเป็นสำคัญ<br>
+                            ด้วยทีมทนายความผู้เชี่ยวชาญที่มีประสบการณ์สะสมมาอย่างยาวนาน
+                        </p>
+                        <p>
+                            <a class="btn btn-lg btn-circle btn-brand" href="{{ route('contact.index') }}">ปรึกษาคดีด่วน</a>
+                            <a class="btn btn-lg btn-circle btn-outline-new-white" href="{{ route('about.index') }}">เรียนรู้เพิ่มเติม</a>
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>

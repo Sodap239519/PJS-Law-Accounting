@@ -14,8 +14,12 @@ class HomeController extends Controller
             ->orderBy('published_at', 'desc')
             ->limit(3)
             ->get();
-            
-        return view('home', compact('latestNews'));
+
+        $banners = \App\Models\Banner::where('is_active', true)
+            ->orderBy('sort_order')->orderBy('id')
+            ->get();
+
+        return view('home', compact('latestNews', 'banners'));
     }
 
     public function aboutLegal(): View
