@@ -11,6 +11,7 @@ const props = defineProps({
     contentLabel: { type: String, default: 'เนื้อหา' },
     titleError: { type: String, default: '' },
     contentError: { type: String, default: '' },
+    contentHeight: { type: Number, default: 380 },
 });
 const emit = defineEmits(['update:title', 'update:content', 'update:translations']);
 
@@ -71,7 +72,7 @@ const filled = (code) => !!((tr[code]?.title || '').trim() || (tr[code]?.content
             <p v-if="titleError" class="mt-1 text-sm text-red-500">{{ titleError }}</p>
 
             <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">{{ contentLabel }} *</label>
-            <RichEditor v-model="contentProxy" />
+            <RichEditor v-model="contentProxy" :height="contentHeight" />
             <p v-if="contentError" class="mt-1 text-sm text-red-500">{{ contentError }}</p>
         </div>
 
@@ -85,7 +86,7 @@ const filled = (code) => !!((tr[code]?.title || '').trim() || (tr[code]?.content
                 <input v-model="tr[code].title" type="text" class="w-full rounded-lg border-slate-200" />
 
                 <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">{{ contentLabel }}</label>
-                <RichEditor v-model="tr[code].content" />
+                <RichEditor v-model="tr[code].content" :height="contentHeight" />
             </div>
         </template>
     </div>
