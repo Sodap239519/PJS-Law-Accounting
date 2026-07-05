@@ -36,19 +36,37 @@ class SiteMenu
             ->map(fn ($i) => array_merge($defByKey[$i['key']], [
                 'label' => $i['label'] ?? $defByKey[$i['key']]['label'],
                 'visible' => (bool) ($i['visible'] ?? true),
+                'children' => self::cleanChildren($i['children'] ?? []),
             ]))
             ->values();
 
         $seen = $ordered->pluck('key');
-        $missing = collect(self::DEFAULTS)->reject(fn ($d) => $seen->contains($d['key']))->values();
+        $missing = collect(self::DEFAULTS)
+            ->reject(fn ($d) => $seen->contains($d['key']))
+            ->map(fn ($d) => array_merge($d, ['children' => []]))
+            ->values();
 
         return $ordered->concat($missing)->values()->all();
     }
 
     /**
-     * เฉพาะเมนูที่เปิดแสดง + ผูก URL แล้ว (ใช้บนหน้าเว็บสาธารณะ)
-     *
-     * @return array<int, array{label: string, url: string, key: string}>
+     * ทำความสะอาดเมนูย่อย (เก็บเฉพาะที่มีชื่อ)
+     */
+    public static function cleanChildren($children): array
+    {
+        return collect(is_array($children) ? $children : [])
+            ->filter(fn ($c) => ! empty($c['label']))
+            ->map(fn ($c) => [
+                'label' => $c['label'],
+                'url' => $c['url'] ?? '#',
+                'visible' => (bool) ($c['visible'] ?? true),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * เฉพาะเมนูที่เปิดแสดง + ผูก URL แล้ว + เมนูย่อยที่เปิดแสดง (ใช้บนหน้าเว็บสาธารณะ)
      */
     public static function visible(): array
     {
@@ -58,6 +76,11 @@ class SiteMenu
                 'key' => $i['key'],
                 'label' => $i['label'],
                 'url' => route($i['route']),
+                'children' => collect($i['children'] ?? [])
+                    ->filter(fn ($c) => $c['visible'])
+                    ->map(fn ($c) => ['label' => $c['label'], 'url' => $c['url']])
+                    ->values()
+                    ->all(),
             ])
             ->values()
             ->all();

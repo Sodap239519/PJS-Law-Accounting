@@ -728,7 +728,18 @@ body {
                 <div class="inner-nav">
                     <ul>
                         @foreach($publicMenu as $item)
-                            <li><a href="{{ $item['url'] }}"><span class="menu-item-span">{{ $item['label'] }}</span></a></li>
+                            @if(!empty($item['children']))
+                                <li class="menu-item-has-children">
+                                    <a href="{{ $item['url'] }}"><span class="menu-item-span">{{ $item['label'] }}</span></a>
+                                    <ul class="sub-menu">
+                                        @foreach($item['children'] as $child)
+                                            <li><a href="{{ $child['url'] }}"><span class="menu-item-span">{{ $child['label'] }}</span></a></li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @else
+                                <li><a href="{{ $item['url'] }}"><span class="menu-item-span">{{ $item['label'] }}</span></a></li>
+                            @endif
                         @endforeach
                     </ul>
                 </div>

@@ -25,9 +25,13 @@ class MenuController extends Controller
             'items.*.key' => ['required', 'string'],
             'items.*.label' => ['required', 'string', 'max:100'],
             'items.*.visible' => ['boolean'],
+            'items.*.children' => ['nullable', 'array'],
+            'items.*.children.*.label' => ['nullable', 'string', 'max:100'],
+            'items.*.children.*.url' => ['nullable', 'string', 'max:500'],
+            'items.*.children.*.visible' => ['boolean'],
         ]);
 
-        // เก็บเฉพาะ key ที่รู้จัก + คงข้อมูล route เดิมไว้
+        // เก็บเฉพาะ key ที่รู้จัก + คงข้อมูล route เดิมไว้ + เมนูย่อย
         $byKey = collect(SiteMenu::DEFAULTS)->keyBy('key');
         $clean = collect($data['items'])
             ->filter(fn ($i) => $byKey->has($i['key']))
@@ -36,6 +40,7 @@ class MenuController extends Controller
                 'label' => $i['label'],
                 'route' => $byKey[$i['key']]['route'],
                 'visible' => (bool) ($i['visible'] ?? true),
+                'children' => SiteMenu::cleanChildren($i['children'] ?? []),
             ])
             ->values()
             ->all();
