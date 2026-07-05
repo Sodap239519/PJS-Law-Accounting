@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
 
 const props = defineProps({
@@ -12,6 +12,26 @@ const value = computed({
     get: () => props.modelValue,
     set: (v) => emit('update:modelValue', v),
 });
+
+// สถานะโหลดตัวแก้ไข (TinyMCE โหลดจาก CDN — ใช้เวลาสักครู่)
+const ready = ref(false);
+const loadPct = ref(0);
+let trickle = null;
+
+onMounted(() => {
+    trickle = setInterval(() => {
+        if (loadPct.value < 92) {
+            loadPct.value = Math.min(92, loadPct.value + Math.max(1, (92 - loadPct.value) * 0.08));
+        }
+    }, 120);
+});
+onUnmounted(() => clearInterval(trickle));
+
+const onReady = () => {
+    loadPct.value = 100;
+    clearInterval(trickle);
+    setTimeout(() => (ready.value = true), 150);
+};
 
 // โหลด TinyMCE 6 จาก CDN (ฟรี GPL — ไม่ต้องใช้ API key/license)
 const scriptSrc = 'https://cdn.jsdelivr.net/npm/tinymce@6.8.6/tinymce.min.js';
@@ -40,8 +60,22 @@ const init = {
 </script>
 
 <template>
-    <div class="tinymce-wrap overflow-hidden rounded-xl border border-slate-200">
-        <Editor v-model="value" :tinymce-script-src="scriptSrc" :init="init" />
+    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200">
+        <Editor v-model="value" :tinymce-script-src="scriptSrc" :init="init" @init="onReady" />
+
+        <!-- Loading overlay + percentage -->
+        <Transition leave-active-class="transition-opacity duration-300" leave-to-class="opacity-0">
+            <div v-if="!ready" class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white" :style="{ minHeight: height + 'px' }">
+                <div class="relative h-14 w-14">
+                    <svg class="h-14 w-14 -rotate-90" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20" fill="none" stroke="#dbeafe" stroke-width="5" />
+                        <circle cx="25" cy="25" r="20" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round" :stroke-dasharray="125.6" :stroke-dashoffset="125.6 - (125.6 * loadPct) / 100" style="transition: stroke-dashoffset 0.15s ease" />
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-pjs-blue-dark">{{ Math.round(loadPct) }}%</span>
+                </div>
+                <p class="text-xs font-medium text-slate-500">กำลังโหลดตัวแก้ไขข้อความ…</p>
+            </div>
+        </Transition>
     </div>
 </template>
 
