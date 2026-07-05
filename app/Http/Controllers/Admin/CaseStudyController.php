@@ -53,7 +53,7 @@ class CaseStudyController extends Controller
         $item = CaseStudy::create($this->data($request));
 
         $this->syncCover($item, $request);
-        $this->addFiles($item, $request, 'gallery', 'gallery');
+        $this->syncOrderedGallery($item, $request);
         $this->addFiles($item, $request, 'attachments', 'attachments');
         $this->syncLinks($item, $request);
 
@@ -84,7 +84,7 @@ class CaseStudyController extends Controller
 
         $this->deleteRemovedMedia($caseStudy, $request);
         $this->syncCover($caseStudy, $request);
-        $this->addFiles($caseStudy, $request, 'gallery', 'gallery');
+        $this->syncOrderedGallery($caseStudy, $request);
         $this->addFiles($caseStudy, $request, 'attachments', 'attachments');
         $this->syncLinks($caseStudy, $request);
 

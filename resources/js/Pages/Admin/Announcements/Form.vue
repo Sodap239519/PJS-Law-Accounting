@@ -28,6 +28,7 @@ const form = useForm({
     cover: null,
     remove_cover: false,
     gallery: [],
+    gallery_order: [],
     attachments: [],
     deleted_media: [],
     links: props.announcement?.links ? [...props.announcement.links] : [],
@@ -92,7 +93,7 @@ const submit = () => {
                     </div>
 
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <GalleryUploader :existing="announcement?.gallery || []" @update:files="form.gallery = $event" @update:deleted="deletedGallery = $event" />
+                        <GalleryUploader :existing="announcement?.gallery || []" @update:files="form.gallery = $event" @update:order="form.gallery_order = $event" @update:deleted="deletedGallery = $event" />
                     </div>
 
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">

@@ -53,7 +53,7 @@ class NewsController extends Controller
         $news = News::create($this->data($request));
 
         $this->syncCover($news, $request);
-        $this->addFiles($news, $request, 'gallery', 'gallery');
+        $this->syncOrderedGallery($news, $request);
         $this->addFiles($news, $request, 'attachments', 'attachments');
         $this->syncLinks($news, $request);
 
@@ -85,7 +85,7 @@ class NewsController extends Controller
 
         $this->deleteRemovedMedia($news, $request);
         $this->syncCover($news, $request);
-        $this->addFiles($news, $request, 'gallery', 'gallery');
+        $this->syncOrderedGallery($news, $request);
         $this->addFiles($news, $request, 'attachments', 'attachments');
         $this->syncLinks($news, $request);
 

@@ -69,7 +69,7 @@ class NewsCrudTest extends TestCase
         $news = News::create(['title' => 'เดิม', 'slug' => 'old-slug', 'content' => 'x']);
 
         $this->actingAs($this->admin())
-            ->get('/admin/news/'.$news->slug.'/edit')
+            ->get('/admin/news/'.$news->id.'/edit')
             ->assertOk()
             ->assertInertia(fn ($p) => $p->component('Admin/News/Form')->where('news.title', 'เดิม'));
     }
@@ -79,7 +79,7 @@ class NewsCrudTest extends TestCase
         $news = News::create(['title' => 'เดิม', 'slug' => 'old-slug', 'content' => 'x', 'is_published' => false]);
 
         $this->actingAs($this->admin())
-            ->put('/admin/news/'.$news->slug, ['title' => 'ใหม่', 'content' => 'y', 'is_published' => true])
+            ->put('/admin/news/'.$news->id, ['title' => 'ใหม่', 'content' => 'y', 'is_published' => true])
             ->assertRedirect(route('admin.news.index'));
 
         $fresh = $news->fresh();
@@ -111,7 +111,7 @@ class NewsCrudTest extends TestCase
         $news = News::create(['title' => 'ลบ', 'slug' => 'del', 'content' => 'x']);
 
         $this->actingAs($this->admin())
-            ->delete('/admin/news/'.$news->slug)
+            ->delete('/admin/news/'.$news->id)
             ->assertRedirect(route('admin.news.index'));
 
         $this->assertDatabaseCount('news', 0);

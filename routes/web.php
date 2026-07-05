@@ -13,6 +13,15 @@ use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
+ * โมเดลเหล่านี้ผูก route หน้าเว็บสาธารณะด้วย slug (getRouteKeyName='slug')
+ * แต่หลังบ้าน (/admin) ใช้ id — bind พารามิเตอร์ของ resource admin ให้หาโดย id
+ * (หน้าเว็บสาธารณะใช้ param ชื่อ {slug} + ค้นเองในคอนโทรลเลอร์ จึงไม่กระทบ)
+ */
+Route::bind('news', fn ($value) => \App\Models\News::findOrFail($value));
+Route::bind('announcement', fn ($value) => \App\Models\Announcement::findOrFail($value));
+Route::bind('case_study', fn ($value) => \App\Models\CaseStudy::findOrFail($value));
+
+/*
 |--------------------------------------------------------------------------
 | Language switcher
 |--------------------------------------------------------------------------

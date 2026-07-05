@@ -29,6 +29,7 @@ class CaseStudyRequest extends FormRequest
             'remove_cover' => ['boolean'],
             'gallery' => ['nullable', 'array'],
             'gallery.*' => ['image', 'max:5120'],
+            'gallery_order' => ['nullable', 'array'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => ['file', 'max:10240'],
             'deleted_media' => ['nullable', 'array'],

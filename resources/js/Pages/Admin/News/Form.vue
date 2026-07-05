@@ -26,6 +26,7 @@ const form = useForm({
     cover: null,
     remove_cover: false,
     gallery: [],
+    gallery_order: [],
     attachments: [],
     deleted_media: [],
     links: props.news?.links ? [...props.news.links] : [],
@@ -122,6 +123,7 @@ const submit = () => {
                             :existing="news?.gallery || []"
                             label=""
                             @update:files="form.gallery = $event"
+                            @update:order="form.gallery_order = $event"
                             @update:deleted="deletedGallery = $event"
                         />
                     </div>

@@ -92,7 +92,7 @@ class AnnouncementController extends Controller
         $item = Announcement::create($this->data($request));
 
         $this->syncCover($item, $request);
-        $this->addFiles($item, $request, 'gallery', 'gallery');
+        $this->syncOrderedGallery($item, $request);
         $this->addFiles($item, $request, 'attachments', 'attachments');
         $this->syncLinks($item, $request);
 
@@ -124,7 +124,7 @@ class AnnouncementController extends Controller
 
         $this->deleteRemovedMedia($announcement, $request);
         $this->syncCover($announcement, $request);
-        $this->addFiles($announcement, $request, 'gallery', 'gallery');
+        $this->syncOrderedGallery($announcement, $request);
         $this->addFiles($announcement, $request, 'attachments', 'attachments');
         $this->syncLinks($announcement, $request);
 

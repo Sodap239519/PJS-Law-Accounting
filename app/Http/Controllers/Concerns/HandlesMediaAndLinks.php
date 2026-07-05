@@ -55,6 +55,44 @@ trait HandlesMediaAndLinks
     }
 
     /**
+     * เพิ่มไฟล์รูปใหม่ + จัดลำดับรูปทั้งหมดตามที่ผู้ใช้ลากเรียง
+     *
+     * รูปแบบ {collection}_order ในฟอร์ม: [{ id: 5 }, { new: 0 }, { id: 3 }, ...]
+     *  - id  = media เดิมที่ยังอยู่
+     *  - new = ไฟล์ใหม่ (อ้างอิงลำดับในไฟล์ที่อัปโหลด)
+     */
+    protected function syncOrderedGallery(HasMedia $model, Request $request, string $collection = 'gallery'): void
+    {
+        $added = [];
+
+        if ($request->hasFile($collection)) {
+            foreach ($request->file($collection) as $file) {
+                $added[] = $model->addMedia($file)->toMediaCollection($collection)->getKey();
+            }
+        }
+
+        $order = $request->input($collection.'_order');
+
+        if (is_array($order) && $order !== []) {
+            $finalIds = [];
+
+            foreach ($order as $entry) {
+                if (isset($entry['id'])) {
+                    $finalIds[] = (int) $entry['id'];
+                } elseif (isset($entry['new']) && isset($added[(int) $entry['new']])) {
+                    $finalIds[] = $added[(int) $entry['new']];
+                }
+            }
+
+            $finalIds = array_values(array_filter($finalIds));
+
+            if ($finalIds !== []) {
+                \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($finalIds);
+            }
+        }
+    }
+
+    /**
      * แทนที่ลิงก์แนบทั้งหมดด้วยชุดใหม่จากฟอร์ม
      */
     protected function syncLinks($model, Request $request): void
