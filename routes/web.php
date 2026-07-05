@@ -61,6 +61,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('announcements/calendar', [\App\Http\Controllers\Admin\AnnouncementController::class, 'calendar'])->name('announcements.calendar');
     Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class)->except(['show']);
     Route::resource('case-studies', \App\Http\Controllers\Admin\CaseStudyController::class)->except(['show']);
+    Route::post('services/reorder', [\App\Http\Controllers\Admin\ServiceController::class, 'reorder'])->name('services.reorder');
     Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->except(['show']);
 
     // กล่องข้อความ (inbox ในระบบ)

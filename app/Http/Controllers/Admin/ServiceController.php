@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\HandlesMediaAndLinks;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ServiceRequest;
 use App\Models\Service;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,6 +29,20 @@ class ServiceController extends Controller
         return Inertia::render('Admin/Services/Index', [
             'services' => $services,
         ]);
+    }
+
+    public function reorder(Request $request)
+    {
+        $ids = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:services,id'],
+        ])['ids'];
+
+        foreach ($ids as $position => $id) {
+            Service::where('id', $id)->update(['sort_order' => $position + 1]);
+        }
+
+        return back(status: 303);
     }
 
     public function create(): Response
