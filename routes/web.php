@@ -69,8 +69,30 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('contacts/{contact}', [\App\Http\Controllers\Admin\ContactController::class, 'show'])->name('contacts.show');
     Route::delete('contacts/{contact}', [\App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('contacts.destroy');
 
-    // TODO (Phase 2+): banners, about, team-members, documents, contact-channels, settings
-    // TODO (Phase 3+): users, menus
+    // Phase 2 — โมดูลย่อย
+    Route::post('banners/reorder', [\App\Http\Controllers\Admin\BannerController::class, 'reorder'])->name('banners.reorder');
+    Route::resource('banners', \App\Http\Controllers\Admin\BannerController::class)->except(['show']);
+
+    Route::post('team-members/reorder', [\App\Http\Controllers\Admin\TeamMemberController::class, 'reorder'])->name('team-members.reorder');
+    Route::resource('team-members', \App\Http\Controllers\Admin\TeamMemberController::class)->except(['show']);
+
+    Route::post('contact-channels/reorder', [\App\Http\Controllers\Admin\ContactChannelController::class, 'reorder'])->name('contact-channels.reorder');
+    Route::resource('contact-channels', \App\Http\Controllers\Admin\ContactChannelController::class)->except(['show']);
+
+    Route::resource('documents', \App\Http\Controllers\Admin\DocumentController::class)->except(['show']);
+
+    Route::get('about', [\App\Http\Controllers\Admin\AboutPageController::class, 'edit'])->name('about.edit');
+    Route::put('about', [\App\Http\Controllers\Admin\AboutPageController::class, 'update'])->name('about.update');
+
+    Route::get('settings', [\App\Http\Controllers\Admin\SettingController::class, 'edit'])->name('settings.edit');
+    Route::put('settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+
+    // Phase 3 — เฉพาะ super_admin
+    Route::middleware('super_admin')->group(function () {
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show']);
+        Route::get('menus', [\App\Http\Controllers\Admin\MenuController::class, 'edit'])->name('menus.index');
+        Route::put('menus', [\App\Http\Controllers\Admin\MenuController::class, 'update'])->name('menus.update');
+    });
 });
 
 // Profile (แก้โปรไฟล์ตัวเอง — ทุก admin) — คงชื่อ profile.* ให้หน้า Vue ของ Breeze ใช้ได้

@@ -2,100 +2,109 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesMediaAndLinks;
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TeamMemberController extends Controller
 {
-    public function index()
+    use HandlesMediaAndLinks;
+
+    public function index(): Response
     {
-        $teamMembers = TeamMember::orderBy('order')->paginate(15);
-        return view('admin.team-members.index', compact('teamMembers'));
+        $members = TeamMember::orderBy('order')->orderBy('id')->get()
+            ->map(fn (TeamMember $m) => [
+                'id' => $m->id,
+                'name' => $m->name,
+                'position' => $m->position,
+                'is_active' => $m->is_active,
+                'photo' => $m->getFirstMediaUrl('photo'),
+            ]);
+
+        return Inertia::render('Admin/TeamMembers/Index', ['members' => $members]);
     }
 
-    public function create()
+    public function create(): Response
     {
-        return view('admin.team-members.create');
+        return Inertia::render('Admin/TeamMembers/Form');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name_th' => 'required|string|max:255',
-            'name_en' => 'required|string|max:255',
-            'position_th' => 'required|string|max:255',
-            'position_en' => 'required|string|max:255',
-            'bio_th' => 'nullable|string',
-            'bio_en' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'order' => 'nullable|integer',
-            'is_active' => 'boolean',
+        $member = TeamMember::create($this->validated($request));
+        $this->syncCover($member, $request, 'photo');
+
+        return redirect()->route('admin.team-members.index')->with('success', 'เพิ่มบุคลากรเรียบร้อยแล้ว');
+    }
+
+    public function edit(TeamMember $teamMember): Response
+    {
+        return Inertia::render('Admin/TeamMembers/Form', [
+            'member' => [
+                'id' => $teamMember->id,
+                'name' => $teamMember->name,
+                'position' => $teamMember->position,
+                'bio' => $teamMember->bio,
+                'socials' => $teamMember->socials ?: [],
+                'order' => $teamMember->order,
+                'is_active' => $teamMember->is_active,
+                'photo' => $teamMember->getFirstMediaUrl('photo') ? ['url' => $teamMember->getFirstMediaUrl('photo')] : null,
+            ],
         ]);
-
-        if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('team', 'public');
-        }
-
-        TeamMember::create($validated);
-
-        return redirect()->route('admin.team-members.index')
-            ->with('success', 'Team member created successfully.');
     }
 
-    public function show(string $id)
+    public function update(Request $request, TeamMember $teamMember)
     {
-        $teamMember = TeamMember::findOrFail($id);
-        return view('admin.team-members.show', compact('teamMember'));
+        $teamMember->update($this->validated($request));
+        $this->syncCover($teamMember, $request, 'photo');
+
+        return redirect()->route('admin.team-members.index')->with('success', 'อัปเดตบุคลากรเรียบร้อยแล้ว');
     }
 
-    public function edit(string $id)
+    public function destroy(TeamMember $teamMember)
     {
-        $teamMember = TeamMember::findOrFail($id);
-        return view('admin.team-members.edit', compact('teamMember'));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $teamMember = TeamMember::findOrFail($id);
-
-        $validated = $request->validate([
-            'name_th' => 'required|string|max:255',
-            'name_en' => 'required|string|max:255',
-            'position_th' => 'required|string|max:255',
-            'position_en' => 'required|string|max:255',
-            'bio_th' => 'nullable|string',
-            'bio_en' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'order' => 'nullable|integer',
-            'is_active' => 'boolean',
-        ]);
-
-        if ($request->hasFile('photo')) {
-            if ($teamMember->photo) {
-                Storage::disk('public')->delete($teamMember->photo);
-            }
-            $validated['photo'] = $request->file('photo')->store('team', 'public');
-        }
-
-        $teamMember->update($validated);
-
-        return redirect()->route('admin.team-members.index')
-            ->with('success', 'Team member updated successfully.');
-    }
-
-    public function destroy(string $id)
-    {
-        $teamMember = TeamMember::findOrFail($id);
-
-        if ($teamMember->photo) {
-            Storage::disk('public')->delete($teamMember->photo);
-        }
-
         $teamMember->delete();
 
-        return redirect()->route('admin.team-members.index')
-            ->with('success', 'Team member deleted successfully.');
+        return redirect()->route('admin.team-members.index')->with('success', 'ลบบุคลากรเรียบร้อยแล้ว');
+    }
+
+    public function reorder(Request $request)
+    {
+        $ids = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:team_members,id'],
+        ])['ids'];
+
+        foreach ($ids as $position => $id) {
+            TeamMember::where('id', $id)->update(['order' => $position + 1]);
+        }
+
+        return back(status: 303);
+    }
+
+    private function validated(Request $request): array
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'position' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
+            'socials' => ['nullable', 'array'],
+            'socials.facebook' => ['nullable', 'string', 'max:500'],
+            'socials.line' => ['nullable', 'string', 'max:255'],
+            'socials.email' => ['nullable', 'string', 'max:255'],
+            'socials.phone' => ['nullable', 'string', 'max:100'],
+            'order' => ['nullable', 'integer'],
+            'is_active' => ['boolean'],
+            'photo' => ['nullable', 'image', 'max:5120'],
+            'remove_photo' => ['boolean'],
+        ]);
+
+        // เก็บเฉพาะช่องทางที่กรอกจริง
+        $data['socials'] = array_filter($data['socials'] ?? []);
+
+        return $data;
     }
 }

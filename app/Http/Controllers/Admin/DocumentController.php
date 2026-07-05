@@ -2,106 +2,105 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesMediaAndLinks;
 use App\Http\Controllers\Controller;
-use App\Models\Document;
 use App\Models\Category;
+use App\Models\Document;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class DocumentController extends Controller
 {
-    public function index()
+    use HandlesMediaAndLinks;
+
+    public function index(): Response
     {
-        $documents = Document::with('category')->latest()->paginate(15);
-        return view('admin.documents.index', compact('documents'));
+        $documents = Document::with('category')->latest()->get()
+            ->map(fn (Document $d) => [
+                'id' => $d->id,
+                'title' => $d->title,
+                'category' => $d->category?->name,
+                'downloads' => $d->downloads,
+                'is_active' => $d->is_active,
+                'file' => $this->fileInfo($d),
+            ]);
+
+        return Inertia::render('Admin/Documents/Index', ['documents' => $documents]);
     }
 
-    public function create()
+    public function create(): Response
     {
-        $categories = Category::all();
-        return view('admin.documents.create', compact('categories'));
+        return Inertia::render('Admin/Documents/Form', ['categories' => $this->categories()]);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title_th' => 'required|string|max:255',
-            'title_en' => 'required|string|max:255',
-            'description_th' => 'nullable|string',
-            'description_en' => 'nullable|string',
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
-            'category_id' => 'nullable|exists:categories,id',
-            'is_active' => 'boolean',
+        $document = Document::create($this->validated($request));
+        $this->syncCover($document, $request, 'file');
+
+        return redirect()->route('admin.documents.index')->with('success', 'อัปโหลดเอกสารเรียบร้อยแล้ว');
+    }
+
+    public function edit(Document $document): Response
+    {
+        return Inertia::render('Admin/Documents/Form', [
+            'categories' => $this->categories(),
+            'document' => [
+                'id' => $document->id,
+                'title' => $document->title,
+                'description' => $document->description,
+                'category_id' => $document->category_id,
+                'is_active' => $document->is_active,
+                'file' => $this->fileInfo($document),
+            ],
         ]);
-
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $validated['file_path'] = $file->store('documents', 'public');
-            $validated['file_name'] = $file->getClientOriginalName();
-            $validated['file_size'] = $file->getSize();
-        }
-
-        Document::create($validated);
-
-        return redirect()->route('admin.documents.index')
-            ->with('success', 'Document uploaded successfully.');
     }
 
-    public function show(string $id)
+    public function update(Request $request, Document $document)
     {
-        $document = Document::with('category')->findOrFail($id);
-        return view('admin.documents.show', compact('document'));
+        $document->update($this->validated($request));
+        $this->syncCover($document, $request, 'file');
+
+        return redirect()->route('admin.documents.index')->with('success', 'อัปเดตเอกสารเรียบร้อยแล้ว');
     }
 
-    public function edit(string $id)
+    public function destroy(Document $document)
     {
-        $document = Document::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.documents.edit', compact('document', 'categories'));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $document = Document::findOrFail($id);
-
-        $validated = $request->validate([
-            'title_th' => 'required|string|max:255',
-            'title_en' => 'required|string|max:255',
-            'description_th' => 'nullable|string',
-            'description_en' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
-            'category_id' => 'nullable|exists:categories,id',
-            'is_active' => 'boolean',
-        ]);
-
-        if ($request->hasFile('file')) {
-            if ($document->file_path) {
-                Storage::disk('public')->delete($document->file_path);
-            }
-            
-            $file = $request->file('file');
-            $validated['file_path'] = $file->store('documents', 'public');
-            $validated['file_name'] = $file->getClientOriginalName();
-            $validated['file_size'] = $file->getSize();
-        }
-
-        $document->update($validated);
-
-        return redirect()->route('admin.documents.index')
-            ->with('success', 'Document updated successfully.');
-    }
-
-    public function destroy(string $id)
-    {
-        $document = Document::findOrFail($id);
-
-        if ($document->file_path) {
-            Storage::disk('public')->delete($document->file_path);
-        }
-
         $document->delete();
 
-        return redirect()->route('admin.documents.index')
-            ->with('success', 'Document deleted successfully.');
+        return redirect()->route('admin.documents.index')->with('success', 'ลบเอกสารเรียบร้อยแล้ว');
+    }
+
+    private function fileInfo(Document $document): ?array
+    {
+        $media = $document->getFirstMedia('file');
+
+        return $media ? [
+            'url' => $media->getUrl(),
+            'name' => $media->file_name,
+            'size' => $media->human_readable_size,
+        ] : null;
+    }
+
+    private function categories(): array
+    {
+        return Category::query()
+            ->where('type', 'document')
+            ->orWhereNull('type')
+            ->get(['id', 'name'])
+            ->toArray();
+    }
+
+    private function validated(Request $request): array
+    {
+        return $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'category_id' => ['nullable', 'exists:categories,id'],
+            'is_active' => ['boolean'],
+            'file' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png', 'max:10240'],
+            'remove_file' => ['boolean'],
+        ]);
     }
 }
