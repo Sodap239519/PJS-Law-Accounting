@@ -49,7 +49,7 @@ const submit = () => {
                             content-label="รายละเอียด"
                             :title-error="form.errors.title"
                             :content-error="form.errors.content"
-                            :content-height="440"
+                            :content-height="560"
                         />
 
                         <label class="mb-1 mt-5 block text-sm font-medium text-slate-600">
@@ -60,8 +60,16 @@ const submit = () => {
                     </div>
                 </div>
 
-                <!-- RIGHT: cover + actions -->
+                <!-- RIGHT: quick save + cover + actions -->
                 <div class="space-y-5">
+                    <div class="pjs-card flex flex-wrap items-center gap-2 p-4">
+                        <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-600">
+                            <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
+                        </label>
+                        <Link :href="route('admin.services.index')" class="btn-outline btn-sm ml-auto">ยกเลิก</Link>
+                        <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                    </div>
+
                     <CoverUploader
                         card
                         :ratio="16 / 9"

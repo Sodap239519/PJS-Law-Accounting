@@ -73,7 +73,7 @@ const submit = () => {
                             content-label="เนื้อหา"
                             :title-error="form.errors.title"
                             :content-error="form.errors.content"
-                            :content-height="560"
+                            :content-height="700"
                         />
 
                         <details class="mt-5 rounded-lg border border-slate-200 px-3 py-2">
@@ -85,8 +85,16 @@ const submit = () => {
                     </div>
                 </div>
 
-                <!-- RIGHT: cover + media + links + actions -->
+                <!-- RIGHT: quick save + cover + media + links + actions -->
                 <div class="space-y-5">
+                    <div class="pjs-card flex flex-wrap items-center gap-2 p-4">
+                        <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-600">
+                            <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
+                        </label>
+                        <Link :href="route('admin.announcements.index')" class="btn-outline btn-sm ml-auto">ยกเลิก</Link>
+                        <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                    </div>
+
                     <CoverUploader
                         card
                         :ratio="4 / 5"
