@@ -85,10 +85,10 @@ const currentYear = new Date().getFullYear();
                                 class="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm transition"
                                 :class="groupActive(g) ? 'bg-pjs-blue text-white shadow' : 'text-slate-500 hover:bg-slate-100'"
                             >
-                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                                {{ g.label }}
                             </Link>
                             <span v-else class="flex shrink-0 cursor-default items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm text-slate-300" title="เร็วๆนี้">
-                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                                {{ g.label }}
                             </span>
                         </template>
                         <div v-else class="relative shrink-0">
@@ -97,7 +97,7 @@ const currentYear = new Date().getFullYear();
                                 :class="groupActive(g) || openGroup === g.label ? 'bg-pjs-blue text-white shadow' : 'text-slate-500 hover:bg-slate-100'"
                                 @click="toggleGroup(g.label)"
                             >
-                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
+                                {{ g.label }}
                                 <i class="bi bi-chevron-down text-[9px]"></i>
                             </button>
                             <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">

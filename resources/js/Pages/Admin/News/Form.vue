@@ -59,27 +59,9 @@ const submit = () => {
 <template>
     <Head :title="isEdit ? 'แก้ไขข่าว' : 'เพิ่มข่าว'" />
     <AdminLayout>
+        <template #title>{{ isEdit ? 'แก้ไขข่าว' : 'เพิ่มข่าว' }}</template>
+
         <form class="space-y-6" @submit.prevent="submit">
-            <!-- Top toolbar: title (left) + publish controls + actions (right) -->
-            <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-white px-5 py-3 shadow-sm">
-                <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขข่าว' : 'เพิ่มข่าว' }}</h1>
-
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
-                        <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
-                    </label>
-                    <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันที่เผยแพร่" />
-                    <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
-                        <option :value="null">— หมวดหมู่ —</option>
-                        <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
-                    </select>
-                    <Link :href="route('admin.news.index')" class="btn-outline">ยกเลิก</Link>
-                    <button type="submit" :disabled="form.processing" class="btn-primary">
-                        <i class="bi bi-check-lg"></i> {{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}
-                    </button>
-                </div>
-            </div>
-
             <div class="grid gap-6 lg:grid-cols-3">
                 <!-- LEFT: title + content (tall) -->
                 <div class="lg:col-span-2">
@@ -148,16 +130,28 @@ const submit = () => {
                         <LinksRepeater v-model="form.links" />
                     </div>
 
-                    <!-- Save (bottom) -->
+                    <!-- Publish settings + actions (bottom) -->
                     <div class="pjs-card p-5">
-                        <p class="mb-3 flex items-start gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
-                            <i class="bi bi-info-circle mt-0.5"></i>
-                            <span>หากไม่เลือก <strong>“เผยแพร่”</strong> ด้านบน ระบบจะบันทึกเป็น<strong>ร่างข่าว</strong>เท่านั้น (ยังไม่แสดงบนหน้าเว็บ)</span>
+                        <label class="mb-1 block text-sm font-medium text-slate-600">หมวดหมู่</label>
+                        <select v-model="form.category_id" class="field mb-3">
+                            <option :value="null">— ไม่ระบุ —</option>
+                            <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+                        </select>
+
+                        <label class="mb-1 block text-sm font-medium text-slate-600">วันที่เผยแพร่</label>
+                        <input v-model="form.published_at" type="datetime-local" class="field mb-4" />
+
+                        <p class="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                            หากไม่เลือก <strong>“เผยแพร่”</strong> ระบบจะบันทึกเป็น<strong>ร่างข่าว</strong>เท่านั้น (ยังไม่แสดงบนหน้าเว็บ)
                         </p>
-                        <button type="submit" :disabled="form.processing" class="btn-primary w-full">
-                            <i class="bi bi-check-lg"></i> {{ isEdit ? 'บันทึกการแก้ไข' : 'สร้างข่าว' }}
-                        </button>
-                        <Link :href="route('admin.news.index')" class="btn-outline mt-2 w-full">ยกเลิก</Link>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
+                                <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
+                            </label>
+                            <Link :href="route('admin.news.index')" class="btn-outline ml-auto">ยกเลิก</Link>
+                            <button type="submit" :disabled="form.processing" class="btn-primary">{{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}</button>
+                        </div>
                     </div>
                 </div>
             </div>
