@@ -37,8 +37,12 @@ const submit = () => {
         <form class="space-y-6" @submit.prevent="submit">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ' }}</h1>
-                <div class="pjs-card flex flex-wrap items-center gap-2 py-2 pl-4 pr-2">
-                    <label class="flex items-center gap-1.5 text-sm font-medium text-slate-600">
+                <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
+                    <label class="flex items-center gap-1.5 pl-2 text-sm text-slate-500">
+                        ลำดับ
+                        <input v-model="form.sort_order" type="number" class="field w-20" title="ลำดับการแสดง" />
+                    </label>
+                    <label class="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-600">
                         <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
                     </label>
                     <Link :href="route('admin.services.index')" class="btn-outline btn-sm">ยกเลิก</Link>

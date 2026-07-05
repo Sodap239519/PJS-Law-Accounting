@@ -51,8 +51,12 @@ const submit = () => {
         <form class="space-y-6" @submit.prevent="submit">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขคดีตัวอย่าง' : 'เพิ่มคดีตัวอย่าง' }}</h1>
-                <div class="pjs-card flex flex-wrap items-center gap-2 py-2 pl-4 pr-2">
-                    <label class="flex items-center gap-1.5 text-sm font-medium text-slate-600">
+                <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
+                    <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
+                        <option :value="null">— หมวดหมู่ —</option>
+                        <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+                    </select>
+                    <label class="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-600">
                         <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                     </label>
                     <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>
