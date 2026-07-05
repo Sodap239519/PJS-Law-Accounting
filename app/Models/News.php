@@ -37,7 +37,26 @@ class News extends Model implements HasMedia
 
     public function scopePublished($query)
     {
-        return $query->where('is_published', true);
+        return $query->where('is_published', true)
+            ->where(function ($q) {
+                $q->whereNull('published_at')->orWhere('published_at', '<=', now());
+            });
+    }
+
+    /**
+     * สถานะ: draft (ร่าง) / scheduled (ตั้งเวลา) / published (เผยแพร่แล้ว)
+     */
+    public function getStatusAttribute(): string
+    {
+        if (! $this->is_published) {
+            return 'draft';
+        }
+
+        if ($this->published_at && $this->published_at->isFuture()) {
+            return 'scheduled';
+        }
+
+        return 'published';
     }
 
     public function getRouteKeyName(): string

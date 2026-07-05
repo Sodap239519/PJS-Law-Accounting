@@ -18,6 +18,12 @@ const applyFilters = () => {
 const destroy = (id) => {
     if (confirm('ยืนยันการลบรายการนี้?')) router.delete(route('admin.announcements.destroy', id));
 };
+
+const statusMeta = {
+    published: { label: 'เผยแพร่แล้ว', class: 'bg-pjs-blue/10 text-pjs-blue-dark' },
+    scheduled: { label: 'ตั้งเวลา', class: 'bg-amber-100 text-amber-700' },
+    draft: { label: 'ร่าง', class: 'bg-slate-100 text-slate-500' },
+};
 </script>
 
 <template>
@@ -29,11 +35,15 @@ const destroy = (id) => {
             <Link :href="route('admin.announcements.create')" class="rounded-lg bg-pjs-blue px-4 py-2 text-sm font-medium text-white hover:bg-pjs-blue-dark">
                 + เพิ่มประชาสัมพันธ์
             </Link>
+            <Link :href="route('admin.announcements.calendar')" class="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">
+                <i class="bi bi-calendar3"></i> ปฏิทิน
+            </Link>
             <div class="ml-auto flex flex-wrap gap-2">
                 <input v-model="search" type="text" placeholder="ค้นหาหัวข้อ..." class="rounded-lg border-slate-200 text-sm" @keyup.enter="applyFilters" />
                 <select v-model="status" class="rounded-lg border-slate-200 text-sm" @change="applyFilters">
                     <option value="">ทุกสถานะ</option>
                     <option value="published">เผยแพร่แล้ว</option>
+                    <option value="scheduled">ตั้งเวลา</option>
                     <option value="draft">ฉบับร่าง</option>
                 </select>
                 <button class="rounded-lg border px-3 py-2 text-sm" @click="applyFilters">ค้นหา</button>
@@ -63,8 +73,8 @@ const destroy = (id) => {
                             <td class="px-4 py-2 font-medium text-slate-800">{{ item.title }}</td>
                             <td class="px-4 py-2 text-slate-500">{{ item.category || '-' }}</td>
                             <td class="px-4 py-2">
-                                <span :class="item.is_published ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'" class="rounded-full px-2 py-0.5 text-xs">
-                                    {{ item.is_published ? 'เผยแพร่' : 'ร่าง' }}
+                                <span :class="(statusMeta[item.status] || statusMeta.draft).class" class="rounded-full px-2 py-0.5 text-xs">
+                                    {{ (statusMeta[item.status] || statusMeta.draft).label }}
                                 </span>
                             </td>
                             <td class="px-4 py-2 text-slate-500">{{ item.published_at || '-' }}</td>

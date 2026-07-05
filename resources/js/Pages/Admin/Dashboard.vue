@@ -134,7 +134,10 @@ const quickActions = [
 
             <!-- PR Calendar -->
             <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-                <h3 class="mb-2 text-sm font-semibold text-slate-700">ปฏิทินการประชาสัมพันธ์</h3>
+                <div class="mb-2 flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-slate-700">ปฏิทินการประชาสัมพันธ์</h3>
+                    <Link v-if="hasRoute('admin.announcements.calendar')" :href="route('admin.announcements.calendar')" class="text-xs text-pjs-blue hover:underline">ดูปฏิทินเต็ม</Link>
+                </div>
                 <MiniCalendar
                     :month-label="prCalendar.monthLabel"
                     :year="prCalendar.year"

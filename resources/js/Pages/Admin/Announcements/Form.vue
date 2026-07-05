@@ -37,6 +37,8 @@ const form = useForm({
 const deletedGallery = ref([]);
 const deletedAttachments = ref([]);
 
+const isScheduled = computed(() => form.is_published && form.published_at && new Date(form.published_at) > new Date());
+
 const submit = () => {
     form.deleted_media = [...deletedGallery.value, ...deletedAttachments.value];
     if (isEdit.value) {
@@ -107,8 +109,12 @@ const submit = () => {
                         <label class="mb-2 flex items-center gap-2 text-sm font-medium text-slate-600">
                             <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                         </label>
-                        <label class="mb-1 mt-3 block text-sm font-medium text-slate-600">วันที่เผยแพร่</label>
+                        <label class="mb-1 mt-3 block text-sm font-medium text-slate-600">วันเวลาที่เผยแพร่</label>
                         <input v-model="form.published_at" type="datetime-local" class="w-full rounded-lg border-slate-200 text-sm" />
+                        <p v-if="isScheduled" class="mt-1.5 flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs text-amber-700">
+                            <i class="bi bi-clock"></i> ตั้งเวลาโพสต์ — จะเผยแพร่อัตโนมัติเมื่อถึงวันเวลานี้
+                        </p>
+                        <p v-else class="mt-1 text-xs text-slate-400">ใส่วันเวลาในอนาคตเพื่อตั้งเวลาโพสต์ล่วงหน้า</p>
                         <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">หมวดหมู่</label>
                         <select v-model="form.category_id" class="w-full rounded-lg border-slate-200 text-sm">
                             <option :value="null">— ไม่ระบุ —</option>

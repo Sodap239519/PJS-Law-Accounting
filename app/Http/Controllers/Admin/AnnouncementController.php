@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\AnnouncementRequest;
 use App\Models\Announcement;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,7 +22,10 @@ class AnnouncementController extends Controller
         $items = Announcement::query()
             ->with('category')
             ->when($request->search, fn ($q, $s) => $q->where('title', 'like', "%{$s}%"))
-            ->when($request->status !== null && $request->status !== '', fn ($q) => $q->where('is_published', $request->status === 'published'))
+            ->when($request->status === 'draft', fn ($q) => $q->where('is_published', false))
+            ->when($request->status === 'scheduled', fn ($q) => $q->where('is_published', true)->where('published_at', '>', now()))
+            ->when($request->status === 'published', fn ($q) => $q->where('is_published', true)
+                ->where(fn ($q2) => $q2->whereNull('published_at')->orWhere('published_at', '<=', now())))
             ->latest()
             ->paginate(12)
             ->withQueryString()
@@ -29,8 +33,8 @@ class AnnouncementController extends Controller
                 'id' => $a->id,
                 'title' => $a->title,
                 'category' => $a->category?->name,
-                'is_published' => $a->is_published,
-                'published_at' => $a->published_at?->format('d/m/Y'),
+                'status' => $a->status,
+                'published_at' => $a->published_at?->format('d/m/Y H:i'),
                 'views' => $a->views,
                 'cover' => $a->getFirstMediaUrl('cover'),
             ]);
@@ -38,6 +42,40 @@ class AnnouncementController extends Controller
         return Inertia::render('Admin/Announcements/Index', [
             'announcements' => $items,
             'filters' => $request->only('search', 'status'),
+        ]);
+    }
+
+    public function calendar(Request $request): Response
+    {
+        $month = $request->query('month')
+            ? Carbon::parse($request->query('month').'-01')->startOfMonth()
+            : today()->startOfMonth();
+
+        $events = Announcement::whereNotNull('published_at')
+            ->whereYear('published_at', $month->year)
+            ->whereMonth('published_at', $month->month)
+            ->orderBy('published_at')
+            ->get()
+            ->groupBy(fn (Announcement $a) => $a->published_at->day)
+            ->map(fn ($group) => $group->map(fn (Announcement $a) => [
+                'id' => $a->id,
+                'title' => $a->title,
+                'time' => $a->published_at->format('H:i'),
+                'status' => $a->status,
+            ])->values());
+
+        return Inertia::render('Admin/Announcements/Calendar', [
+            'calendar' => [
+                'monthLabel' => $month->locale('th')->translatedFormat('F Y'),
+                'year' => $month->year,
+                'month' => $month->month,
+                'daysInMonth' => $month->daysInMonth,
+                'startWeekday' => (int) $month->copy()->startOfMonth()->dayOfWeek,
+                'today' => today()->isSameMonth($month) ? today()->day : null,
+                'prevMonth' => $month->copy()->subMonth()->format('Y-m'),
+                'nextMonth' => $month->copy()->addMonth()->format('Y-m'),
+            ],
+            'events' => $events,
         ]);
     }
 

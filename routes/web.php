@@ -58,6 +58,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Phase 1 — โมดูลเนื้อหาหลัก
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->except(['show']);
+    Route::get('announcements/calendar', [\App\Http\Controllers\Admin\AnnouncementController::class, 'calendar'])->name('announcements.calendar');
     Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class)->except(['show']);
     Route::resource('case-studies', \App\Http\Controllers\Admin\CaseStudyController::class)->except(['show']);
     Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->except(['show']);
