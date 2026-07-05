@@ -147,6 +147,18 @@ const submit = () => {
                         </h3>
                         <LinksRepeater v-model="form.links" />
                     </div>
+
+                    <!-- Save (bottom) -->
+                    <div class="pjs-card p-5">
+                        <p class="mb-3 flex items-start gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                            <i class="bi bi-info-circle mt-0.5"></i>
+                            <span>หากไม่เลือก <strong>“เผยแพร่”</strong> ด้านบน ระบบจะบันทึกเป็น<strong>ร่างข่าว</strong>เท่านั้น (ยังไม่แสดงบนหน้าเว็บ)</span>
+                        </p>
+                        <button type="submit" :disabled="form.processing" class="btn-primary w-full">
+                            <i class="bi bi-check-lg"></i> {{ isEdit ? 'บันทึกการแก้ไข' : 'สร้างข่าว' }}
+                        </button>
+                        <Link :href="route('admin.news.index')" class="btn-outline mt-2 w-full">ยกเลิก</Link>
+                    </div>
                 </div>
             </div>
         </form>
