@@ -68,7 +68,7 @@ const currentYear = new Date().getFullYear();
 
         <!-- Floating pill header -->
         <header class="sticky top-0 z-40 px-3 pt-3">
-            <div class="mx-auto flex h-14 max-w-6xl items-center gap-1 rounded-full border border-slate-200/70 bg-white/90 pl-4 pr-2 shadow-sm backdrop-blur">
+            <div class="mx-auto flex h-14 max-w-6xl 2xl:max-w-[1600px] items-center gap-1 rounded-full border border-slate-200/70 bg-white/90 pl-4 pr-2 shadow-sm backdrop-blur">
                 <!-- Brand -->
                 <Link :href="route('admin.dashboard')" class="flex shrink-0 items-center gap-2">
                     <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue text-white"><i class="bi bi-briefcase text-sm"></i></span>
@@ -82,22 +82,22 @@ const currentYear = new Date().getFullYear();
                             <Link
                                 v-if="hasRoute(g.name)"
                                 :href="route(g.name)"
-                                class="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition"
+                                class="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm transition"
                                 :class="groupActive(g) ? 'bg-pjs-blue text-white shadow' : 'text-slate-500 hover:bg-slate-100'"
                             >
-                                <i :class="g.icon" class="text-[11px]"></i>{{ g.label }}
+                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
                             </Link>
-                            <span v-else class="flex shrink-0 cursor-default items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs text-slate-300" title="เร็วๆนี้">
-                                <i :class="g.icon" class="text-[11px]"></i>{{ g.label }}
+                            <span v-else class="flex shrink-0 cursor-default items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm text-slate-300" title="เร็วๆนี้">
+                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
                             </span>
                         </template>
                         <div v-else class="relative shrink-0">
                             <button
-                                class="flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition"
+                                class="flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm transition"
                                 :class="groupActive(g) || openGroup === g.label ? 'bg-pjs-blue text-white shadow' : 'text-slate-500 hover:bg-slate-100'"
                                 @click="toggleGroup(g.label)"
                             >
-                                <i :class="g.icon" class="text-[11px]"></i>{{ g.label }}
+                                <i :class="g.icon" class="text-xs"></i>{{ g.label }}
                                 <i class="bi bi-chevron-down text-[9px]"></i>
                             </button>
                             <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
@@ -170,7 +170,7 @@ const currentYear = new Date().getFullYear();
 
             <!-- Mobile nav -->
             <Transition enter-active-class="transition" enter-from-class="opacity-0" leave-active-class="transition" leave-to-class="opacity-0">
-                <nav v-if="mobileOpen" class="mx-auto mt-2 max-w-6xl rounded-2xl border border-slate-100 bg-white p-3 shadow-soft lg:hidden">
+                <nav v-if="mobileOpen" class="mx-auto mt-2 max-w-6xl 2xl:max-w-[1600px] rounded-2xl border border-slate-100 bg-white p-3 shadow-soft lg:hidden">
                     <div v-for="g in visibleNav" :key="g.label" class="mb-2">
                         <p class="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ g.label }}</p>
                         <template v-for="item in (g.items || [g])" :key="item.name">
@@ -184,13 +184,13 @@ const currentYear = new Date().getFullYear();
         </header>
 
         <!-- Flash -->
-        <div v-if="flash.success || flash.error" class="mx-auto max-w-6xl px-4 pt-4">
+        <div v-if="flash.success || flash.error" class="mx-auto max-w-6xl 2xl:max-w-[1600px] px-4 pt-4">
             <div v-if="flash.success" class="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm text-green-800"><i class="bi bi-check-circle"></i>{{ flash.success }}</div>
             <div v-if="flash.error" class="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-800"><i class="bi bi-x-circle"></i>{{ flash.error }}</div>
         </div>
 
         <!-- Page -->
-        <main class="mx-auto max-w-6xl px-4 py-5">
+        <main class="mx-auto max-w-6xl 2xl:max-w-[1600px] px-4 py-5">
             <div v-if="$slots.title" class="mb-4">
                 <h1 class="text-lg font-semibold text-slate-800"><slot name="title" /></h1>
             </div>
@@ -198,7 +198,7 @@ const currentYear = new Date().getFullYear();
         </main>
 
         <!-- Footer / license -->
-        <footer class="mx-auto max-w-6xl px-4 pb-6 pt-2">
+        <footer class="mx-auto max-w-6xl 2xl:max-w-[1600px] px-4 pb-6 pt-2">
             <div class="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-center text-xs text-slate-400 sm:flex-row sm:text-left">
                 <p>© {{ currentYear }} PJS Law and Accounting Co., Ltd. — สงวนลิขสิทธิ์</p>
                 <p>ระบบจัดการเว็บไซต์ <span class="text-slate-300">·</span> เวอร์ชัน 1.0</p>
