@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="PJS Law and Accounting - Professional Legal and Accounting Consultants">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'PJS Law & Accounting')</title>
-    
+    <title>@yield('title', $site['name'] ?? 'PJS Law & Accounting')</title>
+
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    @if(!empty($site['favicon']))
+        <link rel="icon" href="{{ $site['favicon'] }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    @endif
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('frontend/images/apple-touch-icon-72x72.png') }}">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('frontend/images/apple-touch-icon-114x114.png') }}">
@@ -715,22 +719,17 @@ body {
         <div class="container-fluid">
             <div class="inner-header">
                 <a class="inner-brand notranslate" href="{{ route('home') }}">
-                    <img src="{{ asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="PJS">
+                    <img src="{{ $site['logo'] ?? asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="{{ $site['name'] ?? 'PJS' }}">
                     <span>PJS</span>
                 </a>
             </div>
-            
+
             <div class="inner-navigation" id="mainNav">
                 <div class="inner-nav">
                     <ul>
-                        <li><a href="{{ route('home') }}"><span class="menu-item-span">หน้าหลัก</span></a></li>
-                        <li><a href="{{ route('about.index') }}"><span class="menu-item-span">เกี่ยวกับเรา</span></a></li>
-                        <li><a href="{{ route('services.index') }}"><span class="menu-item-span">บริการ</span></a></li>
-                        <li><a href="{{ route('team.index') }}"><span class="menu-item-span">ทีมงาน</span></a></li>
-                        <li><a href="{{ route('news.index') }}"><span class="menu-item-span">ข่าวสาร</span></a></li>
-                        <li><a href="{{ route('cases.index') }}"><span class="menu-item-span">คดีตัวอย่าง</span></a></li>
-                        <!-- <li><a href="{{ route('home') }}#case-studies"><span class="menu-item-span">คดีตัวอย่าง</span></a></li> -->
-                        <li><a href="{{ route('contact.index') }}"><span class="menu-item-span">ติดต่อเรา</span></a></li>
+                        @foreach($publicMenu as $item)
+                            <li><a href="{{ $item['url'] }}"><span class="menu-item-span">{{ $item['label'] }}</span></a></li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -760,34 +759,40 @@ body {
     <div class="container">
         <div class="row" style="margin-bottom: 40px;">
             <div class="col-lg-3 col-md-6 mb-4">
-                <img src="{{ asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="PJS">
+                <img src="{{ $site['logo'] ?? asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="{{ $site['name'] ?? 'PJS' }}">
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <h6 class="footer-title">เกี่ยวกับเรา</h6>
-                <p><strong>บริษัท PJS กฎหมายและการบัญชี จำกัด</strong></p>
-                <p>ที่ปรึกษากฎหมายและบัญชีมืออาชีพ พร้อมให้บริการธุรกิจของคุณด้วยความเชี่ยวชาญและประสบการณ์</p>
+                <p><strong>{{ $site['name'] ?? 'บริษัท PJS กฎหมายและการบัญชี จำกัด' }}</strong></p>
+                <p>{{ $site['tagline'] ?: 'ที่ปรึกษากฎหมายและบัญชีมืออาชีพ พร้อมให้บริการธุรกิจของคุณด้วยความเชี่ยวชาญและประสบการณ์' }}</p>
             </div>
-            
+
             <div class="col-lg-2 col-md-6 mb-4">
                 <h6 class="footer-title">แผนผังเว็บไซต์</h6>
                 <ul class="list-unstyled footer-list">
-                    <li><a href="{{ route('home') }}">หน้าหลัก</a></li>
-                    <li><a href="{{ route('about.index') }}">เกี่ยวกับเรา</a></li>
-                    <li><a href="{{ route('services.index') }}">บริการ</a></li>
-                    <li><a href="{{ route('team.index') }}">ทีมงานของเรา</a></li>
-                    <li><a href="{{ route('news.index') }}">ข่าวสาร</a></li>
-                    <li><a href="{{ route('cases.index') }}">คดีตัวอย่าง</a></li>
-                    <li><a href="{{ route('contact.index') }}">ติดต่อเรา</a></li>
+                    @foreach($publicMenu as $item)
+                        <li><a href="{{ $item['url'] }}">{{ $item['label'] }}</a></li>
+                    @endforeach
                 </ul>
             </div>
             
             <div class="col-lg-4 col-md-6 mb-4">
                 <h6 class="footer-title">ติดต่อเรา</h6>
                 <ul class="list-unstyled footer-list mb-3">
-                    <li><i class="bi bi-geo-alt"></i> 27/20 ซอย 4, แขวงบางบอน, เขตบางบอน, กรุงเทพมหานคร 10150</li>
-                    <li><i class="bi bi-telephone"></i> <a href="tel:0922569828">092-256-9828</a></li>
-                    <li><i class="bi bi-envelope"></i> <a href="mailto:pjs.legal2025@gmail.com">pjs.legal2025@gmail.com</a></li>
-                   {{-- <li><i class="bi bi-line"></i> @pjslegal</li> --}}
+                    @forelse($footerChannels as $ch)
+                        <li>
+                            <i class="{{ $ch->icon ?: 'bi bi-dot' }}"></i>
+                            @if(in_array($ch->type, ['address']))
+                                {{ $ch->value }}
+                            @else
+                                <a href="{{ $ch->href }}">{{ $ch->value }}</a>
+                            @endif
+                        </li>
+                    @empty
+                        <li><i class="bi bi-geo-alt"></i> 27/20 ซอย 4, แขวงบางบอน, เขตบางบอน, กรุงเทพมหานคร 10150</li>
+                        <li><i class="bi bi-telephone"></i> <a href="tel:0922569828">092-256-9828</a></li>
+                        <li><i class="bi bi-envelope"></i> <a href="mailto:pjs.legal2025@gmail.com">pjs.legal2025@gmail.com</a></li>
+                    @endforelse
                 </ul>
                 
                 <div class="map-responsive">
@@ -802,7 +807,7 @@ body {
         <div class="row">
             <div class="col-md-12">
                 <div class="footer-copyright text-center" style="padding: 10px 0;">
-                    <p>&copy; 2025 PJS Law and Accounting Co., Ltd. All rights reserved.</p>
+                    <p>&copy; {{ date('Y') }} {{ $site['name'] ?? 'PJS Law and Accounting Co., Ltd.' }} — สงวนลิขสิทธิ์</p>
                 </div>
             </div>
         </div>
@@ -820,41 +825,22 @@ body {
                 </div>
                 <div class="widget-text">ติดต่อเราที่นี่เลยค่ะ</div>
             </a>
-            
-            <a href="https://www.facebook.com/profile.php?id=61583725895144" target="_blank" class="widget-item">
-                <div class="widget-icon facebook">
-                    <i class="bi bi-messenger"></i>
-                </div>
-                <div class="widget-text">พูดคุยผ่าน Facebook</div>
-            </a>
-			
-			<a href="https://www.instagram.com/pjs_legal?igsh=MmlzMWN2bjdzN3c4&utm_source=qr" target="_blank" class="widget-item">
-                <div class="widget-icon instagram">
-                    <i class="bi bi-instagram"></i>
-                </div>
-                <div class="widget-text">ติดตาม Instagram</div>
-            </a>
-			
-			<a href="https://www.tiktok.com/@pjs_legal?lang=th-TH" target="_blank" class="widget-item">
-                <div class="widget-icon tiktok">
-                    <i class="bi bi-tiktok"></i>
-                </div>
-                <div class="widget-text">ติดตาม TikTok</div>
-            </a>
-            
-            <a href="tel:0922569828" class="widget-item">
-                <div class="widget-icon phone">
-                    <i class="bi bi-telephone"></i>
-                </div>
-                <div class="widget-text">โทรหาเรา</div>
-            </a>
-            
-            {{-- <a href="https://line.me/ti/p/sLjBmLc4UW" target="_blank" class="widget-item">
-                <div class="widget-icon line">
-                    <i class="bi bi-line"></i>
-                </div>
-                <div class="widget-text">Line Official</div>
-            </a> --}}
+
+            @forelse($widgetChannels as $ch)
+                <a href="{{ $ch->href }}" @if($ch->is_social) target="_blank" @endif class="widget-item">
+                    <div class="widget-icon {{ $ch->type }}">
+                        <i class="{{ $ch->icon ?: 'bi bi-dot' }}"></i>
+                    </div>
+                    <div class="widget-text">{{ $ch->label ?: ($widgetText[$ch->type] ?? $ch->value) }}</div>
+                </a>
+            @empty
+                <a href="tel:0922569828" class="widget-item">
+                    <div class="widget-icon phone">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+                    <div class="widget-text">โทรหาเรา</div>
+                </a>
+            @endforelse
         </div>
         
         <div class="widget-toggle" id="widgetToggle">
