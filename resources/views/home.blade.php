@@ -314,25 +314,27 @@
             </div>
         </div>
         <div class="row row-post-masonry">
-            <!-- Card 1: ข่าวจริง -->
+            @forelse(($latestNews ?? []) as $news)
             <div class="col-4 post-item">
                 <article class="post">
                     <div class="post-preview">
-                        <img src="{{ asset('frontend/images/blog/News-PR1/Photo_380_0.jpg') }}" alt="News Main">
+                        <a href="{{ route('news.show', $news->slug) }}">
+                            <img src="{{ $news->getFirstMediaUrl('cover') ?: asset('frontend/images/blog/News-PR1/Photo_380_0.jpg') }}" alt="{{ $news->title }}">
+                        </a>
                     </div>
                     <div class="post-wrapper">
                         <div class="post-header">
-                            <h2 class="post-title">เปิดบริษัทและทำบุญบริษัทฯ</h2>
-                            <div class="post-meta">06 มีนาคม 2569</div>
+                            <h2 class="post-title"><a href="{{ route('news.show', $news->slug) }}">{{ $news->title }}</a></h2>
+                            <div class="post-meta">{{ optional($news->published_at)->locale('th')->translatedFormat('d F Y') }}</div>
                         </div>
                         <div class="post-content">
-                            <p>บริษัท พีเจเอส.กฎหมายและการบัญชี จำกัด นำโดยผู้บริหาร คุณธนากร ตั้งกิจโสภา และทีมงานของบริษัทฯ ได้ร่วมพิธีเปิดบริษัทและทำบุญบริษัทฯ... </p>
+                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($news->excerpt ?: $news->content), 120) }}</p>
                         </div>
-                        <div class="post-more"><a href="/news/news-show-1">อ่านเพิ่มเติม</a></div>
+                        <div class="post-more"><a href="{{ route('news.show', $news->slug) }}">อ่านเพิ่มเติม</a></div>
                     </div>
                 </article>
             </div>
-            <!-- Card 2: Placeholder -->
+            @empty
             <div class="col-4 post-item">
                 <article class="post post-placeholder">
                     <div class="post-preview" style="background: #f7f7f7; display: flex; align-items: center; justify-content: center; height: 233px;">
@@ -349,28 +351,12 @@
                     </div>
                 </article>
             </div>
-            <!-- Card 3: Placeholder -->
-            <div class="col-4 post-item">
-                <article class="post post-placeholder">
-                    <div class="post-preview" style="background: #f7f7f7; display: flex; align-items: center; justify-content: center; height: 233px;">
-                        <i class="bi bi-clock-history" style="font-size: 48px; color: #ccc;"></i>
-                    </div>
-                    <div class="post-wrapper">
-                        <div class="post-header text-center">
-                            <h2 class="post-title text-muted">กำลังอัพเดตเร็ว ๆ นี้...</h2>
-                        </div>
-                        <div class="post-content text-center">
-                            <p class="text-muted">รอข่าวสารและกิจกรรมเพิ่มเติมในอนาคต</p>
-                        </div>
-                        <div class="post-more"></div>
-                    </div>
-                </article>
-            </div>
+            @endforelse
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="space" data-MY="30px"></div>
-                <a class="btn btn-circle btn-outline-brand" href="/news/index-news">ดูข่าวสารทั้งหมด</a>
+                <a class="btn btn-circle btn-outline-brand" href="{{ route('news.index') }}">ดูข่าวสารทั้งหมด</a>
             </div>
         </div>
     </div>
