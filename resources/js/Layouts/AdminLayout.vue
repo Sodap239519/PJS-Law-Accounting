@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import LoadingIndicator from '@/Components/Admin/LoadingIndicator.vue';
 
@@ -45,9 +45,19 @@ const isActive = (name) => name && (route().current(name) || route().current(nam
 const groupActive = (g) => (g.items ? g.items.some((i) => isActive(i.name)) : isActive(g.name));
 
 const toggleGroup = (label) => (openGroup.value = openGroup.value === label ? null : label);
-const closeMenus = () => { openGroup.value = null; mobileOpen.value = false; };
 
 const logout = () => router.post(route('logout'));
+
+// ปิดเมนู/ดรอปดาวน์ทุกครั้งที่เริ่มนำทาง (ไม่ต้องผูก @click ที่ทำให้ Link ถูก unmount ก่อนนำทาง)
+let offStart = null;
+onMounted(() => {
+    offStart = router.on('start', () => {
+        openGroup.value = null;
+        profileOpen.value = false;
+        mobileOpen.value = false;
+    });
+});
+onUnmounted(() => offStart?.());
 
 const currentYear = new Date().getFullYear();
 </script>
@@ -98,7 +108,6 @@ const currentYear = new Date().getFullYear();
                                             :href="route(item.name)"
                                             class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition"
                                             :class="isActive(item.name) ? 'bg-pjs-blue/10 font-medium text-pjs-blue' : 'text-slate-600 hover:bg-slate-50'"
-                                            @click="closeMenus"
                                         >
                                             <i :class="item.icon" class="text-pjs-blue/70"></i>{{ item.label }}
                                         </Link>
@@ -165,7 +174,7 @@ const currentYear = new Date().getFullYear();
                     <div v-for="g in visibleNav" :key="g.label" class="mb-2">
                         <p class="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ g.label }}</p>
                         <template v-for="item in (g.items || [g])" :key="item.name">
-                            <Link v-if="hasRoute(item.name)" :href="route(item.name)" class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50" @click="closeMenus">
+                            <Link v-if="hasRoute(item.name)" :href="route(item.name)" class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">
                                 <i :class="item.icon" class="text-pjs-blue/70"></i>{{ item.label }}
                             </Link>
                         </template>
