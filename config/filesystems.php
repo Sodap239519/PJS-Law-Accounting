@@ -41,7 +41,8 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // ใช้ URL แบบ relative เพื่อให้รูปแสดงได้ทุกโดเมน/พอร์ต (ไม่ผูกกับ APP_URL)
+            'url' => env('MEDIA_URL', '/storage'),
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
