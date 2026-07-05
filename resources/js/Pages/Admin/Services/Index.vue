@@ -22,9 +22,9 @@ const destroy = (id) => {
             </Link>
         </div>
 
-        <div class="overflow-hidden rounded-xl border bg-white shadow-sm">
+        <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
             <table class="min-w-full divide-y text-sm">
-                <thead class="bg-gray-50 text-left text-gray-500">
+                <thead class="bg-slate-50 text-left text-slate-500">
                     <tr>
                         <th class="px-4 py-3 text-center">ลำดับ</th>
                         <th class="px-4 py-3">ไอคอน</th>
@@ -34,16 +34,16 @@ const destroy = (id) => {
                     </tr>
                 </thead>
                 <tbody class="divide-y">
-                    <tr v-for="item in services" :key="item.id" class="hover:bg-gray-50">
-                        <td class="px-4 py-2 text-center text-gray-400">{{ item.sort_order }}</td>
+                    <tr v-for="item in services" :key="item.id" class="hover:bg-slate-50">
+                        <td class="px-4 py-2 text-center text-slate-400">{{ item.sort_order }}</td>
                         <td class="px-4 py-2">
                             <img v-if="item.cover" :src="item.cover" class="h-9 w-9 rounded object-cover" />
                             <i v-else-if="item.icon" :class="item.icon" class="text-xl text-pjs-blue"></i>
-                            <span v-else class="text-gray-300">—</span>
+                            <span v-else class="text-slate-300">—</span>
                         </td>
-                        <td class="px-4 py-2 font-medium text-gray-800">{{ item.title }}</td>
+                        <td class="px-4 py-2 font-medium text-slate-800">{{ item.title }}</td>
                         <td class="px-4 py-2">
-                            <span :class="item.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'" class="rounded-full px-2 py-0.5 text-xs">
+                            <span :class="item.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'" class="rounded-full px-2 py-0.5 text-xs">
                                 {{ item.is_active ? 'ใช้งาน' : 'ปิด' }}
                             </span>
                         </td>
@@ -53,7 +53,7 @@ const destroy = (id) => {
                         </td>
                     </tr>
                     <tr v-if="!services.length">
-                        <td colspan="5" class="px-4 py-10 text-center text-gray-400">ยังไม่มีบริการ</td>
+                        <td colspan="5" class="px-4 py-10 text-center text-slate-400">ยังไม่มีบริการ</td>
                     </tr>
                 </tbody>
             </table>

@@ -28,7 +28,7 @@ const destroy = () => {
                         <p class="font-semibold text-slate-800">{{ contact.name }}</p>
                         <p class="text-xs text-slate-400">{{ contact.date }}</p>
                     </div>
-                    <button class="ml-auto rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" @click="destroy">
+                    <button class="ml-auto rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50" @click="destroy">
                         <i class="bi bi-trash"></i> ลบ
                     </button>
                 </div>

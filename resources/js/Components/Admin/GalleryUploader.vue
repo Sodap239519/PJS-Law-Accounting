@@ -34,7 +34,7 @@ const removeExisting = (id) => {
 
 <template>
     <div>
-        <label class="mb-1 block text-sm font-medium text-gray-700">{{ label }}</label>
+        <label class="mb-1 block text-sm font-medium text-slate-600">{{ label }}</label>
         <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
             <div v-for="img in existingItems" :key="'e' + img.id" class="group relative aspect-square overflow-hidden rounded-lg border">
                 <img :src="img.url" class="h-full w-full object-cover" />
@@ -44,7 +44,7 @@ const removeExisting = (id) => {
                 <img :src="img.url" class="h-full w-full object-cover" />
                 <button type="button" class="absolute right-1 top-1 rounded-full bg-red-600 px-1.5 text-xs text-white opacity-90" @click="removeNew(idx)">✕</button>
             </div>
-            <button type="button" class="flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-2xl text-gray-400 hover:border-pjs-blue hover:text-pjs-blue" @click="inputRef.click()">
+            <button type="button" class="flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-slate-200 text-2xl text-slate-400 hover:border-pjs-blue hover:text-pjs-blue" @click="inputRef.click()">
                 +
             </button>
         </div>

@@ -56,9 +56,9 @@ const ratioLabel = computed(() => (Math.abs(props.ratio - 16 / 9) < 0.01 ? '16:9
 
 <template>
     <div>
-        <label class="mb-1 block text-sm font-medium text-gray-700">
+        <label class="mb-1 block text-sm font-medium text-slate-600">
             {{ label }}
-            <span v-if="ratioLabel" class="ml-1 text-xs text-gray-400">(อัตราส่วน {{ ratioLabel }})</span>
+            <span v-if="ratioLabel" class="ml-1 text-xs text-slate-400">(อัตราส่วน {{ ratioLabel }})</span>
         </label>
 
         <!-- Cropping mode -->
@@ -75,7 +75,7 @@ const ratioLabel = computed(() => (Math.abs(props.ratio - 16 / 9) < 0.01 ? '16:9
                 <button type="button" class="rounded-lg bg-pjs-blue px-4 py-2 text-sm text-white" @click="confirmCrop">
                     ครอบตัด &amp; ใช้รูปนี้
                 </button>
-                <button type="button" class="rounded-lg border px-4 py-2 text-sm text-gray-600" @click="rawImage = null">
+                <button type="button" class="rounded-lg border px-4 py-2 text-sm text-slate-600" @click="rawImage = null">
                     ยกเลิก
                 </button>
             </div>
@@ -83,20 +83,20 @@ const ratioLabel = computed(() => (Math.abs(props.ratio - 16 / 9) < 0.01 ? '16:9
 
         <!-- Preview / picker -->
         <div v-else>
-            <div class="relative overflow-hidden rounded-lg border bg-gray-50" :style="boxStyle">
+            <div class="relative overflow-hidden rounded-lg border bg-slate-50" :style="boxStyle">
                 <img v-if="preview" :src="preview" class="h-full w-full object-cover" />
-                <div v-else class="flex h-full items-center justify-center text-sm text-gray-400">ยังไม่มีรูป</div>
+                <div v-else class="flex h-full items-center justify-center text-sm text-slate-400">ยังไม่มีรูป</div>
             </div>
             <div class="mt-2 flex gap-2">
-                <button type="button" class="rounded-lg border px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50" @click="inputRef.click()">
+                <button type="button" class="rounded-lg border px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50" @click="inputRef.click()">
                     เลือกรูป
                 </button>
-                <button v-if="preview" type="button" class="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" @click="clearImage">
+                <button v-if="preview" type="button" class="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50" @click="clearImage">
                     ลบรูป
                 </button>
                 <input ref="inputRef" type="file" accept="image/*" class="hidden" @change="onSelect" />
             </div>
-            <p v-if="hint" class="mt-1 text-xs text-gray-400">{{ hint }}</p>
+            <p v-if="hint" class="mt-1 text-xs text-slate-400">{{ hint }}</p>
         </div>
     </div>
 </template>

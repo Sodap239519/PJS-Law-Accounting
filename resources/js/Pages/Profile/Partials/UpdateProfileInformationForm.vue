@@ -64,7 +64,7 @@ const submit = () => {
                     <button type="button" class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="fileInput.click()">
                         <i class="bi bi-camera mr-1"></i>เปลี่ยนรูป
                     </button>
-                    <button v-if="preview" type="button" class="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" @click="removeAvatar">
+                    <button v-if="preview" type="button" class="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50" @click="removeAvatar">
                         ลบรูป
                     </button>
                     <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="onFile" />
