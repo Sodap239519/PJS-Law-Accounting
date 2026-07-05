@@ -68,7 +68,7 @@ const currentYear = new Date().getFullYear();
 
         <!-- Floating pill header -->
         <header class="sticky top-0 z-40 px-3 pt-3">
-            <div class="mx-auto flex h-14 max-w-6xl items-center gap-1 rounded-full border border-slate-200/70 bg-white/90 pl-4 pr-2 shadow-sm backdrop-blur">
+            <div class="relative z-50 mx-auto flex h-14 max-w-6xl items-center gap-1 rounded-full border border-slate-200/70 bg-white/90 pl-4 pr-2 shadow-sm backdrop-blur">
                 <!-- Brand -->
                 <Link :href="route('admin.dashboard')" class="flex shrink-0 items-center gap-2">
                     <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue text-white"><i class="bi bi-briefcase text-sm"></i></span>
