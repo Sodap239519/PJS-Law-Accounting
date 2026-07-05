@@ -166,7 +166,7 @@ const submit = () => {
                                 </div>
 
                                 <label class="field-label mt-3 text-xs">เนื้อหา</label>
-                                <RichEditor v-model="s.content" :height="240" />
+                                <RichEditor v-model="s.content" :height="420" />
 
                                 <label class="field-label mt-3 text-xs">รูปประกอบ</label>
                                 <div class="flex items-center gap-3">
