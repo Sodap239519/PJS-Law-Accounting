@@ -111,14 +111,14 @@ const ratioLabel = computed(() => (Math.abs(props.ratio - 16 / 9) < 0.01 ? '16:9
 
                 <span class="absolute left-2.5 top-2.5 rounded-full bg-black/35 px-2.5 py-0.5 text-[11px] font-medium text-white backdrop-blur">{{ label }}</span>
 
-                <div class="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-black/70 via-black/25 to-transparent p-3 pt-10">
-                    <button type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-700 backdrop-blur transition hover:bg-white" @click="inputRef.click()">
+                <div class="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-black/45 via-black/15 to-transparent p-3 pt-10">
+                    <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/15 px-3 py-1.5 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/30" @click="inputRef.click()">
                         <i class="bi bi-upload"></i> {{ preview ? 'เปลี่ยนรูป' : 'เลือกรูป' }}
                     </button>
-                    <button v-if="preview" type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-red-500/90 px-3 py-1.5 text-sm text-white backdrop-blur transition hover:bg-red-600" @click="clearImage">
+                    <button v-if="preview" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-red-300/40 bg-red-500/50 px-3 py-1.5 text-sm text-white backdrop-blur-md transition hover:bg-red-500/70" @click="clearImage">
                         <i class="bi bi-trash"></i> ลบ
                     </button>
-                    <span v-if="ratioLabel" class="ml-auto rounded-full bg-white/20 px-2 py-0.5 text-[10px] text-white backdrop-blur">{{ ratioLabel }}</span>
+                    <span v-if="ratioLabel" class="ml-auto rounded-full bg-white/15 px-2 py-0.5 text-[10px] text-white backdrop-blur">{{ ratioLabel }}</span>
                 </div>
 
                 <input ref="inputRef" type="file" accept="image/*" class="hidden" @change="onSelect" />
