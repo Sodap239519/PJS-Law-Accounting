@@ -68,14 +68,14 @@ const submit = () => {
                     <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
                         <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                     </label>
-                    <input v-model="form.published_at" type="datetime-local" class="rounded-lg border-slate-200 text-sm" title="วันที่เผยแพร่" />
-                    <select v-model="form.category_id" class="rounded-lg border-slate-200 text-sm" title="หมวดหมู่">
+                    <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันที่เผยแพร่" />
+                    <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
                         <option :value="null">— หมวดหมู่ —</option>
                         <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
                     </select>
-                    <Link :href="route('admin.news.index')" class="rounded-lg border px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
-                    <button type="submit" :disabled="form.processing" class="rounded-lg bg-pjs-blue px-5 py-2 text-sm font-medium text-white hover:bg-pjs-blue-dark disabled:opacity-50">
-                        {{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}
+                    <Link :href="route('admin.news.index')" class="btn-outline">ยกเลิก</Link>
+                    <button type="submit" :disabled="form.processing" class="btn-primary">
+                        <i class="bi bi-check-lg"></i> {{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}
                     </button>
                 </div>
             </div>
@@ -98,8 +98,8 @@ const submit = () => {
                         <details class="mt-5 rounded-lg border border-slate-200 px-3 py-2">
                             <summary class="cursor-pointer select-none text-xs font-medium text-slate-500">ตั้งค่าขั้นสูง</summary>
                             <label class="mb-1 mt-3 block text-xs text-slate-500">Slug (URL) — เว้นว่างให้ระบบสร้างให้อัตโนมัติ</label>
-                            <input v-model="form.slug" type="text" class="w-full rounded-lg border-slate-200 text-sm sm:max-w-md" />
-                            <p v-if="form.errors.slug" class="mt-1 text-sm text-red-500">{{ form.errors.slug }}</p>
+                            <input v-model="form.slug" type="text" class="field sm:max-w-md" />
+                            <p v-if="form.errors.slug" class="field-error">{{ form.errors.slug }}</p>
                         </details>
                     </div>
                 </div>

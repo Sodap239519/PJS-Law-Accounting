@@ -68,7 +68,7 @@ const filled = (code) => !!((tr[code]?.title || '').trim() || (tr[code]?.content
         <!-- Thai (main) -->
         <div v-show="active === 'th'">
             <label class="mb-1 block text-sm font-medium text-slate-600">{{ titleLabel }} *</label>
-            <input v-model="titleProxy" type="text" class="w-full rounded-lg border-slate-200" />
+            <input v-model="titleProxy" type="text" class="field" />
             <p v-if="titleError" class="mt-1 text-sm text-red-500">{{ titleError }}</p>
 
             <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">{{ contentLabel }} *</label>
@@ -83,7 +83,7 @@ const filled = (code) => !!((tr[code]?.title || '').trim() || (tr[code]?.content
                     <i class="bi bi-translate"></i> ถ้าไม่กรอกคำแปล หน้าเว็บจะใช้ Google แปลจากภาษาไทยอัตโนมัติ — กรอกเองเพื่อความแม่นยำ
                 </p>
                 <label class="mb-1 block text-sm font-medium text-slate-600">{{ titleLabel }}</label>
-                <input v-model="tr[code].title" type="text" class="w-full rounded-lg border-slate-200" />
+                <input v-model="tr[code].title" type="text" class="field" />
 
                 <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">{{ contentLabel }}</label>
                 <RichEditor v-model="tr[code].content" :height="contentHeight" />

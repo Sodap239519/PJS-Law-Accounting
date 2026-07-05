@@ -9,3 +9,90 @@
         font-family: 'Prompt', sans-serif;
     }
 }
+
+/* ---------------------------------------------------------------
+ | ระบบ class ใช้ซ้ำ (adapt แนวจาก Koratnopoor-Report → ธีม pjs-blue)
+ | ปุ่ม / การ์ด / ฟอร์ม / badge — เขียนครั้งเดียว ใช้ทั้งระบบ
+ --------------------------------------------------------------- */
+@layer components {
+    /* ---------- Buttons ---------- */
+    .btn-primary,
+    .btn-outline,
+    .btn-ghost,
+    .btn-soft,
+    .btn-danger {
+        @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    /* Primary = การกระทำหลัก (ทึบ + เงาสีฟ้าลอยเด่น) */
+    .btn-primary {
+        @apply bg-pjs-blue text-white hover:bg-pjs-blue-dark;
+        box-shadow: 0 1px 2px rgba(37, 99, 235, 0.3), 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .btn-primary:hover:not(:disabled) {
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.35), 0 6px 18px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Outline = ทางเลือกเงียบ (ขาว + ขอบ) */
+    .btn-outline {
+        @apply border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50;
+    }
+
+    /* Ghost = ปุ่ม inline/นำทาง */
+    .btn-ghost {
+        @apply text-slate-600 hover:bg-slate-100 hover:text-slate-800;
+    }
+
+    /* Soft = ปุ่มไอคอน/รอง (พื้นฟ้าอ่อน) */
+    .btn-soft {
+        @apply bg-pjs-blue/10 text-pjs-blue hover:bg-pjs-blue/20;
+    }
+
+    /* Danger = ลบ/อันตราย */
+    .btn-danger {
+        @apply bg-red-500 text-white shadow-sm hover:bg-red-600;
+    }
+
+    .btn-sm {
+        @apply gap-1.5 rounded-lg px-3 py-1.5 text-xs;
+    }
+    .btn-lg {
+        @apply px-6 py-2.5 text-base;
+    }
+
+    /* ---------- Card ---------- */
+    .pjs-card {
+        @apply rounded-2xl border border-slate-100 bg-white shadow-sm;
+    }
+
+    /* ---------- Forms ---------- (เลี่ยงชื่อ form-input/select/textarea ที่ชนกับปลั๊กอิน @tailwindcss/forms) */
+    .field {
+        @apply w-full rounded-lg border-slate-200 text-sm transition focus:border-pjs-blue focus:ring-2 focus:ring-pjs-blue/25;
+    }
+    .field-label {
+        @apply mb-1 block text-sm font-medium text-slate-600;
+    }
+    .field-error {
+        @apply mt-1 text-sm text-red-500;
+    }
+
+    /* ---------- Badge (pill) ---------- */
+    .badge {
+        @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+    }
+    .badge-blue {
+        @apply bg-pjs-blue/10 text-pjs-blue-dark;
+    }
+    .badge-slate {
+        @apply bg-slate-100 text-slate-500;
+    }
+    .badge-green {
+        @apply bg-green-100 text-green-700;
+    }
+    .badge-amber {
+        @apply bg-amber-100 text-amber-700;
+    }
+    .badge-gold {
+        @apply bg-pjs-gold/15 text-pjs-gold-dark;
+    }
+}
