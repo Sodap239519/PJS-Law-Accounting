@@ -1,98 +1,54 @@
 <script setup>
-import { watch, onBeforeUnmount } from 'vue';
-import { useEditor, EditorContent } from '@tiptap/vue-3';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import LinkExt from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image';
-import TextAlign from '@tiptap/extension-text-align';
+import { computed } from 'vue';
+import Editor from '@tinymce/tinymce-vue';
 
 const props = defineProps({
     modelValue: { type: String, default: '' },
+    height: { type: Number, default: 380 },
 });
 const emit = defineEmits(['update:modelValue']);
 
-const editor = useEditor({
-    content: props.modelValue,
-    extensions: [
-        StarterKit.configure({ link: false, underline: false }),
-        Underline,
-        LinkExt.configure({ openOnClick: false, autolink: true }),
-        Image.configure({ inline: false, HTMLAttributes: { class: 'rounded-lg' } }),
-        TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    editorProps: {
-        attributes: {
-            class: 'prose prose-sm max-w-none min-h-[240px] px-4 py-3 focus:outline-none prose-blockquote:border-pjs-blue prose-blockquote:text-slate-600 prose-a:text-pjs-blue',
-        },
-    },
-    onUpdate: ({ editor }) => emit('update:modelValue', editor.getHTML()),
+const value = computed({
+    get: () => props.modelValue,
+    set: (v) => emit('update:modelValue', v),
 });
 
-watch(
-    () => props.modelValue,
-    (val) => {
-        if (editor.value && val !== editor.value.getHTML()) {
-            editor.value.commands.setContent(val || '', false);
-        }
-    },
-);
+// โหลด TinyMCE 6 จาก CDN (ฟรี GPL — ไม่ต้องใช้ API key/license)
+const scriptSrc = 'https://cdn.jsdelivr.net/npm/tinymce@6.8.6/tinymce.min.js';
 
-onBeforeUnmount(() => editor.value?.destroy());
-
-const setLink = () => {
-    const previous = editor.value.getAttributes('link').href;
-    const url = window.prompt('ใส่ URL ของลิงก์', previous || 'https://');
-    if (url === null) return;
-    if (url === '') {
-        editor.value.chain().focus().extendMarkRange('link').unsetLink().run();
-        return;
-    }
-    editor.value.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+const init = {
+    height: props.height,
+    menubar: 'edit insert view format table tools',
+    plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons',
+    toolbar:
+        'undo redo | blocks | bold italic underline forecolor backcolor | ' +
+        'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
+        'link image media table | blockquote code | removeformat | fullscreen',
+    toolbar_mode: 'sliding',
+    branding: false,
+    promotion: false,
+    statusbar: true,
+    content_style:
+        "@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');" +
+        "body{font-family:'Prompt',sans-serif;font-size:15px;line-height:1.7;color:#334155;padding:8px 12px;}" +
+        'h1,h2,h3{color:#1e293b;font-weight:700;}' +
+        'a{color:#2563eb;}' +
+        'blockquote{border-left:3px solid #2563eb;margin:0;padding-left:14px;color:#64748b;}' +
+        'img{max-width:100%;height:auto;border-radius:8px;}' +
+        'table{border-collapse:collapse;}table td,table th{border:1px solid #e2e8f0;padding:6px 10px;}',
 };
-
-const addImage = () => {
-    const url = window.prompt('ใส่ URL ของรูปภาพ', 'https://');
-    if (url) editor.value.chain().focus().setImage({ src: url }).run();
-};
-
-const btn = (active) =>
-    'flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-sm transition ' +
-    (active ? 'bg-pjs-blue text-white' : 'text-slate-600 hover:bg-slate-100');
 </script>
 
 <template>
-    <div class="overflow-hidden rounded-xl border border-slate-300 bg-white">
-        <div v-if="editor" class="flex flex-wrap items-center gap-0.5 border-b border-slate-200 bg-slate-50/60 p-1.5">
-            <button type="button" :class="btn(false)" title="ย้อนกลับ" @click="editor.chain().focus().undo().run()"><i class="bi bi-arrow-counterclockwise"></i></button>
-            <button type="button" :class="btn(false)" title="ทำซ้ำ" @click="editor.chain().focus().redo().run()"><i class="bi bi-arrow-clockwise"></i></button>
-            <span class="mx-1 h-5 w-px bg-slate-200"></span>
-
-            <button type="button" :class="btn(editor.isActive('heading', { level: 2 }))" title="หัวข้อใหญ่" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()">H2</button>
-            <button type="button" :class="btn(editor.isActive('heading', { level: 3 }))" title="หัวข้อรอง" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">H3</button>
-            <span class="mx-1 h-5 w-px bg-slate-200"></span>
-
-            <button type="button" :class="btn(editor.isActive('bold'))" title="ตัวหนา" @click="editor.chain().focus().toggleBold().run()"><i class="bi bi-type-bold"></i></button>
-            <button type="button" :class="btn(editor.isActive('italic'))" title="ตัวเอียง" @click="editor.chain().focus().toggleItalic().run()"><i class="bi bi-type-italic"></i></button>
-            <button type="button" :class="btn(editor.isActive('underline'))" title="ขีดเส้นใต้" @click="editor.chain().focus().toggleUnderline().run()"><i class="bi bi-type-underline"></i></button>
-            <button type="button" :class="btn(editor.isActive('strike'))" title="ขีดฆ่า" @click="editor.chain().focus().toggleStrike().run()"><i class="bi bi-type-strikethrough"></i></button>
-            <span class="mx-1 h-5 w-px bg-slate-200"></span>
-
-            <button type="button" :class="btn(editor.isActive('bulletList'))" title="รายการหัวข้อ" @click="editor.chain().focus().toggleBulletList().run()"><i class="bi bi-list-ul"></i></button>
-            <button type="button" :class="btn(editor.isActive('orderedList'))" title="รายการลำดับ" @click="editor.chain().focus().toggleOrderedList().run()"><i class="bi bi-list-ol"></i></button>
-            <button type="button" :class="btn(editor.isActive('blockquote'))" title="คำพูด / อ้างอิง" @click="editor.chain().focus().toggleBlockquote().run()"><i class="bi bi-quote"></i> อ้างอิง</button>
-            <button type="button" :class="btn(false)" title="เส้นคั่น" @click="editor.chain().focus().setHorizontalRule().run()"><i class="bi bi-dash-lg"></i></button>
-            <span class="mx-1 h-5 w-px bg-slate-200"></span>
-
-            <button type="button" :class="btn(editor.isActive({ textAlign: 'left' }))" title="ชิดซ้าย" @click="editor.chain().focus().setTextAlign('left').run()"><i class="bi bi-text-left"></i></button>
-            <button type="button" :class="btn(editor.isActive({ textAlign: 'center' }))" title="กึ่งกลาง" @click="editor.chain().focus().setTextAlign('center').run()"><i class="bi bi-text-center"></i></button>
-            <button type="button" :class="btn(editor.isActive({ textAlign: 'right' }))" title="ชิดขวา" @click="editor.chain().focus().setTextAlign('right').run()"><i class="bi bi-text-right"></i></button>
-            <span class="mx-1 h-5 w-px bg-slate-200"></span>
-
-            <button type="button" :class="btn(editor.isActive('link'))" title="แทรกลิงก์" @click="setLink"><i class="bi bi-link-45deg"></i></button>
-            <button type="button" :class="btn(false)" title="แทรกรูปภาพ" @click="addImage"><i class="bi bi-image"></i></button>
-            <button type="button" :class="btn(false)" title="ล้างรูปแบบ" @click="editor.chain().focus().unsetAllMarks().clearNodes().run()"><i class="bi bi-eraser"></i></button>
-        </div>
-        <EditorContent :editor="editor" />
+    <div class="tinymce-wrap overflow-hidden rounded-xl border border-slate-200">
+        <Editor v-model="value" :tinymce-script-src="scriptSrc" :init="init" />
     </div>
 </template>
+
+<style>
+/* ทำให้ขอบ TinyMCE เข้ากับดีไซน์ */
+.tinymce-wrap .tox-tinymce {
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+</style>
