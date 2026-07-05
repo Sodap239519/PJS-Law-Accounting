@@ -23,11 +23,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center mb-5">
-                <h2>บริษัท PJS กฎหมายและการบัญชี จำกัด</h2>
-                <p class="lead">ผู้เชี่ยวชาญด้านกฎหมายและบัญชีที่คุณไว้วางใจ</p>
+                <h2>{{ $about->intro_title ?: 'บริษัท PJS กฎหมายและการบัญชี จำกัด' }}</h2>
+                <p class="lead">{{ $about->intro_subtitle ?: 'ผู้เชี่ยวชาญด้านกฎหมายและบัญชีที่คุณไว้วางใจ' }}</p>
             </div>
         </div>
-        
+
         <div class="row mb-5">
             <div class="col-md-6">
                 <div class="icon-box text-center p-4">
@@ -35,7 +35,7 @@
                         <i class="bi bi-eye" style="font-size: 48px; color: #3498db;"></i>
                     </div>
                     <h4>วิสัยทัศน์</h4>
-                    <p>ความเชี่ยวชาญเหนือระดับ เปลี่ยนเรื่องกฎหมายให้เป็นเรื่องง่าย เพื่อทุกความสำเร็จของคุณและธุรกิจ</p>
+                    <p>{{ $about->vision ?: 'ความเชี่ยวชาญเหนือระดับ เปลี่ยนเรื่องกฎหมายให้เป็นเรื่องง่าย เพื่อทุกความสำเร็จของคุณและธุรกิจ' }}</p>
                 </div>
             </div>
             <div class="col-md-6">
@@ -44,31 +44,48 @@
                         <i class="bi bi-bullseye" style="font-size: 48px; color: #e74c3c;"></i>
                     </div>
                     <h4>พันธกิจ</h4>
-                    <p>ให้บริการด้านกฎหมายและบัญชีอย่างมืออาชีพ ด้วยทีมงานที่มีความรู้และประสบการณ์</p>
+                    <p>{{ $about->mission ?: 'ให้บริการด้านกฎหมายและบัญชีอย่างมืออาชีพ ด้วยทีมงานที่มีความรู้และประสบการณ์' }}</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-@if(!empty($about->content))
-<!-- About content from database -->
+@if(!empty($about->sections))
+<!-- Sections from database (flexible) -->
 <section class="module bg-light">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-10 m-auto">
-                <div class="about-content-body">{!! $about->content !!}</div>
-            </div>
-        </div>
-        @if($about->getMedia('gallery')->count())
-        <div class="row mt-5">
-            @foreach($about->getMedia('gallery') as $img)
-            <div class="col-md-4 mb-4">
-                <img src="{{ $img->getUrl() }}" alt="" class="img-fluid rounded shadow">
-            </div>
-            @endforeach
-        </div>
-        @endif
+        @foreach($about->sections as $i => $s)
+            @if(($s['position'] ?? 'left') === 'full')
+                <div class="row align-items-center {{ $i > 0 ? 'mt-5 pt-5 border-top' : '' }}">
+                    <div class="col-lg-10 m-auto">
+                        <div class="icon-box">
+                            <div class="icon-box-title mb-3">
+                                <h3>@if(!empty($s['icon']))<i class="{{ $s['icon'] }}" style="color:#d4af37;margin-right:10px;"></i>@endif {{ $s['heading'] ?? '' }}</h3>
+                            </div>
+                            <div class="icon-box-content">{!! $s['content'] ?? '' !!}</div>
+                            @if(!empty($s['image']))<img src="{{ $s['image'] }}" alt="{{ $s['heading'] ?? '' }}" class="img-fluid rounded shadow mt-3">@endif
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="row align-items-center {{ $i > 0 ? 'mt-5 pt-5 border-top' : '' }}">
+                    <div class="col-lg-6 mb-4 mb-lg-0 {{ ($s['position'] ?? 'left') === 'right' ? 'order-lg-2' : '' }}">
+                        <div class="icon-box">
+                            <div class="icon-box-title mb-3">
+                                <h3>@if(!empty($s['icon']))<i class="{{ $s['icon'] }}" style="color:#d4af37;margin-right:10px;"></i>@endif {{ $s['heading'] ?? '' }}</h3>
+                            </div>
+                            <div class="icon-box-content">{!! $s['content'] ?? '' !!}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 {{ ($s['position'] ?? 'left') === 'right' ? 'order-lg-1' : '' }}">
+                        @if(!empty($s['image']))
+                            <img src="{{ $s['image'] }}" alt="{{ $s['heading'] ?? '' }}" class="img-fluid rounded shadow">
+                        @endif
+                    </div>
+                </div>
+            @endif
+        @endforeach
     </div>
 </section>
 @else

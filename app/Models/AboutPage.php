@@ -14,7 +14,16 @@ class AboutPage extends Model implements HasMedia
 
     protected $fillable = [
         'layout',
+        'intro_title',
+        'intro_subtitle',
+        'vision',
+        'mission',
         'content',
+        'sections',
+    ];
+
+    protected $casts = [
+        'sections' => 'array',
     ];
 
     /**
