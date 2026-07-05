@@ -15,6 +15,13 @@ const props = defineProps({
 
 const isEdit = computed(() => !!props.news);
 
+// วันเวลาปัจจุบัน (รูปแบบ datetime-local: YYYY-MM-DDTHH:mm)
+const nowLocal = () => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
 const form = useForm({
     title: props.news?.title || '',
     slug: props.news?.slug || '',
@@ -22,7 +29,7 @@ const form = useForm({
     excerpt: props.news?.excerpt || '', // คงค่าเดิม (ไม่มีช่องกรอกแล้ว)
     content: props.news?.content || '',
     is_published: props.news?.is_published ?? false,
-    published_at: props.news?.published_at || '',
+    published_at: props.news?.published_at || nowLocal(),
     cover: null,
     remove_cover: false,
     gallery: [],
