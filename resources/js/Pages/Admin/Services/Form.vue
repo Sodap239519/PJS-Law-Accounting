@@ -34,9 +34,18 @@ const submit = () => {
 <template>
     <Head :title="isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ'" />
     <AdminLayout>
-        <template #title>{{ isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ' }}</template>
-
         <form class="space-y-6" @submit.prevent="submit">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ' }}</h1>
+                <div class="pjs-card flex flex-wrap items-center gap-2 py-2 pl-4 pr-2">
+                    <label class="flex items-center gap-1.5 text-sm font-medium text-slate-600">
+                        <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
+                    </label>
+                    <Link :href="route('admin.services.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+                    <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                </div>
+            </div>
+
             <div class="grid gap-6 lg:grid-cols-3">
                 <!-- LEFT: title + content + icon -->
                 <div class="lg:col-span-2">
@@ -60,16 +69,8 @@ const submit = () => {
                     </div>
                 </div>
 
-                <!-- RIGHT: quick save + cover + actions -->
+                <!-- RIGHT: cover + actions -->
                 <div class="space-y-5">
-                    <div class="pjs-card flex flex-wrap items-center gap-2 p-4">
-                        <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-600">
-                            <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
-                        </label>
-                        <Link :href="route('admin.services.index')" class="btn-outline btn-sm ml-auto">ยกเลิก</Link>
-                        <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
-                    </div>
-
                     <CoverUploader
                         card
                         :ratio="16 / 9"
