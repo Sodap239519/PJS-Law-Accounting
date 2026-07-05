@@ -65,6 +65,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', fn () => redirect()->route('admin.dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // อัปโหลดรูปจากตัวแก้ไขข้อความ (TinyMCE)
+    Route::post('editor/image', [\App\Http\Controllers\Admin\EditorController::class, 'uploadImage'])->name('editor.image');
+
     // Phase 1 — โมดูลเนื้อหาหลัก
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->except(['show']);
     Route::get('announcements/calendar', [\App\Http\Controllers\Admin\AnnouncementController::class, 'calendar'])->name('announcements.calendar');

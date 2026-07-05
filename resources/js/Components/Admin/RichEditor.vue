@@ -36,9 +36,38 @@ const onReady = () => {
 // โหลด TinyMCE 6 จาก CDN (ฟรี GPL — ไม่ต้องใช้ API key/license)
 const scriptSrc = 'https://cdn.jsdelivr.net/npm/tinymce@6.8.6/tinymce.min.js';
 
+// อัปโหลดรูปไปเซิร์ฟเวอร์ แล้วคืน URL (ส่ง CSRF จาก cookie XSRF-TOKEN แบบเดียวกับ axios)
+const uploadImage = (file) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    const xsrf = decodeURIComponent((document.cookie.match(/XSRF-TOKEN=([^;]+)/) || [])[1] || '');
+    return fetch('/admin/editor/image', {
+        method: 'POST',
+        headers: { 'X-XSRF-TOKEN': xsrf, Accept: 'application/json' },
+        body: fd,
+    }).then(async (r) => {
+        if (!r.ok) throw new Error('อัปโหลดรูปไม่สำเร็จ');
+        return (await r.json()).location;
+    });
+};
+
 const init = {
     height: props.height,
     menubar: 'edit insert view format table tools',
+    // อัปโหลดรูป: เลือกไฟล์ในกล่อง Insert Image, ลาก-วาง, และวาง (paste)
+    automatic_uploads: true,
+    file_picker_types: 'image',
+    images_upload_handler: (blobInfo) => uploadImage(blobInfo.blob()),
+    file_picker_callback: (cb) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = () => {
+            const file = input.files[0];
+            if (file) uploadImage(file).then((url) => cb(url, { title: file.name }));
+        };
+        input.click();
+    },
     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons',
     toolbar:
         'undo redo | blocks | bold italic underline forecolor backcolor | ' +
