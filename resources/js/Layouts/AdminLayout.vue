@@ -11,6 +11,37 @@ const unread = computed(() => page.props.unreadMessages || 0);
 const mobileOpen = ref(false);
 const openGroup = ref(null);
 const profileOpen = ref(false);
+const modeMenuOpen = ref(false);
+
+// ===== โหมดการแสดงผล: auto | desktop | mobile =====
+const viewMode = ref('auto');
+const winWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1280);
+const isNarrow = computed(() => winWidth.value < 1024);
+const isMobileUI = computed(() => viewMode.value === 'mobile' || (viewMode.value === 'auto' && isNarrow.value));
+const modeLabel = { auto: 'อัตโนมัติ', desktop: 'ไซต์เดสก์ท็อป', mobile: 'ไซต์มือถือ' };
+const modeIcon = computed(() => (viewMode.value === 'desktop' ? 'bi-display' : viewMode.value === 'mobile' ? 'bi-phone' : 'bi-aspect-ratio'));
+
+const applyViewport = () => {
+    const m = document.querySelector('meta[name="viewport"]');
+    if (!m) return;
+    // "ไซต์เดสก์ท็อป" บนมือถือ = บังคับความกว้าง 1280 แล้วให้เครื่องย่อ
+    m.setAttribute('content', viewMode.value === 'desktop' ? 'width=1280' : 'width=device-width, initial-scale=1, viewport-fit=cover');
+};
+const setViewMode = (mode) => {
+    viewMode.value = mode;
+    try { localStorage.setItem('pjs-admin-view', mode); } catch (e) {}
+    applyViewport();
+    modeMenuOpen.value = false;
+};
+const onResize = () => (winWidth.value = window.innerWidth);
+
+// เมนูล่างสำหรับมือถือ (ถนัดขวา เอื้อมนิ้วโป้งถึง)
+const bottomNav = computed(() => [
+    { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
+    { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
+    { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
+    { label: 'ข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope', badge: unread.value },
+]);
 
 // เรียงตามลำดับหน้า frontend; เมนูระบบรวมใน "ตั้งค่าระบบ"
 const nav = [
@@ -52,13 +83,20 @@ const logout = () => router.post(route('logout'));
 // ปิดเมนู/ดรอปดาวน์ทุกครั้งที่เริ่มนำทาง (ไม่ต้องผูก @click ที่ทำให้ Link ถูก unmount ก่อนนำทาง)
 let offStart = null;
 onMounted(() => {
+    try { const v = localStorage.getItem('pjs-admin-view'); if (v) viewMode.value = v; } catch (e) {}
+    applyViewport();
+    window.addEventListener('resize', onResize);
     offStart = router.on('start', () => {
         openGroup.value = null;
         profileOpen.value = false;
         mobileOpen.value = false;
+        modeMenuOpen.value = false;
     });
 });
-onUnmounted(() => offStart?.());
+onUnmounted(() => {
+    offStart?.();
+    window.removeEventListener('resize', onResize);
+});
 
 const currentYear = new Date().getFullYear();
 </script>
@@ -77,7 +115,7 @@ const currentYear = new Date().getFullYear();
                 </Link>
 
                 <!-- Tabs (centered) -->
-                <nav class="mx-1 hidden flex-1 items-center justify-center gap-0.5 lg:flex">
+                <nav v-if="!isMobileUI" class="mx-1 hidden flex-1 items-center justify-center gap-0.5 lg:flex">
                     <template v-for="g in visibleNav" :key="g.label">
                         <template v-if="!g.items">
                             <Link
@@ -124,6 +162,22 @@ const currentYear = new Date().getFullYear();
 
                 <!-- Right -->
                 <div class="ml-auto flex shrink-0 items-center gap-1 lg:ml-0">
+                    <!-- View mode (desktop/mobile) -->
+                    <div class="relative">
+                        <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" :title="'โหมด: ' + modeLabel[viewMode]" @click="modeMenuOpen = !modeMenuOpen">
+                            <i class="bi text-base" :class="modeIcon"></i>
+                        </button>
+                        <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
+                            <div v-if="modeMenuOpen" class="absolute right-0 z-50 mt-2 w-48 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
+                                <p class="px-3 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">โหมดการแสดงผล</p>
+                                <button v-for="m in ['auto', 'desktop', 'mobile']" :key="m" class="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm transition" :class="viewMode === m ? 'bg-pjs-blue/10 font-medium text-pjs-blue' : 'text-slate-600 hover:bg-slate-50'" @click="setViewMode(m)">
+                                    <i class="bi" :class="m === 'desktop' ? 'bi-display' : m === 'mobile' ? 'bi-phone' : 'bi-aspect-ratio'"></i>{{ modeLabel[m] }}
+                                    <i v-if="viewMode === m" class="bi bi-check-lg ml-auto"></i>
+                                </button>
+                            </div>
+                        </Transition>
+                    </div>
+
                     <!-- Messages -->
                     <component
                         :is="hasRoute('admin.contacts.index') ? Link : 'button'"
@@ -160,18 +214,18 @@ const currentYear = new Date().getFullYear();
                             </div>
                         </Transition>
                     </div>
-                    <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 lg:hidden" @click="mobileOpen = !mobileOpen">
+                    <button v-if="isMobileUI" class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" @click="mobileOpen = !mobileOpen">
                         <i class="bi bi-list text-lg"></i>
                     </button>
                 </div>
             </div>
 
             <!-- click-away backdrop -->
-            <div v-if="openGroup || profileOpen" class="fixed inset-0 z-30" @click="openGroup = null; profileOpen = false"></div>
+            <div v-if="openGroup || profileOpen || modeMenuOpen" class="fixed inset-0 z-30" @click="openGroup = null; profileOpen = false; modeMenuOpen = false"></div>
 
             <!-- Mobile nav -->
             <Transition enter-active-class="transition" enter-from-class="opacity-0" leave-active-class="transition" leave-to-class="opacity-0">
-                <nav v-if="mobileOpen" class="mx-auto mt-2 max-w-6xl rounded-2xl border border-slate-100 bg-white p-3 shadow-soft lg:hidden">
+                <nav v-if="mobileOpen" class="mx-auto mt-2 max-w-6xl rounded-2xl border border-slate-100 bg-white p-3 shadow-soft">
                     <div v-for="g in visibleNav" :key="g.label" class="mb-2">
                         <p class="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ g.label }}</p>
                         <template v-for="item in (g.items || [g])" :key="item.name">
@@ -191,15 +245,38 @@ const currentYear = new Date().getFullYear();
         </div>
 
         <!-- Page -->
-        <main class="mx-auto max-w-6xl px-4 py-5">
+        <main class="mx-auto max-w-6xl px-4 py-5" :class="isMobileUI ? 'pb-24' : ''">
             <div v-if="$slots.title" class="mb-4">
                 <h1 class="text-lg font-semibold text-slate-800"><slot name="title" /></h1>
             </div>
             <slot />
         </main>
 
+        <!-- Bottom nav (มือถือ — ถนัดขวา เอื้อมนิ้วโป้งถึง) -->
+        <Transition enter-active-class="transition duration-200" enter-from-class="translate-y-full" leave-active-class="transition duration-150" leave-to-class="translate-y-full">
+            <nav v-if="isMobileUI" class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/70 bg-white/95 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.15)] backdrop-blur" style="padding-bottom: env(safe-area-inset-bottom)">
+                <div class="mx-auto flex max-w-lg items-stretch justify-around px-1">
+                    <Link
+                        v-for="b in bottomNav"
+                        :key="b.name"
+                        :href="hasRoute(b.name) ? route(b.name) : '#'"
+                        class="relative flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] transition"
+                        :class="isActive(b.name) ? 'text-pjs-blue' : 'text-slate-400'"
+                    >
+                        <i :class="b.icon" class="text-lg"></i>
+                        <span>{{ b.label }}</span>
+                        <span v-if="b.badge" class="absolute right-4 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[8px] font-bold text-white">{{ b.badge > 99 ? '99+' : b.badge }}</span>
+                    </Link>
+                    <button type="button" class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] text-slate-400 transition hover:text-slate-600" @click="mobileOpen = true">
+                        <i class="bi bi-grid-3x3-gap text-lg"></i>
+                        <span>เมนู</span>
+                    </button>
+                </div>
+            </nav>
+        </Transition>
+
         <!-- Footer / license -->
-        <footer class="mx-auto max-w-6xl px-4 pb-6 pt-2">
+        <footer class="mx-auto max-w-6xl px-4 pb-6 pt-2" :class="isMobileUI ? 'pb-24' : ''">
             <div class="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-center text-xs text-slate-400 sm:flex-row sm:text-left">
                 <p>© {{ currentYear }} PJS Law and Accounting Co., Ltd. — สงวนลิขสิทธิ์</p>
                 <p>ระบบจัดการเว็บไซต์ <span class="text-slate-300">·</span> เวอร์ชัน 1.0</p>
