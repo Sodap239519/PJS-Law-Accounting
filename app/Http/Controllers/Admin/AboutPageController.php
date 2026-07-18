@@ -69,6 +69,6 @@ class AboutPageController extends Controller
             'sections' => $sections,
         ]);
 
-        return back()->with('success', 'บันทึกหน้าเกี่ยวกับเราเรียบร้อยแล้ว');
+        return redirect()->route('admin.dashboard')->with('success', 'บันทึกหน้าเกี่ยวกับเราเรียบร้อยแล้ว');
     }
 }

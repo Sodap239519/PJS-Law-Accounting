@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FloatingSaveBar from '@/Components/Admin/FloatingSaveBar.vue';
+import DraftManager from '@/Components/Admin/DraftManager.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
 import GalleryUploader from '@/Components/Admin/GalleryUploader.vue';
 import FileAttachments from '@/Components/Admin/FileAttachments.vue';
@@ -61,7 +63,7 @@ const submit = () => {
     <AdminLayout>
         <form class="space-y-6" @submit.prevent="submit">
             <!-- Title + save (same row) -->
-            <div class="flex flex-wrap items-center justify-between gap-3">
+            <div id="form-actions-top" class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขข่าว' : 'เพิ่มข่าว' }}</h1>
                 <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
                     <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
@@ -76,6 +78,8 @@ const submit = () => {
                     <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}</button>
                 </div>
             </div>
+
+            <DraftManager :form="form" :fields="['title', 'content', 'excerpt', 'translations']" :storage-key="'news-' + (news?.id || 'new')" />
 
             <div class="grid gap-6 lg:grid-cols-3">
                 <!-- LEFT: title + content (tall) -->
@@ -171,5 +175,7 @@ const submit = () => {
                 </div>
             </div>
         </form>
+
+        <FloatingSaveBar :processing="form.processing" :save-label="isEdit ? 'บันทึก' : 'สร้างข่าว'" @save="submit" @cancel="router.visit(route('admin.news.index'))" />
     </AdminLayout>
 </template>

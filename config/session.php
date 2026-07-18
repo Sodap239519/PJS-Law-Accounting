@@ -32,7 +32,7 @@ return [
     |
     */
 
-    'lifetime' => (int) env('SESSION_LIFETIME', 120),
+    'lifetime' => (int) env('SESSION_LIFETIME', 4320), // 3 วัน — admin หมดอายุแล้ว login ใหม่
 
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 

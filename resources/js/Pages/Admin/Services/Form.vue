@@ -1,7 +1,9 @@
 <script setup>
 import { computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FloatingSaveBar from '@/Components/Admin/FloatingSaveBar.vue';
+import DraftManager from '@/Components/Admin/DraftManager.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
 import LocalizedContent from '@/Components/Admin/LocalizedContent.vue';
 
@@ -35,7 +37,7 @@ const submit = () => {
     <Head :title="isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ'" />
     <AdminLayout>
         <form class="space-y-6" @submit.prevent="submit">
-            <div class="flex flex-wrap items-center justify-between gap-3">
+            <div id="form-actions-top" class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ' }}</h1>
                 <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
                     <label class="flex items-center gap-1.5 pl-2 text-sm text-slate-500">
@@ -49,6 +51,8 @@ const submit = () => {
                     <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
                 </div>
             </div>
+
+            <DraftManager :form="form" :fields="['title', 'content', 'icon', 'translations']" :storage-key="'service-' + (service?.id || 'new')" />
 
             <div class="grid gap-6 lg:grid-cols-3">
                 <!-- LEFT: title + content + icon -->
@@ -101,5 +105,7 @@ const submit = () => {
                 </div>
             </div>
         </form>
+
+        <FloatingSaveBar :processing="form.processing" :save-label="isEdit ? 'บันทึก' : 'สร้าง'" @save="submit" @cancel="router.visit(route('admin.services.index'))" />
     </AdminLayout>
 </template>

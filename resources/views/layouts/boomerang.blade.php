@@ -7,6 +7,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', $site['name'] ?? 'PJS Law & Accounting')</title>
 
+    <!-- ตั้งขนาดตัวอักษรทันที (กันจอกระพริบ) — มือถือ default ~12pt -->
+    <script>
+        (function () {
+            try {
+                var s = parseFloat(localStorage.getItem('pjs-font-scale'));
+                if (isNaN(s)) s = window.matchMedia('(max-width: 991px)').matches ? 1.14 : 1;
+                s = Math.min(1.5, Math.max(0.86, s));
+                document.documentElement.style.setProperty('--pjs-fs-scale', s);
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Favicons -->
     @if(!empty($site['favicon']))
         <link rel="icon" href="{{ $site['favicon'] }}">
@@ -47,6 +59,50 @@
         /* ฟอนต์ Prompt */
         * {
             font-family: 'Prompt', sans-serif !important;
+        }
+
+        /* ===== ปรับขนาดตัวอักษรทั้งเว็บ (rem-based scaling) ===== */
+        :root { --pjs-fs-scale: 1; }
+        html { font-size: calc(16px * var(--pjs-fs-scale)); }
+
+        .fs-control {
+            position: fixed;
+            left: 16px;
+            bottom: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            background: #fff;
+            border: 1px solid #eadfb8;
+            border-radius: 999px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+            padding: 4px;
+        }
+        .fs-control button {
+            border: none;
+            background: transparent;
+            color: #1f2937;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 700;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s;
+        }
+        .fs-control button:hover { background: #f7efd2; color: #b58900; }
+        .fs-control .fs-minus { font-size: 12px; }
+        .fs-control .fs-reset { font-size: 15px; }
+        .fs-control .fs-plus  { font-size: 19px; }
+        .fs-control .fs-label { font-size: 11px; color: #9ca3af; min-width: 36px; text-align: center; user-select: none; }
+        @media (max-width: 575px) {
+            .fs-control { bottom: 16px; left: 12px; padding: 3px; }
+            .fs-control button { width: 32px; height: 32px; }
+            .fs-control .fs-label { display: none; }
         }
 
         /* Header Container */
@@ -825,6 +881,14 @@ body {
     </div>
 </footer>
 
+    <!-- ปุ่มปรับขนาดตัวอักษร -->
+    <div class="fs-control notranslate" translate="no" aria-label="ปรับขนาดตัวอักษร">
+        <button type="button" class="fs-minus" onclick="pjsFontStep(-1)" title="ลดขนาดตัวอักษร" aria-label="ลดขนาดตัวอักษร">A&minus;</button>
+        <button type="button" class="fs-reset" onclick="pjsFontReset()" title="ขนาดปกติ" aria-label="ขนาดปกติ">A</button>
+        <button type="button" class="fs-plus" onclick="pjsFontStep(1)" title="เพิ่มขนาดตัวอักษร" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+        <span class="fs-label" id="pjsFsLabel">100%</span>
+    </div>
+
     <!-- Floating Contact Widget -->
     <div class="floating-widget">
         <div class="widget-menu" id="widgetMenu">
@@ -998,6 +1062,34 @@ body {
                 closeMenu();
             }
         });
+    </script>
+    <!-- ตัวควบคุมขนาดตัวอักษร -->
+    <script>
+        (function () {
+            var KEY = 'pjs-font-scale', MIN = 0.86, MAX = 1.5, STEP = 0.09;
+            var isMobile = window.matchMedia('(max-width: 991px)').matches;
+            function defaultScale() { return isMobile ? 1.14 : 1; } // มือถือ ~12pt
+            function clamp(v) { return Math.min(MAX, Math.max(MIN, v)); }
+            function current() {
+                var s = parseFloat(localStorage.getItem(KEY));
+                return isNaN(s) ? defaultScale() : clamp(s);
+            }
+            function apply(s) {
+                document.documentElement.style.setProperty('--pjs-fs-scale', s);
+                var lbl = document.getElementById('pjsFsLabel');
+                if (lbl) lbl.textContent = Math.round(s * 100) + '%';
+            }
+            window.pjsFontStep = function (dir) {
+                var s = clamp(Math.round((current() + dir * STEP) * 100) / 100);
+                localStorage.setItem(KEY, s);
+                apply(s);
+            };
+            window.pjsFontReset = function () {
+                localStorage.removeItem(KEY);
+                apply(defaultScale());
+            };
+            apply(current());
+        })();
     </script>
 @stack('scripts')
 </body>

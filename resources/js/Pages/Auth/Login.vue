@@ -84,12 +84,11 @@ const submit = () => {
                     <p v-if="form.errors.password" class="mt-1.5 text-sm text-red-500">{{ form.errors.password }}</p>
                 </div>
 
-                <!-- Remember / forgot -->
+                <!-- session note / forgot -->
                 <div class="flex items-center justify-between">
-                    <label class="flex cursor-pointer items-center gap-2 text-sm text-slate-500">
-                        <input v-model="form.remember" type="checkbox" class="rounded border-slate-300 text-pjs-blue focus:ring-pjs-blue" />
-                        จดจำฉันไว้
-                    </label>
+                    <span class="flex items-center gap-1.5 text-xs text-slate-400">
+                        <i class="bi bi-shield-lock"></i> เข้าสู่ระบบได้นาน 3 วัน
+                    </span>
                     <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm text-pjs-blue hover:underline">
                         ลืมรหัสผ่าน?
                     </Link>

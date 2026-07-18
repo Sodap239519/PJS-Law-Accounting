@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import RichEditor from '@/Components/Admin/RichEditor.vue';
+import FloatingSaveBar from '@/Components/Admin/FloatingSaveBar.vue';
+import DraftManager from '@/Components/Admin/DraftManager.vue';
 
 const props = defineProps({
     about: { type: Object, default: () => ({}) },
@@ -89,7 +91,7 @@ const submit = () => {
     <Head title="เกี่ยวกับเรา" />
     <AdminLayout>
         <form class="space-y-6" @submit.prevent="submit">
-            <div class="flex flex-wrap items-center justify-between gap-3">
+            <div id="form-actions-top" class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">หน้าเกี่ยวกับเรา</h1>
                 <div class="pjs-card flex items-center gap-2 py-2 pl-4 pr-2">
                     <button type="button" class="btn-soft btn-sm" @click="prefillDefaults"><i class="bi bi-magic"></i> เติมตัวอย่าง</button>
@@ -97,6 +99,8 @@ const submit = () => {
                     <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">บันทึก</button>
                 </div>
             </div>
+
+            <DraftManager :form="form" :fields="['intro_title', 'intro_subtitle', 'vision', 'mission', 'sections']" storage-key="about" />
 
             <div class="grid gap-6 lg:grid-cols-3">
                 <!-- LEFT: builder -->
@@ -227,5 +231,7 @@ const submit = () => {
                 </div>
             </div>
         </form>
+
+        <FloatingSaveBar :processing="form.processing" @save="submit" @cancel="router.visit(route('admin.dashboard'))" />
     </AdminLayout>
 </template>
