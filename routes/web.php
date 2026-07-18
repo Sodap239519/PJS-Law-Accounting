@@ -99,6 +99,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('settings', [\App\Http\Controllers\Admin\SettingController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
 
+    Route::get('home-layout', [\App\Http\Controllers\Admin\HomeLayoutController::class, 'edit'])->name('home-layout.edit');
+    Route::put('home-layout', [\App\Http\Controllers\Admin\HomeLayoutController::class, 'update'])->name('home-layout.update');
+
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
     // Phase 3 — เฉพาะ super_admin

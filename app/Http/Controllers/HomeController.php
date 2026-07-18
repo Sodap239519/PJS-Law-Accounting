@@ -22,7 +22,10 @@ class HomeController extends Controller
         // เนื้อหา "เกี่ยวกับเรา" (ดึง section จากหน้าเกี่ยวกับเรา — โชว์ 2 อันแรกบนหน้าแรก)
         $about = \App\Models\AboutPage::singleton();
 
-        return view('home', compact('latestNews', 'banners', 'about'));
+        // ลำดับ/การแสดงผล section หน้าแรก
+        $homeLayout = \App\Support\HomeLayout::map();
+
+        return view('home', compact('latestNews', 'banners', 'about', 'homeLayout'));
     }
 
     public function aboutLegal(): View

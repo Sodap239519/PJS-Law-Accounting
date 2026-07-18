@@ -4,9 +4,14 @@
 @section('header-class', 'header-transparent')
 
 @section('content')
+    @php
+        // จัดการแสดงผล/ลำดับ section หน้าแรก (แก้ได้ที่ ตั้งค่าระบบ › จัดการหน้าแรก)
+        $hl = fn ($k) => 'order:'.($homeLayout[$k]['order'] ?? 99).';'.(($homeLayout[$k]['visible'] ?? true) ? '' : 'display:none;');
+    @endphp
+    <div class="home-sections" style="display:flex; flex-direction:column;">
     <!-- Hero Section -->
     @php($hero = ($banners ?? collect())->first())
-    <section class="module-cover parallax text-center fullscreen" data-background="{{ $hero && $hero->getFirstMediaUrl('image') ? $hero->getFirstMediaUrl('image') : asset('frontend/images/Banner.png') }}" data-overlay="0.6">
+    <section class="module-cover parallax text-center fullscreen" style="{{ $hl('hero') }}" data-background="{{ $hero && $hero->getFirstMediaUrl('image') ? $hero->getFirstMediaUrl('image') : asset('frontend/images/Banner.png') }}" data-overlay="0.6">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -45,7 +50,7 @@
     <!-- Hero end -->
 
     <!-- About / เกี่ยวกับเรา -->
-    <section class="module divider-bottom">
+    <section class="module divider-bottom" style="{{ $hl('about') }}">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 m-auto text-center">
@@ -142,7 +147,7 @@
     <!-- About end -->
 
     <!-- Vision / วิสัยทัศน์ -->
-    <section class="module parallax text-center" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.6">
+    <section class="module parallax text-center" style="{{ $hl('vision') }}" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.6">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 m-auto">
@@ -161,7 +166,7 @@
     <!-- Vision end -->
 
     <!-- Team / บุคลากร -->
-<section class="module">
+<section class="module" style="{{ $hl('team') }}">
     <div class="container">
         <div class="row">
             <div class="col-md-6 m-auto text-center">
@@ -287,7 +292,7 @@
 <!-- Team end -->
 
     <!-- Case Study / คดีตัวอย่าง -->
-    <section class="module bg-gray divider-top" id="case-studies" data-aos="fade-up">
+    <section class="module bg-gray divider-top" id="case-studies" style="{{ $hl('cases') }}" data-aos="fade-up">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 m-auto text-center">
@@ -338,7 +343,7 @@
     <!-- Case Study end -->
 
     <!-- Latest News / ข่าวสารและกิจกรรม -->
-<section class="module" id="latest-news" data-aos="fade-up">
+<section class="module" id="latest-news" style="{{ $hl('news') }}" data-aos="fade-up">
     <div class="container">
         <div class="row">
             <div class="col-md-6 m-auto text-center">
@@ -402,7 +407,7 @@
 <!-- Latest News end -->
 
     <!-- Contact Info / ช่องทางการติดต่อ -->
-    <section class="module bg-gray">
+    <section class="module bg-gray" style="{{ $hl('contact') }}">
         <div class="container">
     <div class="row">
         <div class="col-md-6 m-auto text-center">
@@ -456,7 +461,7 @@
     <!-- Contact Info end -->
 
     <!-- Quick Contact / ปรึกษาคดีด่วน -->
-    <section class="module">
+    <section class="module" style="{{ $hl('quick_contact') }}">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 m-auto text-center">
@@ -526,7 +531,7 @@
     <!-- Quick Contact end -->
 
     <!-- Call to Action -->
-    <section class="module parallax text-center" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.6">
+    <section class="module parallax text-center" style="{{ $hl('cta') }}" data-background="{{ asset('frontend/images/module-12.jpg') }}" data-overlay="0.6">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -541,6 +546,8 @@
         </div>
     </section>
     <!-- Call to Action end -->
+    </div>
+    <!-- /.home-sections -->
 
     <!-- Success/Error Modal -->
     <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">

@@ -56,6 +56,7 @@ const nav = [
     { label: 'คดีตัวอย่าง', name: 'admin.case-studies.index', icon: 'bi bi-bank' },
     { label: 'ช่องทางติดต่อ', name: 'admin.contact-channels.index', icon: 'bi bi-telephone' },
     { label: 'ตั้งค่าระบบ', icon: 'bi bi-gear', align: 'right', items: [
+        { label: 'จัดการหน้าแรก', name: 'admin.home-layout.edit', icon: 'bi bi-layout-text-window' },
         { label: 'แบนเนอร์', name: 'admin.banners.index', icon: 'bi bi-image' },
         { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
         { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope' },
