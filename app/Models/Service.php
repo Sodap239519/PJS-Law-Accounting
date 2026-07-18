@@ -24,6 +24,15 @@ class Service extends Model implements HasMedia
         'translations' => 'array',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function (self $m) {
+            if (blank($m->sort_order)) {
+                $m->sort_order = (static::max('sort_order') ?? 0) + 1;
+            }
+        });
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

@@ -23,7 +23,7 @@ class CaseStudyController extends Controller
             ->when($request->search, fn ($q, $s) => $q->where('title', 'like', "%{$s}%"))
             ->when($request->status !== null && $request->status !== '', fn ($q) => $q->where('is_published', $request->status === 'published'))
             ->latest()
-            ->paginate(12)
+            ->paginate(in_array((int) $request->per_page, [10, 20, 50, 100]) ? (int) $request->per_page : 10)
             ->withQueryString()
             ->through(fn (CaseStudy $c) => [
                 'id' => $c->id,
@@ -37,7 +37,7 @@ class CaseStudyController extends Controller
 
         return Inertia::render('Admin/CaseStudies/Index', [
             'cases' => $items,
-            'filters' => $request->only('search', 'status'),
+            'filters' => $request->only('search', 'status', 'per_page'),
         ]);
     }
 

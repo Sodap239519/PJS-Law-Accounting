@@ -17,7 +17,7 @@ const form = useForm({
     title: props.service?.title || '',
     icon: props.service?.icon || '',
     content: props.service?.content || '',
-    sort_order: props.service?.sort_order ?? 0,
+    sort_order: props.service?.sort_order ?? null,
     is_active: props.service?.is_active ?? true,
     cover: null,
     remove_cover: false,
@@ -40,10 +40,6 @@ const submit = () => {
             <div id="form-actions-top" class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขบริการ' : 'เพิ่มบริการ' }}</h1>
                 <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
-                    <label class="flex items-center gap-1.5 pl-2 text-sm text-slate-500">
-                        ลำดับ
-                        <input v-model="form.sort_order" type="number" class="field w-20" title="ลำดับการแสดง" />
-                    </label>
                     <label class="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-600">
                         <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
                     </label>
@@ -91,8 +87,7 @@ const submit = () => {
 
                     <!-- Settings + actions -->
                     <div class="pjs-card p-5">
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ลำดับการแสดง</label>
-                        <input v-model="form.sort_order" type="number" class="field mb-4" />
+                        <p class="mb-3 flex items-center gap-1.5 text-xs text-slate-400"><i class="bi bi-info-circle"></i> ลำดับจะถูกจัดให้อัตโนมัติ — ลากจัดลำดับได้ในหน้ารายการ</p>
 
                         <div class="flex flex-wrap items-center gap-2">
                             <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">

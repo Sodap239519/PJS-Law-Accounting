@@ -22,7 +22,7 @@ const form = useForm({
         email: props.member?.socials?.email || '',
         phone: props.member?.socials?.phone || '',
     },
-    order: props.member?.order ?? 0,
+    order: props.member?.order ?? null,
     is_active: props.member?.is_active ?? true,
     photo: null,
     remove_photo: false,
@@ -89,9 +89,8 @@ const submit = () => {
                         />
                     </div>
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ลำดับการแสดง</label>
-                        <input v-model="form.order" type="number" class="w-full rounded-lg border-slate-200 text-sm" />
-                        <label class="mb-2 mt-4 flex items-center gap-2 text-sm font-medium text-slate-600">
+                        <p class="mb-2 flex items-center gap-1.5 text-xs text-slate-400"><i class="bi bi-info-circle"></i> ลำดับอัตโนมัติ — ลากจัดลำดับได้ในหน้ารายการ</p>
+                        <label class="mb-2 flex items-center gap-2 text-sm font-medium text-slate-600">
                             <input v-model="form.is_active" type="checkbox" class="rounded" /> แสดงบนหน้าเว็บ
                         </label>
                     </div>

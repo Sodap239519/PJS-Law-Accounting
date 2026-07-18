@@ -21,6 +21,15 @@ class ContactChannel extends Model
         'translations' => 'array',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function (self $m) {
+            if (blank($m->sort_order)) {
+                $m->sort_order = (static::max('sort_order') ?? 0) + 1;
+            }
+        });
+    }
+
     /** ประเภทที่ถือเป็นโซเชียล/แชท (ใช้ทำปุ่มลอย + ไอคอนโซเชียล) */
     public const SOCIAL_TYPES = ['line', 'facebook', 'instagram', 'tiktok', 'youtube'];
 

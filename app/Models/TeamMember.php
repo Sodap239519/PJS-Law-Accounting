@@ -26,6 +26,15 @@ class TeamMember extends Model implements HasMedia
         'translations' => 'array',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function (self $m) {
+            if (blank($m->order)) {
+                $m->order = (static::max('order') ?? 0) + 1;
+            }
+        });
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

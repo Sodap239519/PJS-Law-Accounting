@@ -47,7 +47,7 @@ watch(mobileOpen, (open) => {
 const bottomNav = computed(() => [
     { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
     { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
-    { label: 'บริการ', name: 'admin.services.index', icon: 'bi bi-briefcase' },
+    { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
     { label: 'ข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope', badge: unread.value },
 ]);
 
@@ -297,9 +297,9 @@ const currentYear = new Date().getFullYear();
 
         <!-- Footer / license -->
         <footer class="mx-auto max-w-6xl px-4 pb-6 pt-2" :class="isMobileUI ? 'pb-24' : ''">
-            <div class="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-center text-xs text-slate-400 sm:flex-row sm:text-left">
-                <p>© {{ currentYear }} PJS Law and Accounting Co., Ltd. — สงวนลิขสิทธิ์</p>
-                <p>ระบบจัดการเว็บไซต์ <span class="text-slate-300">·</span> เวอร์ชัน 1.0</p>
+            <div class="flex flex-col items-center justify-between gap-1 border-t border-slate-200/70 pt-4 text-center text-[10px] text-slate-400 sm:flex-row sm:text-left sm:text-xs">
+                <p class="whitespace-nowrap">© {{ currentYear }} PJS Law and Accounting Co., Ltd.</p>
+                <p class="whitespace-nowrap">สงวนลิขสิทธิ์ <span class="text-slate-300">·</span> ระบบจัดการเว็บไซต์ v1.0</p>
             </div>
         </footer>
     </div>

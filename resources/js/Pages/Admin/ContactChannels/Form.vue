@@ -16,7 +16,7 @@ const form = useForm({
     label: props.channel?.label || '',
     value: props.channel?.value || '',
     icon: props.channel?.icon || '',
-    sort_order: props.channel?.sort_order ?? 0,
+    sort_order: props.channel?.sort_order ?? null,
     is_active: props.channel?.is_active ?? true,
     translations: props.channel?.translations || null,
 });

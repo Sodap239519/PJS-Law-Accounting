@@ -58,17 +58,21 @@ const submit = () => {
         <form class="space-y-6" @submit.prevent="submit">
             <div id="form-actions-top" class="flex flex-wrap items-center justify-between gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขคดีตัวอย่าง' : 'เพิ่มคดีตัวอย่าง' }}</h1>
-                <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
-                    <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
-                        <option :value="null">— หมวดหมู่ —</option>
-                        <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
-                    </select>
-                    <label class="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-600">
-                        <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
-                    </label>
-                    <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>
-                    <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
-                    <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                <div class="ml-auto flex flex-wrap items-center gap-2">
+                    <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
+                        <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
+                            <option :value="null">— หมวดหมู่ —</option>
+                            <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+                        </select>
+                    </div>
+                    <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
+                        <label class="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-600">
+                            <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
+                        </label>
+                        <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+                        <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
+                        <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                    </div>
                 </div>
             </div>
 

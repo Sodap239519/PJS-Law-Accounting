@@ -27,7 +27,7 @@ class AnnouncementController extends Controller
             ->when($request->status === 'published', fn ($q) => $q->where('is_published', true)
                 ->where(fn ($q2) => $q2->whereNull('published_at')->orWhere('published_at', '<=', now())))
             ->latest()
-            ->paginate(12)
+            ->paginate(in_array((int) $request->per_page, [10, 20, 50, 100]) ? (int) $request->per_page : 10)
             ->withQueryString()
             ->through(fn (Announcement $a) => [
                 'id' => $a->id,
@@ -41,7 +41,7 @@ class AnnouncementController extends Controller
 
         return Inertia::render('Admin/Announcements/Index', [
             'announcements' => $items,
-            'filters' => $request->only('search', 'status'),
+            'filters' => $request->only('search', 'status', 'per_page'),
         ]);
     }
 

@@ -15,7 +15,7 @@ const form = useForm({
     title: props.banner?.title || '',
     subtitle: props.banner?.subtitle || '',
     link_url: props.banner?.link_url || '',
-    sort_order: props.banner?.sort_order ?? 0,
+    sort_order: props.banner?.sort_order ?? null,
     is_active: props.banner?.is_active ?? true,
     image: null,
     remove_image: false,
