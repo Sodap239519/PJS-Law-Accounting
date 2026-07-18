@@ -96,3 +96,51 @@
         @apply bg-pjs-gold/15 text-pjs-gold-dark;
     }
 }
+
+/* ---------------------------------------------------------------
+ | จอมือถือ — บีบ input/ปุ่ม/การ์ด ให้พอดี ไม่สูงเกินไป
+ --------------------------------------------------------------- */
+@media (max-width: 640px) {
+    .field,
+    input[type='text'],
+    input[type='email'],
+    input[type='password'],
+    input[type='number'],
+    input[type='search'],
+    input[type='tel'],
+    input[type='url'],
+    input[type='date'],
+    input[type='datetime-local'],
+    input[type='time'],
+    select,
+    textarea {
+        padding-top: 0.4rem !important;
+        padding-bottom: 0.4rem !important;
+        font-size: 0.875rem !important;
+        border-radius: 0.5rem;
+    }
+
+    .btn-primary,
+    .btn-outline,
+    .btn-ghost,
+    .btn-soft,
+    .btn-danger {
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+        font-size: 0.8125rem;
+    }
+    .btn-lg {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* การ์ด/กล่อง แพดดิ้งกระชับขึ้น */
+    .pjs-card,
+    .rounded-2xl.border.bg-white,
+    .rounded-2xl.border.border-slate-100 {
+        border-radius: 1rem;
+    }
+}

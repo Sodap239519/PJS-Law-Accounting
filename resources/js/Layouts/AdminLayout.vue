@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import LoadingIndicator from '@/Components/Admin/LoadingIndicator.vue';
 
@@ -37,6 +37,11 @@ const setViewMode = (mode) => {
     modeMenuOpen.value = false;
 };
 const onResize = () => (winWidth.value = window.innerWidth);
+
+// ล็อกการเลื่อนพื้นหลังเมื่อเปิดเมนูมือถือ (ให้เลื่อนเฉพาะในเมนู)
+watch(mobileOpen, (open) => {
+    if (typeof document !== 'undefined') document.body.style.overflow = open ? 'hidden' : '';
+});
 
 // เมนูล่างสำหรับมือถือ (ถนัดขวา เอื้อมนิ้วโป้งถึง)
 const bottomNav = computed(() => [
@@ -227,9 +232,20 @@ const currentYear = new Date().getFullYear();
             <!-- click-away backdrop -->
             <div v-if="openGroup || profileOpen || modeMenuOpen" class="fixed inset-0 z-30" @click="openGroup = null; profileOpen = false; modeMenuOpen = false"></div>
 
-            <!-- Mobile nav -->
+            <!-- Mobile nav (overlay ที่เลื่อนในตัวเอง ไม่เลื่อนพื้นหลัง) -->
             <Transition enter-active-class="transition" enter-from-class="opacity-0" leave-active-class="transition" leave-to-class="opacity-0">
-                <nav v-if="mobileOpen" class="mx-auto mt-2 max-w-6xl rounded-2xl border border-slate-100 bg-white p-3 shadow-soft">
+                <div v-if="mobileOpen" class="fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm" @click="mobileOpen = false"></div>
+            </Transition>
+            <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="-translate-y-2 opacity-0"
+                leave-active-class="transition duration-150 ease-in"
+                leave-to-class="-translate-y-2 opacity-0"
+            >
+                <nav
+                    v-if="mobileOpen"
+                    class="fixed inset-x-3 top-[76px] z-50 max-h-[calc(100vh-92px)] overflow-y-auto overscroll-contain rounded-2xl border border-slate-100 bg-white p-3 shadow-soft"
+                >
                     <div v-for="g in visibleNav" :key="g.label" class="mb-2">
                         <p class="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ g.label }}</p>
                         <template v-for="item in (g.items || [g])" :key="item.name">

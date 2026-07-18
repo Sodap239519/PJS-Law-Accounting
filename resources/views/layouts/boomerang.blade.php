@@ -15,6 +15,7 @@
                 if (isNaN(s)) s = window.matchMedia('(max-width: 991px)').matches ? 1.14 : 1;
                 s = Math.min(1.5, Math.max(0.86, s));
                 document.documentElement.style.setProperty('--pjs-fs-scale', s);
+                if (localStorage.getItem('pjs-theme') === 'dark') document.documentElement.classList.add('pjs-dark');
             } catch (e) {}
         })();
     </script>
@@ -65,45 +66,56 @@
         :root { --pjs-fs-scale: 1; }
         html { font-size: calc(16px * var(--pjs-fs-scale)); }
 
-        .fs-control {
-            position: fixed;
-            left: 16px;
-            bottom: 22px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 1px;
-            background: #fff;
-            border: 1px solid #eadfb8;
-            border-radius: 999px;
-            box-shadow: 0 6px 22px rgba(0,0,0,0.12);
-            padding: 4px;
+        /* ===== เมนูปรับการแสดงผล (รวม ขนาดอักษร/ภาษา/โหมดสี/ไซต์) ===== */
+        .pjs-ctrl { position: fixed; left: 16px; bottom: 22px; z-index: 1000; }
+        .pjs-ctrl-btn {
+            width: 46px; height: 46px; border-radius: 50%; border: 1px solid #eadfb8;
+            background: linear-gradient(135deg,#ffffff,#fbf5e4); color: #b8942f;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.16); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            transition: transform .2s;
         }
-        .fs-control button {
-            border: none;
-            background: transparent;
-            color: #1f2937;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-weight: 700;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background .2s, color .2s;
+        .pjs-ctrl-btn:hover { transform: scale(1.06); }
+        .pjs-ctrl-panel {
+            position: absolute; left: 0; bottom: 56px; width: 234px;
+            background: #fff; border: 1px solid #eee; border-radius: 16px;
+            box-shadow: 0 14px 44px rgba(0,0,0,0.18); padding: 6px 12px;
+            opacity: 0; visibility: hidden; transform: translateY(8px); transition: all .18s;
         }
-        .fs-control button:hover { background: #f7efd2; color: #b58900; }
-        .fs-control .fs-minus { font-size: 12px; }
-        .fs-control .fs-reset { font-size: 15px; }
-        .fs-control .fs-plus  { font-size: 19px; }
-        .fs-control .fs-label { font-size: 11px; color: #9ca3af; min-width: 36px; text-align: center; user-select: none; }
+        .pjs-ctrl.open .pjs-ctrl-panel { opacity: 1; visibility: visible; transform: none; }
+        .pjs-ctrl-row { padding: 9px 0; border-bottom: 1px solid #f2f2f2; }
+        .pjs-ctrl-row:last-child { border-bottom: none; }
+        .pjs-ctrl-row .lbl { font-size: 11px; color: #9ca3af; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .pjs-seg { display: flex; gap: 4px; }
+        .pjs-seg button {
+            flex: 1; border: 1px solid #e5e7eb; background: #fff; color: #374151;
+            border-radius: 9px; padding: 7px 2px; font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 4px; line-height: 1;
+        }
+        .pjs-seg button:hover { border-color: #d4af37; color: #b8942f; }
+        .pjs-seg button.on { background: #d4af37; border-color: #d4af37; color: #fff; }
+        .pjs-seg .fsval { flex: 0 0 48px; font-weight: 600; color: #6b7280; background: #f9fafb; cursor: default; }
+        .pjs-seg .fsval:hover { border-color: #e5e7eb; color: #6b7280; }
         @media (max-width: 575px) {
-            .fs-control { bottom: 16px; left: 12px; padding: 3px; }
-            .fs-control button { width: 32px; height: 32px; }
-            .fs-control .fs-label { display: none; }
+            .pjs-ctrl { bottom: 16px; left: 12px; }
         }
+
+        /* ===== โหมดสีมืด (night) ===== */
+        html.pjs-dark body { background: #0f172a; color: #cbd5e1; }
+        html.pjs-dark .bg-gray,
+        html.pjs-dark .footer,
+        html.pjs-dark section.module:not(.parallax):not(.module-cover) { background: #0f172a !important; }
+        html.pjs-dark .card,
+        html.pjs-dark .widget-menu,
+        html.pjs-dark .bg-white { background: #1e293b !important; }
+        html.pjs-dark h1, html.pjs-dark h2, html.pjs-dark h3,
+        html.pjs-dark h4, html.pjs-dark h5, html.pjs-dark h6 { color: #f1f5f9 !important; }
+        html.pjs-dark p, html.pjs-dark li, html.pjs-dark .lead,
+        html.pjs-dark td, html.pjs-dark label { color: #cbd5e1 !important; }
+        html.pjs-dark .text-dark, html.pjs-dark .text-muted { color: #94a3b8 !important; }
+        html.pjs-dark a:not(.btn) { color: #93c5fd; }
+        html.pjs-dark .header.scrolled { background: #1e293b !important; }
+        html.pjs-dark .header.scrolled .menu-item-span { color: #e2e8f0 !important; }
 
         /* Header Container */
         .header .container-fluid {
@@ -586,6 +598,7 @@ body {
             .nav-toggle {
                 display: flex !important;
                 order: 3;
+                margin-left: auto;
                 z-index: 1002;
             }
             
@@ -801,14 +814,6 @@ body {
                 </div>
             </div>
             
-            <div class="lang-switcher notranslate" translate="no">
-                <a href="javascript:void(0)" onclick="changeLanguage('th')" id="lang-th" class="active">TH</a>
-                <span>|</span>
-                <a href="javascript:void(0)" onclick="changeLanguage('en')" id="lang-en">EN</a>
-				<span>|</span>
-    			<a href="javascript:void(0)" onclick="changeLanguage('zh-CN')" id="lang-zh-CN">CHN</a>
-            </div>
-            
             <div class="nav-toggle">
                 <a href="#" id="mobileMenuToggle">
                     <span></span>
@@ -881,12 +886,41 @@ body {
     </div>
 </footer>
 
-    <!-- ปุ่มปรับขนาดตัวอักษร -->
-    <div class="fs-control notranslate" translate="no" aria-label="ปรับขนาดตัวอักษร">
-        <button type="button" class="fs-minus" onclick="pjsFontStep(-1)" title="ลดขนาดตัวอักษร" aria-label="ลดขนาดตัวอักษร">A&minus;</button>
-        <button type="button" class="fs-reset" onclick="pjsFontReset()" title="ขนาดปกติ" aria-label="ขนาดปกติ">A</button>
-        <button type="button" class="fs-plus" onclick="pjsFontStep(1)" title="เพิ่มขนาดตัวอักษร" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
-        <span class="fs-label" id="pjsFsLabel">100%</span>
+    <!-- เมนูปรับการแสดงผล (รวมทุกอย่างไว้ที่เดียว) -->
+    <div class="pjs-ctrl notranslate" id="pjsCtrl" translate="no">
+        <div class="pjs-ctrl-panel">
+            <div class="pjs-ctrl-row">
+                <div class="lbl"><i class="bi bi-fonts"></i> ขนาดตัวอักษร</div>
+                <div class="pjs-seg">
+                    <button type="button" onclick="pjsFontStep(-1)" aria-label="ลดขนาดตัวอักษร">A&minus;</button>
+                    <button type="button" class="fsval" id="pjsFsLabel">100%</button>
+                    <button type="button" onclick="pjsFontStep(1)" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+                </div>
+            </div>
+            <div class="pjs-ctrl-row">
+                <div class="lbl"><i class="bi bi-translate"></i> ภาษา</div>
+                <div class="pjs-seg">
+                    <button type="button" onclick="changeLanguage('th')" id="lang-th" class="on">ไทย</button>
+                    <button type="button" onclick="changeLanguage('en')" id="lang-en">EN</button>
+                    <button type="button" onclick="changeLanguage('zh-CN')" id="lang-zh-CN">中文</button>
+                </div>
+            </div>
+            <div class="pjs-ctrl-row">
+                <div class="lbl"><i class="bi bi-circle-half"></i> โหมดสี</div>
+                <div class="pjs-seg">
+                    <button type="button" onclick="pjsSetTheme('light')" id="pjsThemeLight" class="on"><i class="bi bi-sun"></i> สว่าง</button>
+                    <button type="button" onclick="pjsSetTheme('dark')" id="pjsThemeDark"><i class="bi bi-moon-stars"></i> มืด</button>
+                </div>
+            </div>
+            <div class="pjs-ctrl-row">
+                <div class="lbl"><i class="bi bi-display"></i> ไซต์แสดงผล</div>
+                <div class="pjs-seg">
+                    <button type="button" onclick="pjsSetView('auto')" id="pjsViewAuto" class="on">อัตโนมัติ</button>
+                    <button type="button" onclick="pjsSetView('desktop')" id="pjsViewDesktop">เดสก์ท็อป</button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="pjs-ctrl-btn" id="pjsCtrlBtn" aria-label="ปรับการแสดงผล" title="ปรับการแสดงผล"><i class="bi bi-sliders"></i></button>
     </div>
 
     <!-- Floating Contact Widget -->
@@ -969,13 +1003,10 @@ body {
         }
         
         function updateLanguageUI(lang) {
-			document.querySelectorAll('.lang-switcher a').forEach(function(el) {
-				el.classList.remove('active');
+			['th', 'en', 'zh-CN'].forEach(function(code) {
+				var el = document.getElementById('lang-' + code);
+				if (el) el.classList.toggle('on', code === lang);
 			});
-
-			// id ของ zh-CN มี dash ต้องตรงตาม id
-			var activeEl = document.getElementById('lang-' + lang);
-			if (activeEl) activeEl.classList.add('active');
 		}
 
 		window.addEventListener('load', function() {
@@ -1089,6 +1120,44 @@ body {
                 apply(defaultScale());
             };
             apply(current());
+        })();
+    </script>
+
+    <!-- เมนูปรับการแสดงผล: เปิด/ปิด + โหมดสี + ไซต์แสดงผล -->
+    <script>
+        (function () {
+            var ctrl = document.getElementById('pjsCtrl');
+            var btn = document.getElementById('pjsCtrlBtn');
+            if (btn && ctrl) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    ctrl.classList.toggle('open');
+                });
+                document.addEventListener('click', function (e) {
+                    if (!ctrl.contains(e.target)) ctrl.classList.remove('open');
+                });
+            }
+
+            // โหมดสี (สว่าง/มืด)
+            window.pjsSetTheme = function (mode) {
+                document.documentElement.classList.toggle('pjs-dark', mode === 'dark');
+                try { localStorage.setItem('pjs-theme', mode); } catch (e) {}
+                var d = document.getElementById('pjsThemeDark'), l = document.getElementById('pjsThemeLight');
+                if (d) d.classList.toggle('on', mode === 'dark');
+                if (l) l.classList.toggle('on', mode !== 'dark');
+            };
+            pjsSetTheme(localStorage.getItem('pjs-theme') === 'dark' ? 'dark' : 'light');
+
+            // ไซต์แสดงผล (อัตโนมัติ/เดสก์ท็อป)
+            window.pjsSetView = function (mode) {
+                var m = document.querySelector('meta[name="viewport"]');
+                if (m) m.setAttribute('content', mode === 'desktop' ? 'width=1200' : 'width=device-width, initial-scale=1.0');
+                try { localStorage.setItem('pjs-view', mode); } catch (e) {}
+                var a = document.getElementById('pjsViewAuto'), d = document.getElementById('pjsViewDesktop');
+                if (a) a.classList.toggle('on', mode !== 'desktop');
+                if (d) d.classList.toggle('on', mode === 'desktop');
+            };
+            if (localStorage.getItem('pjs-view') === 'desktop') pjsSetView('desktop');
         })();
     </script>
 @stack('scripts')

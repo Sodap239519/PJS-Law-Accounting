@@ -30,7 +30,25 @@ const fileIcon = (name) => {
             <Link :href="route('admin.documents.create')" class="btn-primary">+ เพิ่มเอกสาร</Link>
         </div>
 
-        <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <!-- มือถือ: การ์ด -->
+        <div class="space-y-2 sm:hidden">
+            <div v-for="item in documents" :key="item.id" class="rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+                <p class="line-clamp-2 text-sm font-medium text-slate-800"><i class="bi bi-file-earmark-text text-pjs-blue/60"></i> {{ item.title }}</p>
+                <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-500">
+                    <span :class="item.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'" class="rounded-full px-2 py-0.5">{{ item.is_active ? 'เผยแพร่' : 'ปิด' }}</span>
+                    <span>{{ item.category || '-' }}</span>
+                    <span>· <i class="bi bi-download"></i> {{ item.downloads }}</span>
+                </div>
+                <div class="mt-2 flex gap-4 text-sm">
+                    <Link :href="route('admin.documents.edit', item.id)" class="text-pjs-blue">แก้ไข</Link>
+                    <button class="text-red-500" @click="destroy(item.id)">ลบ</button>
+                </div>
+            </div>
+            <p v-if="!documents.length" class="rounded-xl border border-slate-100 bg-white py-10 text-center text-sm text-slate-400">ยังไม่มีเอกสาร</p>
+        </div>
+
+        <!-- เดสก์ท็อป: ตาราง -->
+        <div class="hidden overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm sm:block">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y text-sm">
                     <thead class="bg-slate-50 text-left text-slate-500">

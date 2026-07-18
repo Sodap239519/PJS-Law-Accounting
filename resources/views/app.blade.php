@@ -16,6 +16,11 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="icon" href="/favicon.ico" sizes="any">
 
+        <!-- Prompt font (ทั้งเว็บใช้ฟอนต์เดียวกัน) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
         <!-- Bootstrap Icons (MIT, no attribution required) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -35,7 +40,7 @@
                 animation: pjsPop .8s cubic-bezier(.2,.8,.2,1) both;
             }
             #pjs-splash .pjs-brand {
-                font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+                font-family: 'Prompt', sans-serif;
                 font-size: 19px; font-weight: 700; letter-spacing: .3px; color: #b8942f;
                 text-align: center; animation: pjsFade .9s ease .15s both;
             }
@@ -54,7 +59,7 @@
                 display: flex; align-items: center; gap: 12px;
                 background: #fff; border: 1px solid #eadfb8; border-radius: 16px;
                 box-shadow: 0 12px 40px rgba(0,0,0,.16); padding: 12px 14px;
-                font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+                font-family: 'Prompt', sans-serif;
                 animation: pjsFade .3s ease both;
             }
             .pjs-a2hs[hidden] { display: none; }

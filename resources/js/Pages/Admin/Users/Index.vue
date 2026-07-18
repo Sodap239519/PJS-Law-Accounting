@@ -21,7 +21,30 @@ const destroy = (user) => {
             <Link :href="route('admin.users.create')" class="btn-primary">+ เพิ่มผู้ใช้</Link>
         </div>
 
-        <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <!-- มือถือ: การ์ด -->
+        <div class="space-y-2 sm:hidden">
+            <div v-for="u in users" :key="u.id" class="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+                <span class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-pjs-blue/10">
+                    <img v-if="u.avatar" :src="u.avatar" class="h-full w-full object-cover" />
+                    <span v-else class="flex h-full items-center justify-center text-pjs-blue"><i class="bi bi-person"></i></span>
+                </span>
+                <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-medium text-slate-800">{{ u.name }} <span v-if="u.is_self" class="text-[10px] text-slate-400">(คุณ)</span></p>
+                    <p class="truncate text-xs text-slate-500">{{ u.email }}</p>
+                    <span :class="u.role === 'super_admin' ? 'bg-pjs-blue/10 text-pjs-blue-dark' : 'bg-slate-100 text-slate-600'" class="mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px]">
+                        <i :class="u.role === 'super_admin' ? 'bi bi-shield-check' : 'bi bi-person-badge'"></i> {{ u.role_label }}
+                    </span>
+                </div>
+                <div class="flex shrink-0 flex-col items-end gap-1 text-sm">
+                    <Link :href="route('admin.users.edit', u.id)" class="text-pjs-blue">แก้ไข</Link>
+                    <button v-if="!u.is_self" class="text-red-500" @click="destroy(u)">ลบ</button>
+                </div>
+            </div>
+            <p v-if="!users.length" class="rounded-xl border border-slate-100 bg-white py-10 text-center text-sm text-slate-400">ยังไม่มีผู้ใช้</p>
+        </div>
+
+        <!-- เดสก์ท็อป: ตาราง -->
+        <div class="hidden overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm sm:block">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y text-sm">
                     <thead class="bg-slate-50 text-left text-slate-500">

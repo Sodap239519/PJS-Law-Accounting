@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
             leave-active-class="transition duration-150 ease-in"
             leave-to-class="translate-y-4 opacity-0"
         >
-            <div v-if="show" class="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
+            <div v-if="show" class="fixed inset-x-0 bottom-20 z-50 flex justify-center px-4 lg:bottom-4">
                 <div class="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/95 px-3 py-2 shadow-[0_8px_30px_-8px_rgba(37,99,235,0.35)] backdrop-blur">
                     <span class="hidden pl-2 pr-1 text-xs text-slate-400 sm:inline">มีการแก้ไข —</span>
                     <button type="button" class="btn-outline btn-sm" @click="emit('cancel')">{{ cancelLabel }}</button>

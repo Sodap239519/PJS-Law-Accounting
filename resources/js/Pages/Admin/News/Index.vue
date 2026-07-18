@@ -40,7 +40,30 @@ const destroy = (id) => {
             <Link :href="route('admin.news.create')" class="btn-primary ml-auto">+ เพิ่มข่าว</Link>
         </div>
 
-        <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <!-- มือถือ: การ์ด (ไม่เลื่อนขวา) -->
+        <div class="space-y-2 sm:hidden">
+            <div v-for="item in news.data" :key="item.id" class="flex gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+                <img v-if="item.cover" :src="item.cover" class="h-14 w-20 shrink-0 rounded object-cover" />
+                <div v-else class="h-14 w-20 shrink-0 rounded bg-slate-100"></div>
+                <div class="min-w-0 flex-1">
+                    <p class="line-clamp-2 text-sm font-medium text-slate-800">{{ item.title }}</p>
+                    <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-500">
+                        <span :class="item.is_published ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'" class="rounded-full px-2 py-0.5">{{ item.is_published ? 'เผยแพร่' : 'ร่าง' }}</span>
+                        <span>{{ item.category || '-' }}</span>
+                        <span>· {{ item.published_at || '-' }}</span>
+                        <span>· <i class="bi bi-eye"></i> {{ item.views }}</span>
+                    </div>
+                    <div class="mt-2 flex gap-4 text-sm">
+                        <Link :href="route('admin.news.edit', item.id)" class="text-pjs-blue">แก้ไข</Link>
+                        <button class="text-red-500" @click="destroy(item.id)">ลบ</button>
+                    </div>
+                </div>
+            </div>
+            <p v-if="!news.data.length" class="rounded-xl border border-slate-100 bg-white py-10 text-center text-sm text-slate-400">ยังไม่มีข่าว</p>
+        </div>
+
+        <!-- เดสก์ท็อป: ตาราง -->
+        <div class="hidden overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm sm:block">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y text-sm">
                     <thead class="bg-slate-50 text-left text-slate-500">
