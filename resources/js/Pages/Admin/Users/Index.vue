@@ -17,10 +17,8 @@ const destroy = (user) => {
     <AdminLayout>
         <template #title>ผู้ใช้ระบบ</template>
 
-        <div class="mb-4">
-            <Link :href="route('admin.users.create')" class="rounded-lg bg-pjs-blue px-4 py-2 text-sm font-medium text-white hover:bg-pjs-blue-dark">
-                + เพิ่มผู้ใช้
-            </Link>
+        <div class="mb-4 flex justify-end">
+            <Link :href="route('admin.users.create')" class="btn-primary">+ เพิ่มผู้ใช้</Link>
         </div>
 
         <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">

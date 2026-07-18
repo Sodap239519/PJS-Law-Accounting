@@ -24,15 +24,13 @@ const destroy = (id) => {
         <template #title>ช่องทางติดต่อ</template>
 
         <div class="mb-4 flex flex-wrap items-center gap-3">
-            <Link :href="route('admin.contact-channels.create')" class="rounded-lg bg-pjs-blue px-4 py-2 text-sm font-medium text-white hover:bg-pjs-blue-dark">
-                + เพิ่มช่องทาง
-            </Link>
             <p class="flex items-center gap-1.5 text-xs text-slate-400">
                 <i class="bi bi-grip-vertical"></i> ลากเพื่อจัดลำดับ
             </p>
             <span v-if="saving" class="flex items-center gap-1 text-xs text-pjs-blue">
                 <i class="bi bi-arrow-repeat animate-spin"></i> กำลังบันทึกลำดับ…
             </span>
+            <Link :href="route('admin.contact-channels.create')" class="btn-primary ml-auto">+ เพิ่มช่องทาง</Link>
         </div>
 
         <div v-if="items.length" class="grid gap-2">

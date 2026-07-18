@@ -30,7 +30,9 @@
         "@tiptap/pm": "^3.27.1",
         "@tiptap/starter-kit": "^3.27.1",
         "@tiptap/vue-3": "^3.27.1",
+        "apexcharts": "^6.0.0",
         "tinymce": "^8.7.0",
-        "vue-advanced-cropper": "^2.8.9"
+        "vue-advanced-cropper": "^2.8.9",
+        "vue3-apexcharts": "^1.11.1"
     }
 }

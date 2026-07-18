@@ -26,10 +26,7 @@ const destroy = (id) => {
         <template #title>คดีตัวอย่าง</template>
 
         <div class="mb-4 flex flex-wrap items-center gap-3">
-            <Link :href="route('admin.case-studies.create')" class="rounded-lg bg-pjs-blue px-4 py-2 text-sm font-medium text-white hover:bg-pjs-blue-dark">
-                + เพิ่มคดีตัวอย่าง
-            </Link>
-            <div class="ml-auto flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2">
                 <input v-model="search" type="text" placeholder="ค้นหาหัวข้อ..." class="rounded-lg border-slate-200 text-sm" @keyup.enter="applyFilters" />
                 <select v-model="status" class="rounded-lg border-slate-200 text-sm" @change="applyFilters">
                     <option value="">ทุกสถานะ</option>
@@ -38,6 +35,7 @@ const destroy = (id) => {
                 </select>
                 <button class="rounded-lg border px-3 py-2 text-sm" @click="applyFilters">ค้นหา</button>
             </div>
+            <Link :href="route('admin.case-studies.create')" class="btn-primary ml-auto">+ เพิ่มคดีตัวอย่าง</Link>
         </div>
 
         <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">

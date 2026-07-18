@@ -29,6 +29,7 @@ const nav = [
         { label: 'เอกสารดาวน์โหลด', name: 'admin.documents.index', icon: 'bi bi-cloud-arrow-down' },
         { label: 'กล่องข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope' },
         { label: 'จัดการเมนู', name: 'admin.menus.index', icon: 'bi bi-list-nested', superAdmin: true },
+        { label: 'จัดการหมวดหมู่', name: 'admin.categories.index', icon: 'bi bi-tags' },
         { label: 'จัดการโลโก้/ชื่อเว็บ', name: 'admin.settings.edit', icon: 'bi bi-sliders' },
         { label: 'ผู้ใช้ระบบ', name: 'admin.users.index', icon: 'bi bi-shield-check', superAdmin: true },
     ] },

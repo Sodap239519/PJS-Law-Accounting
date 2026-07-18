@@ -23,15 +23,13 @@ const destroy = (id) => {
         <template #title>บริการ</template>
 
         <div class="mb-4 flex flex-wrap items-center gap-3">
-            <Link :href="route('admin.services.create')" class="rounded-lg bg-pjs-blue px-4 py-2 text-sm font-medium text-white hover:bg-pjs-blue-dark">
-                + เพิ่มบริการ
-            </Link>
             <p class="flex items-center gap-1.5 text-xs text-slate-400">
                 <i class="bi bi-arrows-move"></i> ลากไอคอน <i class="bi bi-grip-vertical"></i> เพื่อจัดลำดับการแสดงผล
             </p>
             <span v-if="saving" class="flex items-center gap-1 text-xs text-pjs-blue">
                 <i class="bi bi-arrow-repeat animate-spin"></i> กำลังบันทึกลำดับ…
             </span>
+            <Link :href="route('admin.services.create')" class="btn-primary ml-auto">+ เพิ่มบริการ</Link>
         </div>
 
         <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
