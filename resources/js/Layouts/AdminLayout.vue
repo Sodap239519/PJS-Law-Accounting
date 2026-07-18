@@ -68,12 +68,14 @@ watch(mobileOpen, (open) => {
 });
 
 // เมนูล่างสำหรับมือถือ (ถนัดขวา เอื้อมนิ้วโป้งถึง)
-const bottomNav = computed(() => [
+// ซ้าย 2 · กลางเป็น "ข้อความ" ทรงกลมลอยสูง · ขวา 1 + เมนู
+const bottomLeft = [
     { label: 'แดชบอร์ด', name: 'admin.dashboard', icon: 'bi bi-grid-1x2' },
     { label: 'ข่าวสาร', name: 'admin.news.index', icon: 'bi bi-newspaper' },
+];
+const bottomRight = [
     { label: 'ประชาสัมพันธ์', name: 'admin.announcements.index', icon: 'bi bi-megaphone' },
-    { label: 'ข้อความ', name: 'admin.contacts.index', icon: 'bi bi-envelope', badge: unread.value },
-]);
+];
 
 // เรียงตามลำดับหน้า frontend; เมนูระบบรวมใน "ตั้งค่าระบบ"
 const nav = [
@@ -332,17 +334,38 @@ const currentYear = new Date().getFullYear();
         <!-- Bottom nav (มือถือ — ถนัดขวา เอื้อมนิ้วโป้งถึง) -->
         <Transition enter-active-class="transition duration-200" enter-from-class="translate-y-full" leave-active-class="transition duration-150" leave-to-class="translate-y-full">
             <nav v-if="isMobileUI" class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/70 bg-white/95 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.15)] backdrop-blur" style="padding-bottom: env(safe-area-inset-bottom)">
-                <div class="mx-auto flex max-w-lg items-stretch justify-around px-1">
+                <div class="mx-auto flex max-w-lg items-end justify-around px-1">
+                    <!-- ซ้าย -->
                     <Link
-                        v-for="b in bottomNav"
+                        v-for="b in bottomLeft"
                         :key="b.name"
                         :href="hasRoute(b.name) ? route(b.name) : '#'"
-                        class="relative flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] transition"
+                        class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] transition"
                         :class="isActive(b.name) ? 'text-pjs-blue' : 'text-slate-400'"
                     >
                         <i :class="b.icon" class="text-lg"></i>
                         <span>{{ b.label }}</span>
-                        <span v-if="b.badge" class="absolute right-4 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[8px] font-bold text-white">{{ b.badge > 99 ? '99+' : b.badge }}</span>
+                    </Link>
+
+                    <!-- กลาง: ข้อความ (ทรงกลมสีฟ้าลอยสูง + badge) -->
+                    <Link :href="hasRoute('admin.contacts.index') ? route('admin.contacts.index') : '#'" class="flex flex-1 flex-col items-center">
+                        <span class="relative -mt-7 flex h-14 w-14 items-center justify-center rounded-full bg-pjs-blue text-white shadow-[0_6px_16px_-4px_rgba(37,99,235,0.6)] ring-4 ring-white">
+                            <i class="bi bi-envelope text-xl"></i>
+                            <span v-if="unread > 0" class="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white ring-2 ring-white">{{ unread > 99 ? '99+' : unread }}</span>
+                        </span>
+                        <span class="mt-1 text-[10px]" :class="isActive('admin.contacts.index') ? 'text-pjs-blue' : 'text-slate-400'">ข้อความ</span>
+                    </Link>
+
+                    <!-- ขวา -->
+                    <Link
+                        v-for="b in bottomRight"
+                        :key="b.name"
+                        :href="hasRoute(b.name) ? route(b.name) : '#'"
+                        class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] transition"
+                        :class="isActive(b.name) ? 'text-pjs-blue' : 'text-slate-400'"
+                    >
+                        <i :class="b.icon" class="text-lg"></i>
+                        <span>{{ b.label }}</span>
                     </Link>
                     <button type="button" class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] text-slate-400 transition hover:text-slate-600" @click="mobileOpen = true">
                         <i class="bi bi-grid-3x3-gap text-lg"></i>

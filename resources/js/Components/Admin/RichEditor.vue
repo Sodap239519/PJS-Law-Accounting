@@ -16,6 +16,7 @@ const value = computed({
 // สถานะโหลดตัวแก้ไข (TinyMCE โหลดจาก CDN — ใช้เวลาสักครู่)
 const ready = ref(false);
 const loadPct = ref(0);
+const toolbarExpanded = ref(false); // มือถือ: ย่อเครื่องมือเหลือ 2 แถว
 let trickle = null;
 
 onMounted(() => {
@@ -89,8 +90,13 @@ const init = {
 </script>
 
 <template>
-    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200">
+    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200" :class="{ 'tb-collapsed': !toolbarExpanded }">
         <Editor v-model="value" :tinymce-script-src="scriptSrc" :init="init" @init="onReady" />
+
+        <!-- ปุ่มแสดงเครื่องมือเพิ่มเติม (เฉพาะมือถือ) -->
+        <button v-if="ready" type="button" class="tb-more" @click="toolbarExpanded = !toolbarExpanded">
+            {{ toolbarExpanded ? 'ย่อ' : 'เพิ่มเติม' }} <i class="bi" :class="toolbarExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        </button>
 
         <!-- Loading overlay + percentage -->
         <Transition leave-active-class="transition-opacity duration-300" leave-to-class="opacity-0">
@@ -113,5 +119,38 @@ const init = {
 .tinymce-wrap .tox-tinymce {
     border: 0 !important;
     border-radius: 0 !important;
+}
+
+/* ปุ่ม "เพิ่มเติม" ซ่อนไว้บนจอใหญ่ */
+.tinymce-wrap .tb-more {
+    display: none;
+}
+
+/* จอมือถือ: ซ่อนเมนูบาร์ + ย่อแถบเครื่องมือเหลือ ~2 แถว + ปุ่มเพิ่มเติม */
+@media (max-width: 640px) {
+    .tinymce-wrap .tox-menubar {
+        display: none !important;
+    }
+    .tinymce-wrap.tb-collapsed .tox-toolbar__primary {
+        max-height: 84px;
+        overflow: hidden;
+    }
+    .tinymce-wrap .tb-more {
+        position: absolute;
+        top: 5px;
+        right: 6px;
+        z-index: 5;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        color: #2563eb;
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 999px;
+        padding: 3px 10px;
+        cursor: pointer;
+    }
 }
 </style>

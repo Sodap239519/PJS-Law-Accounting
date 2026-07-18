@@ -11,12 +11,20 @@ const props = defineProps({
 const search = ref(props.filters.search || '');
 const status = ref(props.filters.status || '');
 const perPage = ref(Number(props.filters.per_page) || 10);
+const searching = ref(false);
 
 let timer = null;
 watch([search, status, perPage], () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-        router.get(route('admin.announcements.index'), { search: search.value, status: status.value, per_page: perPage.value }, { preserveState: true, replace: true });
+        window.__pjsSilentNav = true;
+        searching.value = true;
+        router.get(route('admin.announcements.index'), { search: search.value, status: status.value, per_page: perPage.value }, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            onFinish: () => (searching.value = false),
+        });
     }, 300);
 });
 
@@ -39,7 +47,8 @@ const statusMeta = {
         <div class="mb-3 flex flex-wrap items-center gap-2">
             <div class="relative min-w-0 flex-1">
                 <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input v-model="search" type="text" placeholder="ค้นหาหัวข้อ…" class="field w-full pl-9" />
+                <input v-model="search" type="text" placeholder="ค้นหาหัวข้อ…" class="field w-full pl-9 pr-9" />
+                <i v-if="searching" class="bi bi-arrow-repeat absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-pjs-blue/70"></i>
             </div>
             <select v-model="status" class="field w-auto shrink-0">
                 <option value="">ทุกสถานะ</option>

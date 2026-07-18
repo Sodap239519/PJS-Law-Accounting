@@ -28,6 +28,7 @@ const reset = () => {
 
 onMounted(() => {
     offStart = router.on('start', () => {
+        if (window.__pjsSilentNav) return; // ค้นหาแบบเงียบ — ไม่ต้องขึ้น overlay
         clearInterval(trickle);
         percent.value = 0;
         showTimer = setTimeout(() => {
@@ -48,6 +49,7 @@ onMounted(() => {
     });
 
     offFinish = router.on('finish', () => {
+        window.__pjsSilentNav = false;
         reset();
         if (loading.value) {
             percent.value = 100;

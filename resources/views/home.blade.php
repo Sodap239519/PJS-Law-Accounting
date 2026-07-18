@@ -185,85 +185,25 @@
         <div class="swiper team-swiper">
             <div class="swiper-wrapper">
 
-                <!-- Card 1 -->
+                @forelse(($featuredTeam ?? collect()) as $member)
                 <div class="swiper-slide">
                     <div class="team-item">
                         <div class="team-image">
-                            <img src="{{ asset('frontend/images/team-pjs/ธนากร1.jpg') }}" alt="นายธนากร ตั้งกิจโสภา">
+                            <img src="{{ $member->getFirstMediaUrl('photo') ?: asset('web-app-manifest-512x512.png') }}" alt="{{ $member->name }}">
                             <div class="team-wrap">
                                 <div class="team-content">
-                                    <h6 class="team-name">นายธนากร ตั้งกิจโสภา</h6>
-                                    <div class="team-role">ประธานบริษัท</div>
-                                    <div class="team-role-en">Thanagon Tagkidsopha</div>
+                                    <h6 class="team-name">{{ $member->name }}</h6>
+                                    <div class="team-role">{{ $member->position }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Card 2 -->
+                @empty
                 <div class="swiper-slide">
-                    <div class="team-item">
-                        <div class="team-image">
-                            <img src="{{ asset('frontend/images/team-pjs/อธิวัฒน์2.jpg') }}" alt="นายอธิวัฒน์ ชิดอรุณธนวัฒน์">
-                            <div class="team-wrap">
-                                <div class="team-content">
-                                    <h6 class="team-name">นายอธิวัฒน์ ชิดอรุณธนวัฒน์</h6>
-                                    <div class="team-role">ที่ปรึกษาผู้เชี่ยวชาญทางด้านกฎหมาย</div>
-                                    <div class="team-role-en">Athiwat Chidarunthanawat</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="team-item text-center text-muted p-4">ยังไม่มีข้อมูลบุคลากร</div>
                 </div>
-
-                <!-- Card 3 -->
-                <div class="swiper-slide">
-                    <div class="team-item">
-                        <div class="team-image">
-                            <img src="{{ asset('frontend/images/team-pjs/จักรพันธ์3.jpg') }}" alt="นายจักรพันธ์ อยู่ยืน">
-                            <div class="team-wrap">
-                                <div class="team-content">
-                                    <h6 class="team-name">นายจักรพันธ์ อยู่ยืน</h6>
-                                    <div class="team-role">หัวหน้าฝ่ายสืบทรัพย์และบังคับคดี</div>
-                                    <div class="team-role-en">Jukkapun Yuyuen</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="swiper-slide">
-                    <div class="team-item">
-                        <div class="team-image">
-                            <img src="{{ asset('frontend/images/team-pjs/พลอย4.jpg') }}" alt="นางสาวพลอยไพลิน อยู่ยืน">
-                            <div class="team-wrap">
-                                <div class="team-content">
-                                    <h6 class="team-name">นางสาวพลอยไพลิน อยู่ยืน</h6>
-                                    <div class="team-role">ทนายความ</div>
-                                    <div class="team-role-en">Ploypailin Yuyuen</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5 (เพิ่มใหม่) -->
-                <div class="swiper-slide">
-                    <div class="team-item">
-                        <div class="team-image">
-                            <img src="{{ asset('frontend/images/team-pjs/วิชญาพร5.jpg') }}" alt="วิชญาพร ชนาธินาถ">
-                            <div class="team-wrap">
-                                <div class="team-content">
-                                    <h6 class="team-name">คุณวิชญาพร ชนาธินาถ</h6>
-                                    <div class="team-role">เลขานุการผู้บริหารและที่ปรึกษาทางด้านบัญชีภาษีอากร</div>
-                                    <div class="team-role-en">Witchayaphon Chanathinat</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
 
             </div>
 
@@ -306,36 +246,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="post">
+                @forelse(($featuredCases ?? collect()) as $case)
+                <div class="col-md-4 mb-4" data-aos="fade-up">
+                    <article class="post h-100">
+                        <div class="post-preview">
+                            <a href="{{ route('cases.show', $case->slug) }}">
+                                <img src="{{ $case->getFirstMediaUrl('cover') ?: asset('frontend/images/portfolio/default.jpg') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
+                            </a>
+                        </div>
                         <div class="post-wrapper">
                             <div class="post-header">
-                                <h3 class="post-title">ฎีกาใหม่สะเทือนวงการการเงิน ศาลชี้ 'ผู้ถือบัตรเครดิต' ไม่ต้องรับผิด หากถูกมิจฉาชีพรูดบัตร ธนาคารต้องพิสูจน์ตัวผู้ใช้!</h3>
-                                <div class="post-meta">17 ธันวาคม 2568</div>
+                                <h5 class="post-title"><a href="{{ route('cases.show', $case->slug) }}">{{ $case->title }}</a></h5>
                             </div>
-                            <div class="post-content">
-                                <p><strong>คำพิพากษาฎีกาที่ 2624/2568</strong></p>
-                                
-                                <p>17 ธันวาคม 2568 มีการเผยแพร่คำพิพากษาศาลฎีกาที่ได้รับความสนใจอย่างกว้างขวางในหมู่ #ผู้บริโภค และ #สถาบันการเงิน คือ คำพิพากษาฎีกาที่ 2624/2568 ซึ่งวางบรรทัดฐานสำคัญเกี่ยวกับความรับผิดกรณีข้อมูลบัตรเครดิตถูกนำไปใช้โดยมิชอบ</p>
-
-                                <p>คดีดังกล่าวเป็นกรณีที่ผู้บริโภคถูก #คนร้ายนำข้อมูลบัตรเครดิตไป #รูดซื้อสินค้าโดยไม่ได้รับอนุญาต ธนาคารผู้ออกบัตรเรียกให้เจ้าของบัตรชำระหนี้ โดยอ้างว่าเป็นภาระหน้าที่ของผู้ถือบัตรตามสัญญา แต่ผู้บริโภคปฏิเสธ โดยยืนยันว่าไม่ใช่ผู้ใช้บัตรและไม่เคยยินยอมให้ทำธุรกรรมดังกล่าว</p>
-
-                                <h5>ศาลฎีกาชี้ชัด ภาระพิสูจน์อยู่ที่ธนาคาร</h5>
-                                <p>ศาลฎีกาวินิจฉัยว่า ในกรณีที่มีข้อพิพาทว่า ใครเป็นผู้ใช้บัตรเครดิต #ภาระการพิสูจน์ตกเป็นของธนาคารผู้ออกบัตร ไม่ใช่ผู้บริโภค เนื่องจากธนาคารเป็นฝ่ายจัดทำระบบบัตรเครดิต ระบบยืนยันตัวตน และเป็นผู้ได้รับประโยชน์จากการให้บริการดังกล่าว</p>
-
-                                <p>ศาลเห็นว่า การที่มีรายการใช้บัตรเกิดขึ้น ไม่อาจสันนิษฐานได้โดยอัตโนมัติว่า เจ้าของบัตรเป็นผู้ใช้ หากธนาคารไม่สามารถนำพยานหลักฐานมายืนยันได้ชัดเจนว่า ผู้ถือบัตรเป็นผู้ทำธุรกรรมเอง หรือมีส่วนร่วมโดยประมาทเลินเล่ออย่างร้ายแรง ศาลย่อมไม่อาจให้ผู้บริโภครับผิดชำระหนี้แทนคนร้ายได้</p>
-
-                                <h5>ยกฟ้องผู้บริโภค ไม่ต้องชำระยอดค้าง</h5>
-                                <p>ผลคำพิพากษา ศาลฎีกามีคำสั่ง <strong>ยกฟ้อง</strong> ผู้ถือบัตรเครดิต โดยระบุว่า ผู้บริโภคไม่ต้องรับผิดในยอดใช้จ่ายที่เกิดจากการกระทำของมิจฉาชีพ เนื่องจากธนาคารไม่สามารถพิสูจน์ได้ว่า ผู้ถือบัตรเป็นผู้ใช้บัตรจริง</p>
-
-                                <h5>นักกฎหมายชี้ เป็นหมุดหมายใหม่คุ้มครองผู้บริโภค</h5>
-                                <p>นักกฎหมายด้านคุ้มครองผู้บริโภคประเมินว่า คำพิพากษาฎีกานี้ถือเป็น <strong>แนวคำวินิจฉัยสำคัญ</strong> ที่ช่วยยกระดับสิทธิของผู้ใช้บัตรเครดิต และกดดันให้สถาบันการเงินต้องพัฒนาระบบความปลอดภัย การยืนยันตัวตน และกระบวนการตรวจสอบการทุจริตให้รัดกุมมากขึ้น</p>
-                            </div>
-                            {{-- <div class="post-more text-center m-t-30">
-                                <a class="btn btn-circle btn-outline-brand" href="{{ route('cases.index') }}">ดูคดีตัวอย่างทั้งหมด</a>
-                            </div> --}}
+                            <div class="post-content"><p>{{ \Illuminate\Support\Str::limit(strip_tags($case->content), 100) }}</p></div>
+                            <div class="post-more"><a href="{{ route('cases.show', $case->slug) }}">อ่านเพิ่มเติม</a></div>
                         </div>
-                    </div>
+                    </article>
+                </div>
+                @empty
+                <div class="col-md-12 text-center text-muted py-4">ยังไม่มีคดีตัวอย่าง</div>
+                @endforelse
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center m-t-20">
+                    <a class="btn btn-circle btn-outline-brand" href="{{ route('cases.index') }}">ดูคดีตัวอย่างทั้งหมด</a>
                 </div>
             </div>
         </div>

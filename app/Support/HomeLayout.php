@@ -2,8 +2,10 @@
 
 namespace App\Support;
 
+use App\Models\CaseStudy;
 use App\Models\News;
 use App\Models\Setting;
+use App\Models\TeamMember;
 
 class HomeLayout
 {
@@ -20,8 +22,10 @@ class HomeLayout
         'cta' => ['label' => 'แบนเนอร์ปิดท้าย (Call to Action)', 'icon' => 'bi bi-megaphone'],
     ];
 
-    /** section ที่เลือกได้ว่าจะแสดงรายการไหน (คีย์ => จำนวนที่แสดง) */
+    /** section ที่เลือกได้ว่าจะแสดงรายการไหน (คีย์ => จำนวนที่แสดงเริ่มต้น) */
     public const SELECTABLE = [
+        'team' => 8,
+        'cases' => 3,
         'news' => 3,
     ];
 
@@ -119,19 +123,40 @@ class HomeLayout
         Setting::set('home_sections', json_encode($clean, JSON_UNESCAPED_UNICODE), 'home');
     }
 
-    /** ข่าวที่จะแสดงหน้าแรก (ตามที่เลือก หรือ ล่าสุด) */
-    public static function featuredNews(?int $limit = null)
+    /** query เริ่มต้น + การเรียงของแต่ละ section ที่เลือกได้ */
+    private static function source(string $key): ?array
     {
-        $limit ??= self::SELECTABLE['news'];
-        $cfg = self::config('news');
+        return match ($key) {
+            'news' => [fn () => News::published()->with('category'), 'published_at', 'desc'],
+            'cases' => [fn () => CaseStudy::published()->with('category'), 'created_at', 'desc'],
+            'team' => [fn () => TeamMember::where('is_active', true), 'order', 'asc'],
+            default => null,
+        };
+    }
+
+    /** รายการที่จะแสดงหน้าแรก (ตามที่เลือก หรือ ล่าสุด/ตามลำดับ) */
+    public static function featured(string $key)
+    {
+        $src = self::source($key);
+        if (! $src) {
+            return collect();
+        }
+        [$base, $col, $dir] = $src;
+        $cfg = self::config($key);
 
         if (($cfg['mode'] ?? 'latest') === 'selected' && ! empty($cfg['items'])) {
             $ids = $cfg['items'];
-            $items = News::published()->with('category')->whereIn('id', $ids)->get();
 
-            return $items->sortBy(fn ($n) => array_search($n->id, $ids))->values();
+            return $base()->whereIn('id', $ids)->get()
+                ->sortBy(fn ($m) => array_search($m->id, $ids))->values();
         }
 
-        return News::published()->with('category')->orderBy('published_at', 'desc')->limit($limit)->get();
+        return $base()->orderBy($col, $dir)->limit(self::SELECTABLE[$key] ?? 6)->get();
+    }
+
+    /** เผื่อโค้ดเดิม */
+    public static function featuredNews()
+    {
+        return self::featured('news');
     }
 }

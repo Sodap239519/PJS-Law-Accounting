@@ -9,8 +9,10 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        // ข่าวหน้าแรก — ตามที่เลือกในหน้าจัดการหน้าแรก (หรือ ล่าสุด)
-        $latestNews = \App\Support\HomeLayout::featuredNews();
+        // เนื้อหาหน้าแรก — ตามที่เลือกในหน้าจัดการหน้าแรก (หรือ ล่าสุด/ตามลำดับ)
+        $latestNews = \App\Support\HomeLayout::featured('news');
+        $featuredCases = \App\Support\HomeLayout::featured('cases');
+        $featuredTeam = \App\Support\HomeLayout::featured('team');
 
         $banners = \App\Models\Banner::where('is_active', true)
             ->orderBy('sort_order')->orderBy('id')
@@ -22,7 +24,7 @@ class HomeController extends Controller
         // ลำดับ/การแสดงผล section หน้าแรก
         $homeLayout = \App\Support\HomeLayout::map();
 
-        return view('home', compact('latestNews', 'banners', 'about', 'homeLayout'));
+        return view('home', compact('latestNews', 'featuredCases', 'featuredTeam', 'banners', 'about', 'homeLayout'));
     }
 
     public function aboutLegal(): View

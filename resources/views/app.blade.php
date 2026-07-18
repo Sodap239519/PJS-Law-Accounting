@@ -58,7 +58,7 @@
                 max-width: 460px; margin: 0 auto;
                 display: flex; align-items: center; gap: 12px;
                 background: #fff; border: 1px solid #eadfb8; border-radius: 16px;
-                box-shadow: 0 12px 40px rgba(0,0,0,.16); padding: 12px 14px;
+                box-shadow: 0 12px 40px rgba(0,0,0,.16); padding: 9px 12px;
                 font-family: 'Prompt', sans-serif;
                 animation: pjsFade .3s ease both;
             }
@@ -100,10 +100,10 @@
         <div id="pjs-a2hs" class="pjs-a2hs" hidden>
             <img src="/web-app-manifest-192x192.png" alt="">
             <div class="txt">
-                <strong>ติดตั้งแอป PJS</strong>
-                <span id="pjs-a2hs-desc">เพิ่มลงหน้าจอหลักเพื่อเข้าใช้งานได้เร็วขึ้น</span>
+                <strong>เพิ่ม PJS ลงหน้าจอหลัก</strong>
+                <span id="pjs-a2hs-desc">เข้าใช้งานได้เร็วขึ้น</span>
             </div>
-            <button id="pjs-a2hs-install" class="pjs-install" type="button">เพิ่มลงหน้าจอหลัก</button>
+            <button id="pjs-a2hs-install" class="pjs-install" type="button">ติดตั้ง</button>
             <button id="pjs-a2hs-close" class="pjs-close" type="button" aria-label="ปิด">&times;</button>
         </div>
 

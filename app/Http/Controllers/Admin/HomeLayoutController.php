@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaseStudy;
 use App\Models\News;
+use App\Models\TeamMember;
 use App\Support\HomeLayout;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,6 +27,14 @@ class HomeLayoutController extends Controller
                         'title' => $n->title,
                         'date' => optional($n->published_at)->format('d/m/Y'),
                     ]),
+                'cases' => CaseStudy::published()
+                    ->latest()
+                    ->get(['id', 'title', 'client_name'])
+                    ->map(fn ($c) => ['id' => $c->id, 'title' => $c->title, 'date' => $c->client_name]),
+                'team' => TeamMember::where('is_active', true)
+                    ->orderBy('order')
+                    ->get(['id', 'name', 'position'])
+                    ->map(fn ($m) => ['id' => $m->id, 'title' => $m->name, 'date' => $m->position]),
             ],
         ]);
     }
