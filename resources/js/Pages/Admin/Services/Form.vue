@@ -15,6 +15,7 @@ const isEdit = computed(() => !!props.service);
 
 const form = useForm({
     title: props.service?.title || '',
+    group: props.service?.group || '',
     icon: props.service?.icon || '',
     content: props.service?.content || '',
     sort_order: props.service?.sort_order ?? null,
@@ -65,11 +66,22 @@ const submit = () => {
                             :content-height="560"
                         />
 
-                        <label class="mb-1 mt-5 block text-sm font-medium text-slate-600">
-                            ไอคอน (Bootstrap Icon) <i v-if="form.icon" :class="form.icon" class="ml-1 text-pjs-blue"></i>
-                        </label>
-                        <input v-model="form.icon" type="text" placeholder="เช่น bi bi-briefcase" class="field sm:max-w-md" />
-                        <p class="mt-1 text-xs text-slate-400">ดูรายชื่อไอคอนได้ที่ icons.getbootstrap.com</p>
+                        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="field-label">กลุ่มบริการ (แสดงแยกกลุ่มบนหน้าเว็บ)</label>
+                                <input v-model="form.group" type="text" list="service-groups" placeholder="เช่น ด้านกฎหมาย, ด้านบัญชี" class="field" />
+                                <datalist id="service-groups">
+                                    <option value="ด้านกฎหมาย" />
+                                    <option value="ด้านบัญชี" />
+                                </datalist>
+                                <p class="mt-1 text-xs text-slate-400">บริการที่กลุ่มเดียวกันจะแสดงรวมกันบนหน้าเว็บ</p>
+                            </div>
+                            <div>
+                                <label class="field-label">ไอคอน (Bootstrap Icon) <i v-if="form.icon" :class="form.icon" class="ml-1 text-pjs-blue"></i></label>
+                                <input v-model="form.icon" type="text" placeholder="เช่น bi bi-briefcase" class="field" />
+                                <p class="mt-1 text-xs text-slate-400">ดูไอคอนที่ icons.getbootstrap.com</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

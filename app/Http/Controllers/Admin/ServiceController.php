@@ -64,6 +64,7 @@ class ServiceController extends Controller
             'service' => [
                 'id' => $service->id,
                 'title' => $service->title,
+                'group' => $service->group,
                 'icon' => $service->icon,
                 'content' => $service->content,
                 'translations' => $service->translations,
@@ -93,10 +94,11 @@ class ServiceController extends Controller
     {
         return [
             'title' => $request->input('title'),
+            'group' => $request->input('group'),
             'icon' => $request->input('icon'),
             'content' => $request->input('content'),
             'translations' => $request->input('translations'),
-            'sort_order' => (int) $request->input('sort_order', 0),
+            'sort_order' => $request->filled('sort_order') ? (int) $request->input('sort_order') : null,
             'is_active' => $request->boolean('is_active'),
         ];
     }

@@ -29,11 +29,18 @@
 </section>
 
 @if($services->count())
-<!-- Services from database -->
-<section class="module bg-light">
+<!-- Services from database (grouped) -->
+@php($grouped = $services->groupBy(fn ($s) => $s->group ?: 'บริการของเรา'))
+@foreach($grouped as $groupName => $items)
+<section class="module {{ $loop->odd ? 'bg-light' : '' }}">
     <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12 text-center" data-aos="fade-up">
+                <h2 class="mt-3">{{ $groupName }}</h2>
+            </div>
+        </div>
         <div class="row">
-            @foreach($services as $s)
+            @foreach($items as $s)
             <div class="col-md-4 mb-4" data-aos="fade-up">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body text-center p-4">
@@ -51,6 +58,7 @@
         </div>
     </div>
 </section>
+@endforeach
 @else
 <!-- Legal Services -->
 <section class="module bg-light">

@@ -12,6 +12,7 @@ class Service extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'group',
         'icon',
         'content',
         'sort_order',
