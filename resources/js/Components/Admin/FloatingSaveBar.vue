@@ -11,18 +11,26 @@ const props = defineProps({
 const emit = defineEmits(['save', 'cancel']);
 
 const show = ref(false);
-let observer = null;
+
+const compute = () => {
+    const el = document.getElementById(props.target);
+    if (!el) {
+        show.value = false;
+        return;
+    }
+    // โผล่เมื่อแถบปุ่มบนเลื่อนพ้นจอ (ขอบล่างอยู่เหนือ header ~64px)
+    show.value = el.getBoundingClientRect().bottom < 64;
+};
 
 onMounted(() => {
-    const el = document.getElementById(props.target);
-    if (!el || !('IntersectionObserver' in window)) return;
-    observer = new IntersectionObserver(
-        ([entry]) => (show.value = !entry.isIntersecting),
-        { threshold: 0, rootMargin: '-8px 0px 0px 0px' },
-    );
-    observer.observe(el);
+    compute();
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute, { passive: true });
 });
-onBeforeUnmount(() => observer?.disconnect());
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', compute);
+    window.removeEventListener('resize', compute);
+});
 </script>
 
 <template>
