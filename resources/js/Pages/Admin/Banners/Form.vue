@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
+import LocalizedFields from '@/Components/Admin/LocalizedFields.vue';
 
 const props = defineProps({
     banner: { type: Object, default: null },
@@ -18,6 +19,7 @@ const form = useForm({
     is_active: props.banner?.is_active ?? true,
     image: null,
     remove_image: false,
+    translations: props.banner?.translations || null,
 });
 
 const submit = () => {
@@ -47,14 +49,17 @@ const submit = () => {
             </div>
 
             <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <label class="mb-1 block text-sm font-medium text-slate-600">หัวข้อ</label>
-                <input v-model="form.title" type="text" class="w-full rounded-lg border-slate-200" />
+                <LocalizedFields
+                    :form="form"
+                    :fields="[
+                        { key: 'title', label: 'หัวข้อ' },
+                        { key: 'subtitle', label: 'คำโปรย' },
+                    ]"
+                    v-model:translations="form.translations"
+                />
 
-                <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">คำโปรย</label>
-                <input v-model="form.subtitle" type="text" class="w-full rounded-lg border-slate-200" />
-
-                <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">ลิงก์ปลายทาง (เมื่อคลิกแบนเนอร์)</label>
-                <input v-model="form.link_url" type="text" placeholder="https://…" class="w-full rounded-lg border-slate-200" />
+                <label class="field-label mt-4">ลิงก์ปลายทาง (เมื่อคลิกแบนเนอร์)</label>
+                <input v-model="form.link_url" type="text" placeholder="https://…" class="field" />
                 <p v-if="form.errors.link_url" class="mt-1 text-sm text-red-500">{{ form.errors.link_url }}</p>
 
                 <label class="mb-2 mt-4 flex items-center gap-2 text-sm font-medium text-slate-600">

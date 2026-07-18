@@ -51,6 +51,7 @@ class BannerController extends Controller
                 'link_url' => $banner->link_url,
                 'sort_order' => $banner->sort_order,
                 'is_active' => $banner->is_active,
+                'translations' => $banner->translations,
                 'image' => $banner->getFirstMediaUrl('image') ? ['url' => $banner->getFirstMediaUrl('image')] : null,
             ],
         ]);
@@ -95,6 +96,7 @@ class BannerController extends Controller
             'is_active' => ['boolean'],
             'image' => ['nullable', 'image', 'max:5120'],
             'remove_image' => ['boolean'],
+            'translations' => ['nullable', 'array'],
         ]);
     }
 }

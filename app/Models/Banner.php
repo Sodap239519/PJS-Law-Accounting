@@ -16,10 +16,12 @@ class Banner extends Model implements HasMedia
         'link_url',
         'sort_order',
         'is_active',
+        'translations',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'translations' => 'array',
     ];
 
     public function scopeActive($query)

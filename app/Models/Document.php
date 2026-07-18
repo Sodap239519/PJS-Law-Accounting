@@ -17,10 +17,12 @@ class Document extends Model implements HasMedia
         'category_id',
         'downloads',
         'is_active',
+        'translations',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'translations' => 'array',
     ];
 
     public function category(): BelongsTo

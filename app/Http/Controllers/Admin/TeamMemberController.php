@@ -51,6 +51,7 @@ class TeamMemberController extends Controller
                 'socials' => $teamMember->socials ?: [],
                 'order' => $teamMember->order,
                 'is_active' => $teamMember->is_active,
+                'translations' => $teamMember->translations,
                 'photo' => $teamMember->getFirstMediaUrl('photo') ? ['url' => $teamMember->getFirstMediaUrl('photo')] : null,
             ],
         ]);
@@ -100,6 +101,7 @@ class TeamMemberController extends Controller
             'is_active' => ['boolean'],
             'photo' => ['nullable', 'image', 'max:5120'],
             'remove_photo' => ['boolean'],
+            'translations' => ['nullable', 'array'],
         ]);
 
         // เก็บเฉพาะช่องทางที่กรอกจริง

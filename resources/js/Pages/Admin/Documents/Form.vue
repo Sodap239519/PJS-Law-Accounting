@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import LocalizedFields from '@/Components/Admin/LocalizedFields.vue';
 
 const props = defineProps({
     document: { type: Object, default: null },
@@ -18,6 +19,7 @@ const form = useForm({
     is_active: props.document?.is_active ?? true,
     file: null,
     remove_file: false,
+    translations: props.document?.translations || null,
 });
 
 const onFile = (e) => {
@@ -43,14 +45,16 @@ const submit = () => {
 
         <form class="mx-auto max-w-2xl space-y-6" @submit.prevent="submit">
             <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <label class="mb-1 block text-sm font-medium text-slate-600">ชื่อเอกสาร *</label>
-                <input v-model="form.title" type="text" class="w-full rounded-lg border-slate-200" />
-                <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title }}</p>
+                <LocalizedFields
+                    :form="form"
+                    :fields="[
+                        { key: 'title', label: 'ชื่อเอกสาร', required: true },
+                        { key: 'description', label: 'คำอธิบาย', type: 'textarea', rows: 3 },
+                    ]"
+                    v-model:translations="form.translations"
+                />
 
-                <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">คำอธิบาย</label>
-                <textarea v-model="form.description" rows="3" class="w-full rounded-lg border-slate-200"></textarea>
-
-                <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">หมวดหมู่</label>
+                <label class="field-label mt-4">หมวดหมู่</label>
                 <select v-model="form.category_id" class="w-full rounded-lg border-slate-200 text-sm">
                     <option :value="null">— ไม่ระบุ —</option>
                     <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>

@@ -52,6 +52,7 @@ class DocumentController extends Controller
                 'description' => $document->description,
                 'category_id' => $document->category_id,
                 'is_active' => $document->is_active,
+                'translations' => $document->translations,
                 'file' => $this->fileInfo($document),
             ],
         ]);
@@ -101,6 +102,7 @@ class DocumentController extends Controller
             'is_active' => ['boolean'],
             'file' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png', 'max:10240'],
             'remove_file' => ['boolean'],
+            'translations' => ['nullable', 'array'],
         ]);
     }
 }

@@ -17,11 +17,13 @@ class TeamMember extends Model implements HasMedia
         'socials',
         'order',
         'is_active',
+        'translations',
     ];
 
     protected $casts = [
         'socials' => 'array',
         'is_active' => 'boolean',
+        'translations' => 'array',
     ];
 
     public function scopeActive($query)

@@ -66,6 +66,7 @@ class ContactChannelController extends Controller
                 'icon' => $contactChannel->icon,
                 'sort_order' => $contactChannel->sort_order,
                 'is_active' => $contactChannel->is_active,
+                'translations' => $contactChannel->translations,
             ],
         ]);
     }
@@ -107,6 +108,7 @@ class ContactChannelController extends Controller
             'icon' => ['nullable', 'string', 'max:100'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
+            'translations' => ['nullable', 'array'],
         ]);
 
         // ใส่ไอคอนเริ่มต้นตามประเภทหากไม่ได้ระบุ

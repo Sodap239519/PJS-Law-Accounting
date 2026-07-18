@@ -13,10 +13,12 @@ class ContactChannel extends Model
         'icon',
         'sort_order',
         'is_active',
+        'translations',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'translations' => 'array',
     ];
 
     /** ประเภทที่ถือเป็นโซเชียล/แชท (ใช้ทำปุ่มลอย + ไอคอนโซเชียล) */

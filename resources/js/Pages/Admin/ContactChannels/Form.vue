@@ -2,6 +2,7 @@
 import { computed, watch } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import LocalizedFields from '@/Components/Admin/LocalizedFields.vue';
 
 const props = defineProps({
     channel: { type: Object, default: null },
@@ -17,6 +18,7 @@ const form = useForm({
     icon: props.channel?.icon || '',
     sort_order: props.channel?.sort_order ?? 0,
     is_active: props.channel?.is_active ?? true,
+    translations: props.channel?.translations || null,
 });
 
 // เปลี่ยนประเภท → เติมไอคอนเริ่มต้นให้อัตโนมัติ (เฉพาะตอนเพิ่มใหม่/ยังไม่ตั้งไอคอนเอง)
@@ -77,15 +79,17 @@ const submit = () => {
                 <input v-model="form.value" type="text" :placeholder="valuePlaceholder" class="w-full rounded-lg border-slate-200" />
                 <p v-if="form.errors.value" class="mt-1 text-sm text-red-500">{{ form.errors.value }}</p>
 
-                <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ป้ายกำกับ (ไม่ใส่ก็ได้)</label>
-                        <input v-model="form.label" type="text" placeholder="เช่น สายด่วน, ฝ่ายบัญชี" class="w-full rounded-lg border-slate-200 text-sm" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ไอคอน <i :class="form.icon" class="ml-1 text-pjs-blue"></i></label>
-                        <input v-model="form.icon" type="text" placeholder="bi bi-telephone" class="w-full rounded-lg border-slate-200 text-sm" />
-                    </div>
+                <div class="mt-5">
+                    <LocalizedFields
+                        :form="form"
+                        :fields="[{ key: 'label', label: 'ป้ายกำกับ (ไม่ใส่ก็ได้)', placeholder: 'เช่น สายด่วน, ฝ่ายบัญชี' }]"
+                        v-model:translations="form.translations"
+                    />
+                </div>
+
+                <div class="mt-4">
+                    <label class="field-label">ไอคอน <i :class="form.icon" class="ml-1 text-pjs-blue"></i></label>
+                    <input v-model="form.icon" type="text" placeholder="bi bi-telephone" class="field" />
                 </div>
 
                 <label class="mb-2 mt-4 flex items-center gap-2 text-sm font-medium text-slate-600">

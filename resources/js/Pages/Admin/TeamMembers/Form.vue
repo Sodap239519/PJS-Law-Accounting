@@ -4,6 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import RichEditor from '@/Components/Admin/RichEditor.vue';
 import CoverUploader from '@/Components/Admin/CoverUploader.vue';
+import LocalizedFields from '@/Components/Admin/LocalizedFields.vue';
 
 const props = defineProps({
     member: { type: Object, default: null },
@@ -25,6 +26,7 @@ const form = useForm({
     is_active: props.member?.is_active ?? true,
     photo: null,
     remove_photo: false,
+    translations: props.member?.translations || null,
 });
 
 const socialFields = [
@@ -52,15 +54,16 @@ const submit = () => {
             <div class="grid gap-6 lg:grid-cols-3">
                 <div class="space-y-5 lg:col-span-2">
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <label class="mb-1 block text-sm font-medium text-slate-600">ชื่อ-นามสกุล *</label>
-                        <input v-model="form.name" type="text" class="w-full rounded-lg border-slate-200" />
-                        <p v-if="form.errors.name" class="mt-1 text-sm text-red-500">{{ form.errors.name }}</p>
+                        <LocalizedFields
+                            :form="form"
+                            :fields="[
+                                { key: 'name', label: 'ชื่อ-นามสกุล', required: true },
+                                { key: 'position', label: 'ตำแหน่ง', required: true },
+                            ]"
+                            v-model:translations="form.translations"
+                        />
 
-                        <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">ตำแหน่ง *</label>
-                        <input v-model="form.position" type="text" class="w-full rounded-lg border-slate-200" />
-                        <p v-if="form.errors.position" class="mt-1 text-sm text-red-500">{{ form.errors.position }}</p>
-
-                        <label class="mb-1 mt-4 block text-sm font-medium text-slate-600">ประวัติ / ความเชี่ยวชาญ</label>
+                        <label class="field-label mt-4">ประวัติ / ความเชี่ยวชาญ</label>
                         <RichEditor v-model="form.bio" />
                     </div>
 
