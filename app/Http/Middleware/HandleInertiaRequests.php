@@ -41,6 +41,10 @@ class HandleInertiaRequests extends Middleware
                     'email_verified_at' => $request->user()->email_verified_at,
                 ] : null,
             ],
+            'site' => [
+                'name' => fn () => \App\Models\Setting::get('site_name', 'PJS'),
+                'logo' => fn () => \App\Models\Setting::get('logo'),
+            ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

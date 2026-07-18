@@ -7,6 +7,9 @@ const page = usePage();
 const user = computed(() => page.props.auth?.user);
 const flash = computed(() => page.props.flash || {});
 const unread = computed(() => page.props.unreadMessages || 0);
+// โลโก้/ชื่อบริษัทจริง (จัดการที่ ตั้งค่าระบบ › โลโก้/ชื่อเว็บ) — สำรองด้วยตราสัญลักษณ์แอป
+const siteName = computed(() => page.props.site?.name || 'PJS');
+const siteLogo = computed(() => page.props.site?.logo || '/web-app-manifest-192x192.png');
 
 const mobileOpen = ref(false);
 const openGroup = ref(null);
@@ -111,8 +114,8 @@ const currentYear = new Date().getFullYear();
             <div class="relative z-50 mx-auto flex h-14 max-w-6xl items-center gap-1 rounded-full border border-slate-200/70 bg-white/90 pl-4 pr-2 shadow-sm backdrop-blur">
                 <!-- Brand -->
                 <Link :href="route('admin.dashboard')" class="flex shrink-0 items-center gap-2">
-                    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue text-white"><i class="bi bi-briefcase text-sm"></i></span>
-                    <span class="hidden text-sm font-bold text-slate-800 xl:block">PJS Admin</span>
+                    <img :src="siteLogo" class="h-9 w-9 rounded-full object-contain" :alt="siteName" />
+                    <span class="hidden text-sm font-bold text-slate-800 xl:block">{{ siteName }} Admin</span>
                 </Link>
 
                 <!-- Tabs (centered) -->
