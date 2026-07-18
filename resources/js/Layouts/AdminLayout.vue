@@ -347,13 +347,12 @@ const currentYear = new Date().getFullYear();
                         <span>{{ b.label }}</span>
                     </Link>
 
-                    <!-- กลาง: ข้อความ (ทรงกลมสีฟ้าลอยสูง + badge) -->
-                    <Link :href="hasRoute('admin.contacts.index') ? route('admin.contacts.index') : '#'" class="flex flex-1 flex-col items-center">
+                    <!-- กลาง: ข้อความ (ทรงกลมสีฟ้าลอยสูง + badge) เฉพาะไอคอน -->
+                    <Link :href="hasRoute('admin.contacts.index') ? route('admin.contacts.index') : '#'" class="flex flex-1 flex-col items-center py-2.5" title="ข้อความ">
                         <span class="relative -mt-7 flex h-14 w-14 items-center justify-center rounded-full bg-pjs-blue text-white shadow-[0_6px_16px_-4px_rgba(37,99,235,0.6)] ring-4 ring-white">
                             <i class="bi bi-envelope text-xl"></i>
                             <span v-if="unread > 0" class="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white ring-2 ring-white">{{ unread > 99 ? '99+' : unread }}</span>
                         </span>
-                        <span class="mt-1 text-[10px]" :class="isActive('admin.contacts.index') ? 'text-pjs-blue' : 'text-slate-400'">ข้อความ</span>
                     </Link>
 
                     <!-- ขวา -->
