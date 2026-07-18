@@ -70,7 +70,7 @@
                 </div>
             @else
                 <div class="row align-items-center {{ $i > 0 ? 'mt-5 pt-5 border-top' : '' }}">
-                    <div class="col-lg-6 mb-4 mb-lg-0 {{ ($s['position'] ?? 'left') === 'right' ? 'order-lg-2' : '' }}">
+                    <div class="col-lg-6 mb-4 mb-lg-0 {{ ($s['position'] ?? 'left') === 'left' ? 'order-lg-2' : '' }}">
                         <div class="icon-box">
                             <div class="icon-box-title mb-3">
                                 <h3>@if(!empty($s['icon']))<i class="{{ $s['icon'] }}" style="color:#d4af37;margin-right:10px;"></i>@endif {{ $s['heading'] ?? '' }}</h3>
@@ -78,7 +78,7 @@
                             <div class="icon-box-content">{!! $s['content'] ?? '' !!}</div>
                         </div>
                     </div>
-                    <div class="col-lg-6 {{ ($s['position'] ?? 'left') === 'right' ? 'order-lg-1' : '' }}">
+                    <div class="col-lg-6 {{ ($s['position'] ?? 'left') === 'left' ? 'order-lg-1' : '' }}">
                         @if(!empty($s['image']))
                             <img src="{{ $s['image'] }}" alt="{{ $s['heading'] ?? '' }}" class="img-fluid rounded shadow">
                         @endif

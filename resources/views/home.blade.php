@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="col-md-8 m-auto text-center">
                     <h1>เกี่ยวกับเรา</h1>
-                    <p class="lead">บริษัท PJS กฎหมายและการบัญชี จำกัด</p>
+                    <p class="lead">{{ $about->intro_title ?: 'บริษัท PJS กฎหมายและการบัญชี จำกัด' }}</p>
                 </div>
             </div>
             <div class="row">
@@ -59,6 +59,29 @@
                 </div>
             </div>
 
+            @if(!empty($about->sections))
+                {{-- ดึงเนื้อหาจากหน้าเกี่ยวกับเรา (2 section แรก) --}}
+                @foreach(array_slice($about->sections, 0, 2) as $idx => $s)
+                    @if(($s['position'] ?? 'left') === 'full')
+                        <div class="row align-items-center m-b-80 {{ $idx > 0 ? 'mt-5' : '' }}">
+                            <div class="col-lg-10 m-auto">
+                                <div class="icon-box-title"><h3>@if(!empty($s['icon']))<i class="{{ $s['icon'] }}"></i> @endif{{ $s['heading'] ?? '' }}</h3></div>
+                                <div class="icon-box-content">{!! $s['content'] ?? '' !!}</div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="row align-items-center m-b-80 {{ $idx > 0 ? 'mt-5' : '' }}">
+                            <div class="col-lg-6 {{ ($s['position'] ?? 'left') === 'left' ? 'order-lg-2' : '' }}">
+                                <div class="icon-box-title"><h3>@if(!empty($s['icon']))<i class="{{ $s['icon'] }}"></i> @endif{{ $s['heading'] ?? '' }}</h3></div>
+                                <div class="icon-box-content">{!! $s['content'] ?? '' !!}</div>
+                            </div>
+                            <div class="col-lg-6 {{ ($s['position'] ?? 'left') === 'left' ? 'order-lg-1' : '' }}">
+                                @if(!empty($s['image']))<img src="{{ $s['image'] }}" alt="{{ $s['heading'] ?? '' }}" class="img-fluid rounded">@endif
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @else
             <!-- ด้านกฎหมาย -->
             <div class="row align-items-center m-b-80">
                 <div class="col-lg-6">
@@ -113,6 +136,7 @@
                     <img src="{{ asset('frontend/images/main/accounting.jpg') }}" alt="Accounting Services" class="img-fluid">
                 </div>
             </div>
+            @endif
         </div>
     </section>
     <!-- About end -->

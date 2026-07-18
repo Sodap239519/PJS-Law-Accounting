@@ -19,7 +19,10 @@ class HomeController extends Controller
             ->orderBy('sort_order')->orderBy('id')
             ->get();
 
-        return view('home', compact('latestNews', 'banners'));
+        // เนื้อหา "เกี่ยวกับเรา" (ดึง section จากหน้าเกี่ยวกับเรา — โชว์ 2 อันแรกบนหน้าแรก)
+        $about = \App\Models\AboutPage::singleton();
+
+        return view('home', compact('latestNews', 'banners', 'about'));
     }
 
     public function aboutLegal(): View
