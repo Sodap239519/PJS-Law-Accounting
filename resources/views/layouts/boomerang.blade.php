@@ -66,21 +66,21 @@
         :root { --pjs-fs-scale: 1; }
         html { font-size: calc(16px * var(--pjs-fs-scale)); }
 
-        /* ===== เมนูปรับการแสดงผล (รวม ขนาดอักษร/ภาษา/โหมดสี/ไซต์) ===== */
-        .pjs-ctrl { position: fixed; left: 16px; bottom: 22px; z-index: 1000; }
+        /* ===== เมนูปรับการแสดงผล (บนหัวเว็บ ข้างปุ่มเมนู) ===== */
+        .pjs-ctrl { position: relative; z-index: 101; display: inline-flex; align-items: center; }
         .pjs-ctrl-btn {
-            width: 46px; height: 46px; border-radius: 50%; border: 1px solid #eadfb8;
-            background: linear-gradient(135deg,#ffffff,#fbf5e4); color: #b8942f;
-            box-shadow: 0 6px 22px rgba(0,0,0,0.16); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-            transition: transform .2s;
+            width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.15); color: #fff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;
+            transition: all .2s;
         }
-        .pjs-ctrl-btn:hover { transform: scale(1.06); }
+        .pjs-ctrl-btn:hover { background: rgba(255,255,255,0.28); }
+        .header.scrolled .pjs-ctrl-btn { border-color: #eadfb8; background: linear-gradient(135deg,#ffffff,#fbf5e4); color: #b8942f; }
         .pjs-ctrl-panel {
-            position: absolute; left: 0; bottom: 56px; width: 234px;
+            position: absolute; right: 0; top: calc(100% + 14px); width: 236px;
             background: #fff; border: 1px solid #eee; border-radius: 16px;
             box-shadow: 0 14px 44px rgba(0,0,0,0.18); padding: 6px 12px;
-            opacity: 0; visibility: hidden; transform: translateY(8px); transition: all .18s;
+            opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all .18s;
         }
         .pjs-ctrl.open .pjs-ctrl-panel { opacity: 1; visibility: visible; transform: none; }
         .pjs-ctrl-row { padding: 9px 0; border-bottom: 1px solid #f2f2f2; }
@@ -96,9 +96,6 @@
         .pjs-seg button.on { background: #d4af37; border-color: #d4af37; color: #fff; }
         .pjs-seg .fsval { flex: 0 0 48px; font-weight: 600; color: #6b7280; background: #f9fafb; cursor: default; }
         .pjs-seg .fsval:hover { border-color: #e5e7eb; color: #6b7280; }
-        @media (max-width: 575px) {
-            .pjs-ctrl { bottom: 16px; left: 12px; }
-        }
 
         /* ===== โหมดสีมืด (night) ===== */
         html.pjs-dark body { background: #0f172a; color: #cbd5e1; }
@@ -632,10 +629,14 @@ body {
                 color: rgba(0, 0, 0, 0.3);
             }
             
+            .pjs-ctrl {
+                order: 2;
+                margin-left: auto;
+                margin-right: 6px;
+            }
             .nav-toggle {
                 display: flex !important;
                 order: 3;
-                margin-left: auto;
                 z-index: 1002;
             }
             
@@ -851,6 +852,43 @@ body {
                 </div>
             </div>
             
+            <!-- เมนูปรับการแสดงผล (บนหัวเว็บ ข้างปุ่มเมนู) -->
+            <div class="pjs-ctrl notranslate" id="pjsCtrl" translate="no">
+                <button type="button" class="pjs-ctrl-btn" id="pjsCtrlBtn" aria-label="ตั้งค่าการแสดงผล" title="ตั้งค่าการแสดงผล"><i class="bi bi-sliders"></i></button>
+                <div class="pjs-ctrl-panel">
+                    <div class="pjs-ctrl-row">
+                        <div class="lbl"><i class="bi bi-fonts"></i> ขนาดตัวอักษร</div>
+                        <div class="pjs-seg">
+                            <button type="button" onclick="pjsFontStep(-1)" aria-label="ลดขนาดตัวอักษร">A&minus;</button>
+                            <button type="button" class="fsval" id="pjsFsLabel">100%</button>
+                            <button type="button" onclick="pjsFontStep(1)" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+                        </div>
+                    </div>
+                    <div class="pjs-ctrl-row">
+                        <div class="lbl"><i class="bi bi-translate"></i> ภาษา</div>
+                        <div class="pjs-seg">
+                            <button type="button" onclick="changeLanguage('th')" id="lang-th" class="on">ไทย</button>
+                            <button type="button" onclick="changeLanguage('en')" id="lang-en">EN</button>
+                            <button type="button" onclick="changeLanguage('zh-CN')" id="lang-zh-CN">中文</button>
+                        </div>
+                    </div>
+                    <div class="pjs-ctrl-row">
+                        <div class="lbl"><i class="bi bi-circle-half"></i> โหมดสี</div>
+                        <div class="pjs-seg">
+                            <button type="button" onclick="pjsSetTheme('light')" id="pjsThemeLight" class="on"><i class="bi bi-sun"></i> สว่าง</button>
+                            <button type="button" onclick="pjsSetTheme('dark')" id="pjsThemeDark"><i class="bi bi-moon-stars"></i> มืด</button>
+                        </div>
+                    </div>
+                    <div class="pjs-ctrl-row">
+                        <div class="lbl"><i class="bi bi-display"></i> ไซต์แสดงผล</div>
+                        <div class="pjs-seg">
+                            <button type="button" onclick="pjsSetView('auto')" id="pjsViewAuto" class="on">อัตโนมัติ</button>
+                            <button type="button" onclick="pjsSetView('desktop')" id="pjsViewDesktop">เดสก์ท็อป</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="nav-toggle">
                 <a href="#" id="mobileMenuToggle">
                     <span></span>
@@ -922,43 +960,6 @@ body {
         </div>
     </div>
 </footer>
-
-    <!-- เมนูปรับการแสดงผล (รวมทุกอย่างไว้ที่เดียว) -->
-    <div class="pjs-ctrl notranslate" id="pjsCtrl" translate="no">
-        <div class="pjs-ctrl-panel">
-            <div class="pjs-ctrl-row">
-                <div class="lbl"><i class="bi bi-fonts"></i> ขนาดตัวอักษร</div>
-                <div class="pjs-seg">
-                    <button type="button" onclick="pjsFontStep(-1)" aria-label="ลดขนาดตัวอักษร">A&minus;</button>
-                    <button type="button" class="fsval" id="pjsFsLabel">100%</button>
-                    <button type="button" onclick="pjsFontStep(1)" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
-                </div>
-            </div>
-            <div class="pjs-ctrl-row">
-                <div class="lbl"><i class="bi bi-translate"></i> ภาษา</div>
-                <div class="pjs-seg">
-                    <button type="button" onclick="changeLanguage('th')" id="lang-th" class="on">ไทย</button>
-                    <button type="button" onclick="changeLanguage('en')" id="lang-en">EN</button>
-                    <button type="button" onclick="changeLanguage('zh-CN')" id="lang-zh-CN">中文</button>
-                </div>
-            </div>
-            <div class="pjs-ctrl-row">
-                <div class="lbl"><i class="bi bi-circle-half"></i> โหมดสี</div>
-                <div class="pjs-seg">
-                    <button type="button" onclick="pjsSetTheme('light')" id="pjsThemeLight" class="on"><i class="bi bi-sun"></i> สว่าง</button>
-                    <button type="button" onclick="pjsSetTheme('dark')" id="pjsThemeDark"><i class="bi bi-moon-stars"></i> มืด</button>
-                </div>
-            </div>
-            <div class="pjs-ctrl-row">
-                <div class="lbl"><i class="bi bi-display"></i> ไซต์แสดงผล</div>
-                <div class="pjs-seg">
-                    <button type="button" onclick="pjsSetView('auto')" id="pjsViewAuto" class="on">อัตโนมัติ</button>
-                    <button type="button" onclick="pjsSetView('desktop')" id="pjsViewDesktop">เดสก์ท็อป</button>
-                </div>
-            </div>
-        </div>
-        <button type="button" class="pjs-ctrl-btn" id="pjsCtrlBtn" aria-label="ปรับการแสดงผล" title="ปรับการแสดงผล"><i class="bi bi-sliders"></i></button>
-    </div>
 
     <!-- Floating Contact Widget -->
     <div class="floating-widget">

@@ -34,9 +34,33 @@ const setViewMode = (mode) => {
     viewMode.value = mode;
     try { localStorage.setItem('pjs-admin-view', mode); } catch (e) {}
     applyViewport();
-    modeMenuOpen.value = false;
 };
 const onResize = () => (winWidth.value = window.innerWidth);
+
+// ===== ขนาดตัวอักษร (admin) =====
+const adminFs = ref(1);
+const applyFs = () => (document.documentElement.style.fontSize = 16 * adminFs.value + 'px');
+const fsStep = (d) => {
+    adminFs.value = Math.min(1.35, Math.max(0.85, Math.round((adminFs.value + d * 0.08) * 100) / 100));
+    try { localStorage.setItem('pjs-admin-fs', adminFs.value); } catch (e) {}
+    applyFs();
+};
+
+// ===== โหมดสี (admin) =====
+const adminTheme = ref('light');
+const applyTheme = () => document.documentElement.classList.toggle('pjs-admin-dark', adminTheme.value === 'dark');
+const setTheme = (t) => {
+    adminTheme.value = t;
+    try { localStorage.setItem('pjs-admin-theme', t); } catch (e) {}
+    applyTheme();
+};
+
+// ===== ภาษา (เก็บค่าที่มีผลกับหน้าเว็บสาธารณะ) =====
+const adminLang = ref('th');
+const setLang = (l) => {
+    adminLang.value = l;
+    try { localStorage.setItem('preferredLanguage', l); } catch (e) {}
+};
 
 // ล็อกการเลื่อนพื้นหลังเมื่อเปิดเมนูมือถือ (ให้เลื่อนเฉพาะในเมนู)
 watch(mobileOpen, (open) => {
@@ -92,8 +116,15 @@ const logout = () => router.post(route('logout'));
 // ปิดเมนู/ดรอปดาวน์ทุกครั้งที่เริ่มนำทาง (ไม่ต้องผูก @click ที่ทำให้ Link ถูก unmount ก่อนนำทาง)
 let offStart = null;
 onMounted(() => {
-    try { const v = localStorage.getItem('pjs-admin-view'); if (v) viewMode.value = v; } catch (e) {}
+    try {
+        const v = localStorage.getItem('pjs-admin-view'); if (v) viewMode.value = v;
+        const fs = parseFloat(localStorage.getItem('pjs-admin-fs')); if (!isNaN(fs)) adminFs.value = fs;
+        adminTheme.value = localStorage.getItem('pjs-admin-theme') === 'dark' ? 'dark' : 'light';
+        adminLang.value = localStorage.getItem('preferredLanguage') || 'th';
+    } catch (e) {}
     applyViewport();
+    applyFs();
+    applyTheme();
     window.addEventListener('resize', onResize);
     offStart = router.on('start', () => {
         openGroup.value = null;
@@ -171,18 +202,44 @@ const currentYear = new Date().getFullYear();
 
                 <!-- Right -->
                 <div class="ml-auto flex shrink-0 items-center gap-1 lg:ml-0">
-                    <!-- View mode (desktop/mobile) -->
+                    <!-- ตั้งค่าการแสดงผล (รวม ขนาดอักษร/ภาษา/โหมดสี/ไซต์) -->
                     <div class="relative">
-                        <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" :title="'โหมด: ' + modeLabel[viewMode]" @click="modeMenuOpen = !modeMenuOpen">
-                            <i class="bi text-base" :class="modeIcon"></i>
+                        <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" title="ตั้งค่าการแสดงผล" @click="modeMenuOpen = !modeMenuOpen">
+                            <i class="bi bi-sliders text-base"></i>
                         </button>
                         <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
-                            <div v-if="modeMenuOpen" class="absolute right-0 z-50 mt-2 w-48 rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft">
-                                <p class="px-3 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">โหมดการแสดงผล</p>
-                                <button v-for="m in ['auto', 'desktop', 'mobile']" :key="m" class="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm transition" :class="viewMode === m ? 'bg-pjs-blue/10 font-medium text-pjs-blue' : 'text-slate-600 hover:bg-slate-50'" @click="setViewMode(m)">
-                                    <i class="bi" :class="m === 'desktop' ? 'bi-display' : m === 'mobile' ? 'bi-phone' : 'bi-aspect-ratio'"></i>{{ modeLabel[m] }}
-                                    <i v-if="viewMode === m" class="bi bi-check-lg ml-auto"></i>
-                                </button>
+                            <div v-if="modeMenuOpen" class="absolute right-0 z-50 mt-2 w-60 rounded-2xl border border-slate-100 bg-white p-2 shadow-soft">
+                                <!-- ขนาดตัวอักษร -->
+                                <div class="px-1.5 py-1.5">
+                                    <p class="mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400"><i class="bi bi-fonts"></i> ขนาดตัวอักษร</p>
+                                    <div class="flex gap-1">
+                                        <button class="flex-1 rounded-lg border border-slate-200 py-1.5 text-sm text-slate-600 hover:border-pjs-blue hover:text-pjs-blue" @click="fsStep(-1)">A&minus;</button>
+                                        <span class="flex-1 rounded-lg bg-slate-50 py-1.5 text-center text-xs font-medium text-slate-500">{{ Math.round(adminFs * 100) }}%</span>
+                                        <button class="flex-1 rounded-lg border border-slate-200 py-1.5 text-sm text-slate-600 hover:border-pjs-blue hover:text-pjs-blue" @click="fsStep(1)">A+</button>
+                                    </div>
+                                </div>
+                                <!-- ภาษา -->
+                                <div class="px-1.5 py-1.5">
+                                    <p class="mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400"><i class="bi bi-translate"></i> ภาษา</p>
+                                    <div class="flex gap-1">
+                                        <button v-for="l in [{ c: 'th', t: 'ไทย' }, { c: 'en', t: 'EN' }, { c: 'zh-CN', t: '中文' }]" :key="l.c" class="flex-1 rounded-lg border py-1.5 text-xs transition" :class="adminLang === l.c ? 'border-pjs-blue bg-pjs-blue/10 font-medium text-pjs-blue' : 'border-slate-200 text-slate-600 hover:border-pjs-blue'" @click="setLang(l.c)">{{ l.t }}</button>
+                                    </div>
+                                </div>
+                                <!-- โหมดสี -->
+                                <div class="px-1.5 py-1.5">
+                                    <p class="mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400"><i class="bi bi-circle-half"></i> โหมดสี</p>
+                                    <div class="flex gap-1">
+                                        <button class="flex-1 rounded-lg border py-1.5 text-xs transition" :class="adminTheme === 'light' ? 'border-pjs-blue bg-pjs-blue/10 font-medium text-pjs-blue' : 'border-slate-200 text-slate-600'" @click="setTheme('light')"><i class="bi bi-sun"></i> สว่าง</button>
+                                        <button class="flex-1 rounded-lg border py-1.5 text-xs transition" :class="adminTheme === 'dark' ? 'border-pjs-blue bg-pjs-blue/10 font-medium text-pjs-blue' : 'border-slate-200 text-slate-600'" @click="setTheme('dark')"><i class="bi bi-moon-stars"></i> มืด</button>
+                                    </div>
+                                </div>
+                                <!-- ไซต์แสดงผล -->
+                                <div class="px-1.5 py-1.5">
+                                    <p class="mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400"><i class="bi bi-display"></i> ไซต์แสดงผล</p>
+                                    <div class="flex gap-1">
+                                        <button v-for="m in ['auto', 'desktop', 'mobile']" :key="m" class="flex-1 rounded-lg border py-1.5 text-[11px] transition" :class="viewMode === m ? 'border-pjs-blue bg-pjs-blue/10 font-medium text-pjs-blue' : 'border-slate-200 text-slate-600'" @click="setViewMode(m)">{{ m === 'auto' ? 'อัตโนมัติ' : m === 'desktop' ? 'เดสก์ท็อป' : 'มือถือ' }}</button>
+                                    </div>
+                                </div>
                             </div>
                         </Transition>
                     </div>
