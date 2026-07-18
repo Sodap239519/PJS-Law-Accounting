@@ -1,120 +1,81 @@
 @extends('layouts.boomerang')
 
+@section('title', 'ข่าวสารและกิจกรรม - PJS กฎหมายและการบัญชี')
+
 @section('content')
 <!-- Hero -->
-<section class="module-cover parallax text-center" data-background="{{ asset('frontend/images/module-17.jpg') }}" data-overlay="0.3">
+<section class="module-cover parallax text-center" data-background="{{ asset('frontend/images/module-17.jpg') }}" data-overlay="0.4" style="padding:120px 0 70px;">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2>{{ __('common.news') }}</h2>
-                <p>
-                    @if(app()->getLocale() === 'th')
-                        ข่าวสารและกิจกรรมของเรา
-                    @else
-                        Our news and activities
-                    @endif
-                </p>
+                <h2 class="m-b-10">ข่าวสารและกิจกรรม</h2>
+                <p class="lead">ข่าวสารและกิจกรรมของเรา</p>
             </div>
         </div>
     </div>
 </section>
 <!-- Hero end-->
 
-<!-- Blog -->
 <section class="module">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
                 @if(isset($news) && $news->count() > 0)
-                    @foreach($news as $article)
-                    <!-- Post -->
-                    <article class="post">
-                        <div class="post-preview">
-                            <a href="{{ route('news.show', $article) }}">
-                                @if($article->featured_image)
-                                    <img src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->{'title_' . app()->getLocale()} }}">
-                                @else
-                                    <img src="{{ asset('frontend/images/blog/default.jpg') }}" alt="{{ $article->{'title_' . app()->getLocale()} }}">
-                                @endif
-                            </a>
+                    <div class="row">
+                        @foreach($news as $article)
+                        <div class="col-md-6 m-b-30">
+                            <article class="post h-100">
+                                <div class="post-preview">
+                                    <a href="{{ route('news.show', $article->slug) }}">
+                                        <img src="{{ $article->getFirstMediaUrl('cover') ?: asset('frontend/images/blog/default.jpg') }}" alt="{{ $article->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
+                                    </a>
+                                </div>
+                                <div class="post-wrapper">
+                                    <div class="post-header">
+                                        <ul class="post-meta">
+                                            <li><i class="bi bi-calendar3"></i> {{ optional($article->published_at)->format('d/m/Y') }}</li>
+                                            @if($article->category)<li><i class="bi bi-tag"></i> {{ $article->category->name }}</li>@endif
+                                        </ul>
+                                        <h5 class="post-title"><a href="{{ route('news.show', $article->slug) }}">{{ $article->title }}</a></h5>
+                                    </div>
+                                    <div class="post-content">
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($article->excerpt ?: $article->content), 120) }}</p>
+                                    </div>
+                                    <div class="post-more"><a href="{{ route('news.show', $article->slug) }}">อ่านเพิ่มเติม <i class="bi bi-arrow-right"></i></a></div>
+                                </div>
+                            </article>
                         </div>
-                        <div class="post-wrapper">
-                            <div class="post-header">
-                                <h2 class="post-title"><a href="{{ route('news.show', $article) }}">{{ $article->{'title_' . app()->getLocale()} }}</a></h2>
-                                <ul class="post-meta">
-                                    <li>{{ $article->published_at->format('F d, Y') }}</li>
-                                    @if($article->category)
-                                    <li><a href="{{ route('news.index', ['category' => $article->category->id]) }}">{{ $article->category->{'name_' . app()->getLocale()} }}</a></li>
-                                    @endif
-                                    <li>{{ $article->view_count }} {{ __('common.views') }}</li>
-                                </ul>
-                            </div>
-                            <div class="post-content">
-                                <p>{{ $article->{'excerpt_' . app()->getLocale()} ?? Str::limit(strip_tags($article->{'content_' . app()->getLocale()}), 200) }}</p>
-                            </div>
-                            <div class="post-more"><a href="{{ route('news.show', $article) }}">{{ __('common.read_more') }}</a></div>
-                        </div>
-                    </article>
-                    <!-- Post end-->
-                    @endforeach
-
-                    <!-- Pagination -->
-                    @if($news->hasPages())
-                    <div class="pagination">
-                        {{ $news->links() }}
+                        @endforeach
                     </div>
+
+                    @if($news->hasPages())
+                    <div class="m-t-20">{{ $news->links() }}</div>
                     @endif
                 @else
-                    <!-- Empty State -->
-                    <div class="text-center">
-                        <div class="space" data-MY="60px"></div>
-                        <h3>
-                            @if(app()->getLocale() === 'th')
-                                ไม่พบข่าวสาร
-                            @else
-                                No news found
-                            @endif
-                        </h3>
-                        <p>
-                            @if(app()->getLocale() === 'th')
-                                กรุณากลับมาตรวจสอบอีกครั้งในภายหลัง
-                            @else
-                                Please check back later
-                            @endif
-                        </p>
-                        <div class="space" data-MY="60px"></div>
+                    <div class="text-center p-y-60">
+                        <h3>ไม่พบข่าวสาร</h3>
+                        <p>กรุณากลับมาตรวจสอบอีกครั้งในภายหลัง</p>
                     </div>
                 @endif
             </div>
-            
+
             <!-- Sidebar -->
             <div class="col-lg-4">
                 <aside class="sidebar">
-                    <!-- Widget Categories -->
                     <div class="widget">
-                        <h5 class="widget-title">{{ __('common.category') }}</h5>
+                        <h5 class="widget-title">หมวดหมู่</h5>
                         <ul class="category-list">
-                            <li>
-                                <a href="{{ route('news.index') }}" class="{{ !request('category') ? 'active' : '' }}">
-                                    {{ __('common.all_categories') }}
-                                </a>
-                            </li>
+                            <li><a href="{{ route('news.index') }}" class="{{ !request('category') ? 'active' : '' }}">ทั้งหมด</a></li>
                             @if(isset($categories))
                                 @foreach($categories as $category)
-                                <li>
-                                    <a href="{{ route('news.index', ['category' => $category->id]) }}" class="{{ request('category') == $category->id ? 'active' : '' }}">
-                                        {{ $category->{'name_' . app()->getLocale()} }}
-                                    </a>
-                                </li>
+                                <li><a href="{{ route('news.index', ['category' => $category->slug]) }}" class="{{ request('category') == $category->slug ? 'active' : '' }}">{{ $category->name }}</a></li>
                                 @endforeach
                             @endif
                         </ul>
                     </div>
-                    <!-- Widget Categories end-->
                 </aside>
             </div>
         </div>
     </div>
 </section>
-<!-- Blog end-->
 @endsection

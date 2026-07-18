@@ -74,9 +74,13 @@
             }
             .pjs-a2hs .pjs-install:hover { filter: brightness(1.05); }
             .pjs-a2hs .pjs-close {
-                flex:0 0 auto; border:none; background:transparent; color:#9ca3af;
-                font-size:22px; line-height:1; cursor:pointer; padding:2px 4px;
+                position:absolute; top:-9px; right:-9px; width:26px; height:26px;
+                display:flex; align-items:center; justify-content:center;
+                border:1px solid #e5e7eb; border-radius:50%; background:#fff; color:#6b7280;
+                font-size:16px; line-height:1; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.15);
+                transition: all .15s;
             }
+            .pjs-a2hs .pjs-close:hover { background:#f3f4f6; color:#111827; }
         </style>
 
         <!-- Scripts -->
@@ -125,9 +129,9 @@
                 });
             }
 
-            // ===== เพิ่มลงหน้าจอหลัก + เตือนใหม่ทุก 24 ชม. =====
+            // ===== เพิ่มลงหน้าจอหลัก (แสดงทุกครั้งที่เข้าเว็บจนกว่าจะติดตั้ง) =====
             (function () {
-                var KEY = 'pjs-a2hs-last', DAY = 24 * 60 * 60 * 1000, deferred = null;
+                var deferred = null;
                 var banner = document.getElementById('pjs-a2hs');
                 var installBtn = document.getElementById('pjs-a2hs-install');
                 var closeBtn = document.getElementById('pjs-a2hs-close');
@@ -139,12 +143,8 @@
                 function isIOS() {
                     return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
                 }
-                function canShow() {
-                    if (isInstalled()) return false;
-                    var last = parseInt(localStorage.getItem(KEY) || '0', 10);
-                    return (Date.now() - last) > DAY; // เตือนใหม่ทุก 24 ชม.
-                }
-                function snooze() { try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {} }
+                // แสดงทุกครั้งที่เข้าเว็บ หากยังไม่ได้ติดตั้ง (กดกากบาทแค่ปิดชั่วคราว รอบหน้าเข้ามาโชว์อีก)
+                function canShow() { return !isInstalled(); }
 
                 window.addEventListener('beforeinstallprompt', function (e) {
                     e.preventDefault();
@@ -154,24 +154,21 @@
                 window.addEventListener('appinstalled', function () {
                     if (banner) banner.hidden = true;
                     deferred = null;
-                    try { localStorage.setItem(KEY, String(Date.now() + 3650 * DAY)); } catch (e) {} // ติดตั้งแล้ว ไม่เตือนอีก
                 });
 
                 // iOS Safari ไม่มี beforeinstallprompt → แสดงคำแนะนำแทน
-                if (isIOS() && !isInstalled() && canShow() && banner) {
+                if (isIOS() && !isInstalled() && banner) {
                     if (installBtn) installBtn.style.display = 'none';
                     if (desc) desc.textContent = 'แตะปุ่ม แชร์ แล้วเลือก “เพิ่มลงหน้าจอหลัก”';
                     banner.hidden = false;
                 }
 
                 if (installBtn) installBtn.addEventListener('click', function () {
-                    if (banner) banner.hidden = true;
-                    snooze();
                     if (deferred) { deferred.prompt(); deferred = null; }
+                    if (banner) banner.hidden = true;
                 });
                 if (closeBtn) closeBtn.addEventListener('click', function () {
-                    if (banner) banner.hidden = true;
-                    snooze();
+                    if (banner) banner.hidden = true; // ปิดเฉพาะรอบนี้ ไม่จำถาวร
                 });
             })();
         </script>

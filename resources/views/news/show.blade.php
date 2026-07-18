@@ -1,91 +1,97 @@
 @extends('layouts.boomerang')
 
+@section('title', $news->title . ' - PJS กฎหมายและการบัญชี')
+
 @section('content')
+@php($cover = $news->getFirstMediaUrl('cover'))
 <!-- Hero -->
-<section class="module-cover parallax text-center" data-background="{{ $news->featured_image ? asset('storage/' . $news->featured_image) : asset('frontend/images/module-17.jpg') }}" data-overlay="0.5">
+<section class="module-cover parallax text-center" data-background="{{ $cover ?: asset('frontend/images/module-17.jpg') }}" data-overlay="0.55" style="padding:120px 0 70px;">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>{{ $news->{'title_' . app()->getLocale()} }}</h1>
-                @if($news->category)
-                <p class="lead">{{ $news->category->{'name_' . app()->getLocale()} }}</p>
-                @endif
+                <h1 class="m-b-10">{{ $news->title }}</h1>
+                <ul class="post-meta" style="justify-content:center;">
+                    @if($news->published_at)<li><i class="bi bi-calendar3"></i> {{ $news->published_at->format('d/m/Y') }}</li>@endif
+                    @if($news->category)<li><i class="bi bi-tag"></i> {{ $news->category->name }}</li>@endif
+                    <li><i class="bi bi-eye"></i> {{ $news->views }}</li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 <!-- Hero end-->
 
-<!-- Blog Single -->
 <section class="module">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
-                <!-- Post -->
+            <div class="col-lg-9 mx-auto">
                 <article class="post">
                     <div class="post-wrapper">
-                        <div class="post-header">
-                            <h1 class="post-title">{{ $news->{'title_' . app()->getLocale()} }}</h1>
-                            <ul class="post-meta">
-                                <li>{{ __('common.published_on') }}: {{ $news->published_at->format('F d, Y') }}</li>
-                                @if($news->category)
-                                <li><a href="{{ route('news.index', ['category' => $news->category->id]) }}">{{ $news->category->{'name_' . app()->getLocale()} }}</a></li>
-                                @endif
-                                <li>{{ $news->view_count }} {{ __('common.views') }}</li>
-                            </ul>
+                        <div class="post-content rich-content">
+                            {!! $news->content !!}
                         </div>
-                        
-                        @if($news->featured_image)
-                        <div class="post-preview">
-                            <img src="{{ asset('storage/' . $news->featured_image) }}" alt="{{ $news->{'title_' . app()->getLocale()} }}">
+
+                        {{-- แกลเลอรีรูปภาพ --}}
+                        @if($news->getMedia('gallery')->count())
+                        <div class="rich-gallery">
+                            @foreach($news->getMedia('gallery') as $img)
+                                <a href="{{ $img->getUrl() }}" data-fancybox="gallery">
+                                    <img src="{{ $img->getUrl() }}" alt="{{ $news->title }}" loading="lazy">
+                                </a>
+                            @endforeach
                         </div>
                         @endif
 
-                        <div class="post-content">
-                            {!! nl2br(e($news->{'content_' . app()->getLocale()})) !!}
+                        {{-- ไฟล์แนบ --}}
+                        @if($news->getMedia('attachments')->count())
+                        <div class="rich-files">
+                            <h6><i class="bi bi-paperclip"></i> ไฟล์แนบ</h6>
+                            @foreach($news->getMedia('attachments') as $file)
+                                <a href="{{ $file->getUrl() }}" target="_blank" class="rich-file">
+                                    <i class="bi bi-file-earmark-arrow-down"></i>
+                                    <span>{{ $file->file_name }}</span>
+                                    <small>{{ number_format($file->size / 1024, 0) }} KB</small>
+                                </a>
+                            @endforeach
                         </div>
+                        @endif
 
-                        <div class="post-nav">
-                            <a href="{{ route('news.index') }}" class="btn btn-border-d btn-circle">
-                                @if(app()->getLocale() === 'th')
-                                    กลับไปหน้าข่าว
-                                @else
-                                    Back to News
-                                @endif
-                            </a>
+                        {{-- ลิงก์ที่เกี่ยวข้อง --}}
+                        @if($news->links && $news->links->count())
+                        <div class="rich-files">
+                            <h6><i class="bi bi-link-45deg"></i> ลิงก์ที่เกี่ยวข้อง</h6>
+                            @foreach($news->links as $link)
+                                <a href="{{ $link->url }}" target="_blank" class="rich-file">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                    <span>{{ $link->label ?: $link->url }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        <div class="post-nav m-t-40">
+                            <a href="{{ route('news.index') }}" class="btn btn-border-d btn-circle"><i class="bi bi-arrow-left"></i> กลับไปหน้าข่าว</a>
                         </div>
                     </div>
                 </article>
-                <!-- Post end-->
 
-                <!-- Related News -->
                 @if(isset($relatedNews) && $relatedNews->count() > 0)
-                <div class="module">
-                    <h4 class="m-b-30">
-                        @if(app()->getLocale() === 'th')
-                            ข่าวที่เกี่ยวข้อง
-                        @else
-                            Related News
-                        @endif
-                    </h4>
+                <div class="module p-t-50">
+                    <h4 class="m-b-30">ข่าวที่เกี่ยวข้อง</h4>
                     <div class="row">
                         @foreach($relatedNews as $related)
-                        <div class="col-md-4">
+                        <div class="col-md-4 m-b-20">
                             <article class="post">
                                 <div class="post-preview">
-                                    <a href="{{ route('news.show', $related) }}">
-                                        @if($related->featured_image)
-                                            <img src="{{ asset('storage/' . $related->featured_image) }}" alt="{{ $related->{'title_' . app()->getLocale()} }}">
-                                        @else
-                                            <img src="{{ asset('frontend/images/blog/default.jpg') }}" alt="{{ $related->{'title_' . app()->getLocale()} }}">
-                                        @endif
+                                    <a href="{{ route('news.show', $related->slug) }}">
+                                        <img src="{{ $related->getFirstMediaUrl('cover') ?: asset('frontend/images/blog/default.jpg') }}" alt="{{ $related->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:8px;">
                                     </a>
                                 </div>
                                 <div class="post-wrapper">
                                     <div class="post-header">
-                                        <h6 class="post-title"><a href="{{ route('news.show', $related) }}">{{ $related->{'title_' . app()->getLocale()} }}</a></h6>
+                                        <h6 class="post-title"><a href="{{ route('news.show', $related->slug) }}">{{ $related->title }}</a></h6>
                                     </div>
-                                    <div class="post-more"><a href="{{ route('news.show', $related) }}">{{ __('common.read_more') }}</a></div>
+                                    <div class="post-more"><a href="{{ route('news.show', $related->slug) }}">อ่านเพิ่มเติม</a></div>
                                 </div>
                             </article>
                         </div>
@@ -94,33 +100,7 @@
                 </div>
                 @endif
             </div>
-            
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <aside class="sidebar">
-                    <!-- Widget Categories -->
-                    <div class="widget">
-                        <h5 class="widget-title">{{ __('common.category') }}</h5>
-                        <ul class="category-list">
-                            <li>
-                                <a href="{{ route('news.index') }}">{{ __('common.all_categories') }}</a>
-                            </li>
-                            @if(isset($categories))
-                                @foreach($categories as $category)
-                                <li>
-                                    <a href="{{ route('news.index', ['category' => $category->id]) }}" class="{{ $news->category_id == $category->id ? 'active' : '' }}">
-                                        {{ $category->{'name_' . app()->getLocale()} }}
-                                    </a>
-                                </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
-                    <!-- Widget Categories end-->
-                </aside>
-            </div>
         </div>
     </div>
 </section>
-<!-- Blog Single end-->
 @endsection

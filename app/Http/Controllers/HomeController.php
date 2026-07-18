@@ -9,11 +9,8 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        $latestNews = \App\Models\News::published()
-            ->with('category')
-            ->orderBy('published_at', 'desc')
-            ->limit(3)
-            ->get();
+        // ข่าวหน้าแรก — ตามที่เลือกในหน้าจัดการหน้าแรก (หรือ ล่าสุด)
+        $latestNews = \App\Support\HomeLayout::featuredNews();
 
         $banners = \App\Models\Banner::where('is_active', true)
             ->orderBy('sort_order')->orderBy('id')

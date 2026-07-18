@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\News;
 use App\Models\Setting;
 
 class HomeLayout
@@ -19,32 +20,61 @@ class HomeLayout
         'cta' => ['label' => 'แบนเนอร์ปิดท้าย (Call to Action)', 'icon' => 'bi bi-megaphone'],
     ];
 
-    /** รายการ section ตามลำดับที่บันทึกไว้ (เติม section ใหม่ต่อท้าย): [{key,label,icon,visible}] */
-    public static function items(): array
+    /** section ที่เลือกได้ว่าจะแสดงรายการไหน (คีย์ => จำนวนที่แสดง) */
+    public const SELECTABLE = [
+        'news' => 3,
+    ];
+
+    /** config ดิบที่บันทึกไว้ (map key => [visible, mode, items]) */
+    private static function saved(): array
     {
         $saved = json_decode(Setting::get('home_sections', ''), true);
         $saved = is_array($saved) ? $saved : [];
-
-        $items = [];
+        $map = [];
+        $order = [];
         foreach ($saved as $s) {
             $k = $s['key'] ?? null;
-            if ($k && isset(self::SECTIONS[$k]) && ! isset($items[$k])) {
-                $items[$k] = [
-                    'key' => $k,
-                    'label' => self::SECTIONS[$k]['label'],
-                    'icon' => self::SECTIONS[$k]['icon'],
-                    'visible' => (bool) ($s['visible'] ?? true),
-                ];
-            }
-        }
-        // section ที่ยังไม่เคยบันทึก → ต่อท้าย (เปิดแสดงเป็นค่าเริ่มต้น)
-        foreach (self::SECTIONS as $k => $meta) {
-            if (! isset($items[$k])) {
-                $items[$k] = ['key' => $k, 'label' => $meta['label'], 'icon' => $meta['icon'], 'visible' => true];
+            if ($k && isset(self::SECTIONS[$k]) && ! isset($map[$k])) {
+                $map[$k] = $s;
+                $order[] = $k;
             }
         }
 
-        return array_values($items);
+        return ['map' => $map, 'order' => $order];
+    }
+
+    /** รายการ section ตามลำดับ (เติม section ใหม่ต่อท้าย): [{key,label,icon,visible,selectable,mode,items}] */
+    public static function items(): array
+    {
+        ['map' => $map, 'order' => $order] = self::saved();
+
+        // section ใหม่ที่ยังไม่เคยบันทึก → ต่อท้าย
+        $keys = $order;
+        foreach (array_keys(self::SECTIONS) as $k) {
+            if (! in_array($k, $keys, true)) {
+                $keys[] = $k;
+            }
+        }
+
+        $items = [];
+        foreach ($keys as $k) {
+            $meta = self::SECTIONS[$k];
+            $s = $map[$k] ?? [];
+            $row = [
+                'key' => $k,
+                'label' => $meta['label'],
+                'icon' => $meta['icon'],
+                'visible' => (bool) ($s['visible'] ?? true),
+                'selectable' => isset(self::SELECTABLE[$k]),
+            ];
+            if ($row['selectable']) {
+                $row['mode'] = ($s['mode'] ?? 'latest') === 'selected' ? 'selected' : 'latest';
+                $row['items'] = array_values(array_filter(array_map('intval', $s['items'] ?? [])));
+            }
+            $items[] = $row;
+        }
+
+        return $items;
     }
 
     /** map สำหรับ blade: key => ['visible'=>bool, 'order'=>int] */
@@ -58,16 +88,50 @@ class HomeLayout
         return $map;
     }
 
-    /** บันทึกลำดับ + การแสดงผล */
+    /** config เฉพาะ section */
+    private static function config(string $key): array
+    {
+        foreach (self::items() as $it) {
+            if ($it['key'] === $key) {
+                return $it;
+            }
+        }
+
+        return [];
+    }
+
+    /** บันทึกลำดับ + การแสดงผล + การเลือกรายการ */
     public static function save(array $sections): void
     {
         $clean = [];
         foreach ($sections as $s) {
             $k = $s['key'] ?? null;
-            if ($k && isset(self::SECTIONS[$k])) {
-                $clean[] = ['key' => $k, 'visible' => (bool) ($s['visible'] ?? true)];
+            if (! $k || ! isset(self::SECTIONS[$k])) {
+                continue;
             }
+            $row = ['key' => $k, 'visible' => (bool) ($s['visible'] ?? true)];
+            if (isset(self::SELECTABLE[$k])) {
+                $row['mode'] = ($s['mode'] ?? 'latest') === 'selected' ? 'selected' : 'latest';
+                $row['items'] = array_values(array_filter(array_map('intval', $s['items'] ?? [])));
+            }
+            $clean[] = $row;
         }
         Setting::set('home_sections', json_encode($clean, JSON_UNESCAPED_UNICODE), 'home');
+    }
+
+    /** ข่าวที่จะแสดงหน้าแรก (ตามที่เลือก หรือ ล่าสุด) */
+    public static function featuredNews(?int $limit = null)
+    {
+        $limit ??= self::SELECTABLE['news'];
+        $cfg = self::config('news');
+
+        if (($cfg['mode'] ?? 'latest') === 'selected' && ! empty($cfg['items'])) {
+            $ids = $cfg['items'];
+            $items = News::published()->with('category')->whereIn('id', $ids)->get();
+
+            return $items->sortBy(fn ($n) => array_search($n->id, $ids))->values();
+        }
+
+        return News::published()->with('category')->orderBy('published_at', 'desc')->limit($limit)->get();
     }
 }

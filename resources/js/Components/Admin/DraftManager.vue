@@ -118,13 +118,13 @@ function discard() {
             v-if="hasDraft"
             class="flex flex-wrap items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
         >
-            <i class="bi bi-file-earmark-text text-base text-amber-500"></i>
+            <i class="bi bi-clock-history text-base text-amber-500"></i>
             <span>
-                พบ<strong>ฉบับร่าง</strong>ที่ยังไม่ได้บันทึก<span v-if="draftAt" class="text-amber-600"> (บันทึกร่างเมื่อ {{ draftAt }})</span>
+                พบ<strong>ข้อมูลที่พิมพ์ค้างไว้</strong> (ยังไม่ได้กดบันทึกลงระบบ)<span v-if="draftAt" class="text-amber-600"> — เมื่อ {{ draftAt }}</span>
             </span>
             <div class="ml-auto flex items-center gap-2">
-                <button type="button" class="btn-outline btn-sm" @click="discard"><i class="bi bi-trash"></i> ละทิ้งร่าง</button>
-                <button type="button" class="btn-primary btn-sm" @click="restore"><i class="bi bi-arrow-counterclockwise"></i> กู้คืนฉบับร่าง</button>
+                <button type="button" class="btn-outline btn-sm" @click="discard"><i class="bi bi-trash"></i> ล้างทิ้ง</button>
+                <button type="button" class="btn-primary btn-sm" @click="restore"><i class="bi bi-arrow-counterclockwise"></i> กู้คืนข้อมูล</button>
             </div>
         </div>
     </Transition>

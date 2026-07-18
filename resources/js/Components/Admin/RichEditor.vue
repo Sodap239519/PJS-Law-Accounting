@@ -73,7 +73,7 @@ const init = {
         'undo redo | blocks | bold italic underline forecolor backcolor | ' +
         'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
         'link image media table | blockquote code | removeformat | fullscreen',
-    toolbar_mode: 'sliding',
+    toolbar_mode: 'wrap',
     branding: false,
     promotion: false,
     statusbar: true,

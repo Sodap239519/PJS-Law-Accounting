@@ -1,133 +1,78 @@
 @extends('layouts.boomerang')
 
+@section('title', $case->title . ' - PJS กฎหมายและการบัญชี')
+
 @section('content')
+@php($cover = $case->getFirstMediaUrl('cover'))
 <!-- Hero -->
-<section class="module-cover parallax text-center" data-background="{{ $case->featured_image ? asset('storage/' . $case->featured_image) : asset('frontend/images/module-17.jpg') }}" data-overlay="0.5">
+<section class="module-cover parallax text-center" data-background="{{ $cover ?: asset('frontend/images/module-17.jpg') }}" data-overlay="0.55" style="padding:120px 0 70px;">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>{{ $case->{'title_' . app()->getLocale()} }}</h1>
-                @if($case->category)
-                <p class="lead">{{ $case->category->{'name_' . app()->getLocale()} }}</p>
-                @endif
+                <h1 class="m-b-10">{{ $case->title }}</h1>
+                <ul class="post-meta" style="justify-content:center;">
+                    @if($case->client_name)<li><i class="bi bi-person"></i> {{ $case->client_name }}</li>@endif
+                    @if($case->category)<li><i class="bi bi-tag"></i> {{ $case->category->name }}</li>@endif
+                    <li><i class="bi bi-eye"></i> {{ $case->views }}</li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 <!-- Hero end-->
 
-<!-- Case Study -->
 <section class="module">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <!-- Case Info -->
-                <div class="m-b-40">
-                    <ul class="post-meta">
-                        @if($case->client_name)
-                        <li>
-                            <strong>
-                                @if(app()->getLocale() === 'th')
-                                    ลูกค้า:
-                                @else
-                                    Client:
-                                @endif
-                            </strong>
-                            {{ $case->client_name }}
-                        </li>
-                        @endif
-                        @if($case->category)
-                        <li>
-                            <a href="{{ route('cases.index', ['category' => $case->category->id]) }}">{{ $case->category->{'name_' . app()->getLocale()} }}</a>
-                        </li>
-                        @endif
-                        <li>{{ $case->view_count }} {{ __('common.views') }}</li>
-                    </ul>
-                </div>
-
-                @if($case->featured_image)
-                <div class="m-b-40">
-                    <img src="{{ asset('storage/' . $case->featured_image) }}" alt="{{ $case->{'title_' . app()->getLocale()} }}">
-                </div>
-                @endif
-
-                <h1 class="m-b-20">{{ $case->{'title_' . app()->getLocale()} }}</h1>
-
-                <!-- Challenge Section -->
-                @if($case->{'challenge_' . app()->getLocale()})
-                <div class="m-b-40">
-                    <h4 class="m-b-20">
-                        @if(app()->getLocale() === 'th')
-                            ความท้าทาย
-                        @else
-                            Challenge
-                        @endif
-                    </h4>
-                    <p>{!! nl2br(e($case->{'challenge_' . app()->getLocale()})) !!}</p>
-                </div>
-                @endif
-
-                <!-- Solution Section -->
-                @if($case->{'solution_' . app()->getLocale()})
-                <div class="m-b-40">
-                    <h4 class="m-b-20">
-                        @if(app()->getLocale() === 'th')
-                            แนวทางแก้ไข
-                        @else
-                            Solution
-                        @endif
-                    </h4>
-                    <p>{!! nl2br(e($case->{'solution_' . app()->getLocale()})) !!}</p>
-                </div>
-                @endif
-
-                <!-- Result Section -->
-                @if($case->{'result_' . app()->getLocale()})
-                <div class="m-b-40">
-                    <h4 class="m-b-20">
-                        @if(app()->getLocale() === 'th')
-                            ผลลัพธ์
-                        @else
-                            Result
-                        @endif
-                    </h4>
-                    <p>{!! nl2br(e($case->{'result_' . app()->getLocale()})) !!}</p>
-                </div>
-                @endif
-
-                <!-- Gallery Images -->
-                @if(isset($case->gallery) && is_array($case->gallery) && count($case->gallery) > 0)
-                <div class="m-b-40">
-                    <h4 class="m-b-20">
-                        @if(app()->getLocale() === 'th')
-                            ภาพประกอบ
-                        @else
-                            Gallery
-                        @endif
-                    </h4>
-                    <div class="row">
-                        @foreach($case->gallery as $image)
-                        <div class="col-md-4 m-b-30">
-                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $case->{'title_' . app()->getLocale()} }}">
+            <div class="col-lg-9 mx-auto">
+                <article class="post">
+                    <div class="post-wrapper">
+                        <div class="post-content rich-content">
+                            {!! $case->content !!}
                         </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
 
-                <!-- Back Button -->
-                <div class="m-t-40">
-                    <a href="{{ route('cases.index') }}" class="btn btn-border-d btn-circle">
-                        @if(app()->getLocale() === 'th')
-                            กลับไปหน้าผลงาน
-                        @else
-                            Back to Case Studies
+                        @if($case->getMedia('gallery')->count())
+                        <div class="rich-gallery">
+                            @foreach($case->getMedia('gallery') as $img)
+                                <a href="{{ $img->getUrl() }}" data-fancybox="gallery">
+                                    <img src="{{ $img->getUrl() }}" alt="{{ $case->title }}" loading="lazy">
+                                </a>
+                            @endforeach
+                        </div>
                         @endif
-                    </a>
-                </div>
+
+                        @if($case->getMedia('attachments')->count())
+                        <div class="rich-files">
+                            <h6><i class="bi bi-paperclip"></i> ไฟล์แนบ</h6>
+                            @foreach($case->getMedia('attachments') as $file)
+                                <a href="{{ $file->getUrl() }}" target="_blank" class="rich-file">
+                                    <i class="bi bi-file-earmark-arrow-down"></i>
+                                    <span>{{ $file->file_name }}</span>
+                                    <small>{{ number_format($file->size / 1024, 0) }} KB</small>
+                                </a>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        @if($case->links && $case->links->count())
+                        <div class="rich-files">
+                            <h6><i class="bi bi-link-45deg"></i> ลิงก์ที่เกี่ยวข้อง</h6>
+                            @foreach($case->links as $link)
+                                <a href="{{ $link->url }}" target="_blank" class="rich-file">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                    <span>{{ $link->label ?: $link->url }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        <div class="post-nav m-t-40">
+                            <a href="{{ route('cases.index') }}" class="btn btn-border-d btn-circle"><i class="bi bi-arrow-left"></i> กลับไปหน้าคดีตัวอย่าง</a>
+                        </div>
+                    </div>
+                </article>
             </div>
         </div>
     </div>
 </section>
-<!-- Case Study end-->
 @endsection

@@ -37,6 +37,11 @@ const form = useForm({
 const deletedGallery = ref([]);
 const deletedAttachments = ref([]);
 
+const submitDraft = () => {
+    form.is_published = false;
+    submit();
+};
+
 const submit = () => {
     form.deleted_media = [...deletedGallery.value, ...deletedAttachments.value];
     if (isEdit.value) {
@@ -62,6 +67,7 @@ const submit = () => {
                         <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                     </label>
                     <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+                    <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
                     <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
                 </div>
             </div>

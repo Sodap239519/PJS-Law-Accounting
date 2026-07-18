@@ -117,6 +117,43 @@
         html.pjs-dark .header.scrolled { background: #1e293b !important; }
         html.pjs-dark .header.scrolled .menu-item-span { color: #e2e8f0 !important; }
 
+        /* ===== เนื้อหา rich text จาก editor (ให้แสดงเหมือนตอนแก้ไข) ===== */
+        .rich-content { font-size: 1.05rem; line-height: 1.85; color: #3f4a53; word-wrap: break-word; }
+        .rich-content > *:first-child { margin-top: 0; }
+        .rich-content h1, .rich-content h2, .rich-content h3,
+        .rich-content h4, .rich-content h5, .rich-content h6 { color: #1f2d3d; font-weight: 600; margin: 1.4em 0 .6em; line-height: 1.3; }
+        .rich-content h1 { font-size: 1.9rem; } .rich-content h2 { font-size: 1.6rem; }
+        .rich-content h3 { font-size: 1.35rem; } .rich-content h4 { font-size: 1.15rem; }
+        .rich-content p { margin: 0 0 1.1em; }
+        .rich-content a { color: #2563eb; text-decoration: underline; }
+        .rich-content ul, .rich-content ol { margin: 0 0 1.1em; padding-left: 1.6em; }
+        .rich-content ul { list-style: disc; } .rich-content ol { list-style: decimal; }
+        .rich-content li { margin-bottom: .4em; }
+        .rich-content img { max-width: 100%; height: auto; border-radius: 10px; margin: .4em 0; }
+        .rich-content blockquote { border-left: 4px solid #c5a647; margin: 1.2em 0; padding: .4em 1.2em; color: #64748b; background: #faf8f0; border-radius: 0 8px 8px 0; }
+        .rich-content table { width: 100%; border-collapse: collapse; margin: 1.2em 0; font-size: .95em; }
+        .rich-content table td, .rich-content table th { border: 1px solid #e2e8f0; padding: 8px 12px; }
+        .rich-content table th { background: #f8fafc; font-weight: 600; }
+        .rich-content iframe { max-width: 100%; border-radius: 10px; margin: .6em 0; }
+        .rich-content figure { margin: 1em 0; max-width: 100%; }
+        .rich-content hr { border: none; border-top: 1px solid #e5e7eb; margin: 1.6em 0; }
+
+        .rich-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin: 24px 0; }
+        .rich-gallery a { display: block; overflow: hidden; border-radius: 10px; }
+        .rich-gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; transition: transform .3s; }
+        .rich-gallery a:hover img { transform: scale(1.05); }
+
+        .rich-files { margin: 20px 0; }
+        .rich-files h6 { font-weight: 600; color: #334155; margin-bottom: 10px; }
+        .rich-file { display: flex; align-items: center; gap: 10px; padding: 11px 14px; margin-bottom: 8px; border: 1px solid #e8eef7; border-radius: 10px; background: #fbfcfe; color: #334155; text-decoration: none; transition: all .2s; }
+        .rich-file:hover { border-color: #2563eb; background: #f5f9ff; color: #2563eb; }
+        .rich-file i { font-size: 20px; color: #2563eb; }
+        .rich-file span { flex: 1; word-break: break-all; }
+        .rich-file small { color: #94a3b8; flex-shrink: 0; }
+        html.pjs-dark .rich-content { color: #cbd5e1; }
+        html.pjs-dark .rich-content h1, html.pjs-dark .rich-content h2, html.pjs-dark .rich-content h3,
+        html.pjs-dark .rich-content h4, html.pjs-dark .rich-content h5, html.pjs-dark .rich-content h6 { color: #f1f5f9; }
+
         /* Header Container */
         .header .container-fluid {
             display: flex;
