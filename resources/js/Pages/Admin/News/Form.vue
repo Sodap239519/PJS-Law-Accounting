@@ -165,6 +165,11 @@ const submit = () => {
         </form>
 
         <FloatingSaveBar :processing="form.processing">
+            <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
+                <option :value="null">— หมวดหมู่ —</option>
+                <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+            </select>
+            <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันที่เผยแพร่" />
             <label class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                 <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
             </label>
