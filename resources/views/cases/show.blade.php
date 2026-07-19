@@ -34,7 +34,7 @@
                         @if($case->getMedia('gallery')->count())
                         <div class="rich-gallery">
                             @foreach($case->getMedia('gallery') as $img)
-                                <a href="{{ $img->getUrl() }}" data-fancybox="gallery">
+                                <a href="{{ $img->getUrl() }}" class="glightbox" data-gallery="gallery">
                                     <img src="{{ $img->getUrl() }}" alt="{{ $case->title }}" loading="lazy">
                                 </a>
                             @endforeach

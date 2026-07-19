@@ -51,8 +51,8 @@
 	
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 	
-	<!-- Fancybox CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
+	<!-- GLightbox CSS (MIT — ฟรีเชิงพาณิชย์) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
     
     <!-- Custom Styles -->
@@ -996,8 +996,9 @@ body {
     <script src="{{ asset('frontend/js/custom/custom.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	
-	<!-- Fancybox JS -->
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+	<!-- GLightbox JS (MIT — ฟรีเชิงพาณิชย์) -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', function () { if (window.GLightbox) { GLightbox({ selector: '.glightbox' }); } });</script>
     
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

@@ -35,7 +35,7 @@
                         @if($news->getMedia('gallery')->count())
                         <div class="rich-gallery">
                             @foreach($news->getMedia('gallery') as $img)
-                                <a href="{{ $img->getUrl() }}" data-fancybox="gallery">
+                                <a href="{{ $img->getUrl() }}" class="glightbox" data-gallery="gallery">
                                     <img src="{{ $img->getUrl() }}" alt="{{ $news->title }}" loading="lazy">
                                 </a>
                             @endforeach
