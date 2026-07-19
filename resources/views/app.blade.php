@@ -174,8 +174,12 @@
                 function isIOS() {
                     return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
                 }
-                // แสดงทุกครั้งที่เข้าเว็บ หากยังไม่ได้ติดตั้ง (กดกากบาทแค่ปิดชั่วคราว รอบหน้าเข้ามาโชว์อีก)
-                function canShow() { return !isInstalled(); }
+                // เฉพาะมือถือ/แท็บเล็ต — ไม่แสดงบนคอมพิวเตอร์
+                function isMobile() {
+                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+                }
+                // แสดงเฉพาะมือถือ ทุกครั้งที่เข้าเว็บ หากยังไม่ได้ติดตั้ง (กดกากบาทปิดเฉพาะรอบนี้)
+                function canShow() { return isMobile() && !isInstalled(); }
 
                 window.addEventListener('beforeinstallprompt', function (e) {
                     e.preventDefault();
