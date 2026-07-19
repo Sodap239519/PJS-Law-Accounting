@@ -140,36 +140,9 @@ const submit = () => {
                         <LinksRepeater v-model="form.links" />
                     </div>
 
-                    <!-- Publish settings + actions -->
-                    <div class="pjs-card p-5">
-                        <label class="mb-1 block text-sm font-medium text-slate-600">หมวดหมู่</label>
-                        <select v-model="form.category_id" class="field mb-3">
-                            <option :value="null">— ไม่ระบุ —</option>
-                            <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
-
-                        <label class="mb-1 block text-sm font-medium text-slate-600">วันเวลาที่เผยแพร่</label>
-                        <input v-model="form.published_at" type="datetime-local" class="field" />
-                        <p v-if="isScheduled" class="mt-1.5 flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs text-amber-700">
-                            <i class="bi bi-clock"></i> ตั้งเวลาโพสต์ — จะเผยแพร่อัตโนมัติเมื่อถึงวันเวลานี้
-                        </p>
-                        <p v-else class="mt-1 mb-3 text-xs text-slate-400">ใส่วันเวลาในอนาคตเพื่อตั้งเวลาโพสต์ล่วงหน้า</p>
-
-                        <p class="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
-                            หากไม่เลือก <strong>“เผยแพร่”</strong> ระบบจะบันทึกเป็น<strong>ร่าง</strong>เท่านั้น (ยังไม่แสดงบนหน้าเว็บ)
-                        </p>
-
-                        <div class="flex flex-wrap items-center gap-2">
-                            <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
-                                <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
-                            </label>
-                            <div class="ml-auto flex flex-wrap items-center justify-end gap-2">
-                                <Link :href="route('admin.announcements.index')" class="btn-outline btn-sm">ยกเลิก</Link>
-                                <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
-                                <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
-                            </div>
-                        </div>
-                    </div>
+                    <p v-if="isScheduled" class="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                        <i class="bi bi-clock"></i> ตั้งเวลาโพสต์ — จะเผยแพร่อัตโนมัติเมื่อถึงวันเวลาที่กำหนดด้านบน
+                    </p>
                 </div>
             </div>
         </form>
