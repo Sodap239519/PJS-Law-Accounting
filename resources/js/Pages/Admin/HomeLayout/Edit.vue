@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FloatingSaveBar from '@/Components/Admin/FloatingSaveBar.vue';
 
 const props = defineProps({
     sections: { type: Array, default: () => [] },
@@ -121,5 +122,7 @@ const submit = () => form.put(route('admin.home-layout.update'), { preserveScrol
                 </div>
             </div>
         </div>
+
+        <FloatingSaveBar :processing="form.processing" @save="submit" @cancel="router.visit(route('admin.dashboard'))" />
     </AdminLayout>
 </template>

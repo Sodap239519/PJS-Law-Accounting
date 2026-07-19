@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\Announcement;
 use App\Models\CaseStudy;
 use App\Models\News;
 use App\Models\Setting;
@@ -17,6 +18,7 @@ class HomeLayout
         'team' => ['label' => 'ทีมงาน / บุคลากร', 'icon' => 'bi bi-people'],
         'cases' => ['label' => 'คดีตัวอย่าง', 'icon' => 'bi bi-bank'],
         'news' => ['label' => 'ข่าวสารและกิจกรรม', 'icon' => 'bi bi-newspaper'],
+        'announcement' => ['label' => 'ประชาสัมพันธ์', 'icon' => 'bi bi-megaphone'],
         'contact' => ['label' => 'ช่องทางการติดต่อ', 'icon' => 'bi bi-telephone'],
         'quick_contact' => ['label' => 'ปรึกษาคดีด่วน', 'icon' => 'bi bi-chat-dots'],
         'cta' => ['label' => 'แบนเนอร์ปิดท้าย (Call to Action)', 'icon' => 'bi bi-megaphone'],
@@ -27,6 +29,7 @@ class HomeLayout
         'team' => 8,
         'cases' => 3,
         'news' => 3,
+        'announcement' => 3,
     ];
 
     /** config ดิบที่บันทึกไว้ (map key => [visible, mode, items]) */
@@ -128,6 +131,7 @@ class HomeLayout
     {
         return match ($key) {
             'news' => [fn () => News::published()->with('category'), 'published_at', 'desc'],
+            'announcement' => [fn () => Announcement::published()->with('category'), 'published_at', 'desc'],
             'cases' => [fn () => CaseStudy::published()->with('category'), 'created_at', 'desc'],
             'team' => [fn () => TeamMember::where('is_active', true), 'order', 'asc'],
             default => null,

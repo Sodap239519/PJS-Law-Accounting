@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import FloatingSaveBar from '@/Components/Admin/FloatingSaveBar.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 
 const props = defineProps({
@@ -99,5 +100,7 @@ const submit = () => {
                 </button>
             </div>
         </form>
+
+        <FloatingSaveBar :processing="form.processing" :cancel-label="'ล้างการแก้ไข'" @save="submit" @cancel="form.reset()" />
     </AdminLayout>
 </template>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
 use App\Models\CaseStudy;
 use App\Models\News;
 use App\Models\TeamMember;
@@ -27,6 +28,10 @@ class HomeLayoutController extends Controller
                         'title' => $n->title,
                         'date' => optional($n->published_at)->format('d/m/Y'),
                     ]),
+                'announcement' => Announcement::published()
+                    ->orderBy('published_at', 'desc')
+                    ->get(['id', 'title', 'published_at'])
+                    ->map(fn ($a) => ['id' => $a->id, 'title' => $a->title, 'date' => optional($a->published_at)->format('d/m/Y')]),
                 'cases' => CaseStudy::published()
                     ->latest()
                     ->get(['id', 'title', 'client_name'])

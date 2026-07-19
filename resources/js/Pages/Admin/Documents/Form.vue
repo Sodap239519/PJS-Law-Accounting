@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import FloatingSaveBar from '@/Components/Admin/FloatingSaveBar.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import LocalizedFields from '@/Components/Admin/LocalizedFields.vue';
 
@@ -85,5 +86,7 @@ const submit = () => {
                 </button>
             </div>
         </form>
+
+        <FloatingSaveBar :processing="form.processing" @save="submit" @cancel="router.visit(route('admin.documents.index'))" />
     </AdminLayout>
 </template>

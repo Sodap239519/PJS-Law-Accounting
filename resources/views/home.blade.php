@@ -245,28 +245,51 @@
                     <div class="space" data-MY="60px"></div>
                 </div>
             </div>
-            <div class="row">
-                @forelse(($featuredCases ?? collect()) as $case)
-                <div class="col-md-4 mb-4" data-aos="fade-up">
-                    <article class="post h-100">
-                        <div class="post-preview">
-                            <a href="{{ route('cases.show', $case->slug) }}">
-                                <img src="{{ $case->getFirstMediaUrl('cover') ?: asset('frontend/images/portfolio/default.jpg') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
-                            </a>
-                        </div>
-                        <div class="post-wrapper">
-                            <div class="post-header">
-                                <h5 class="post-title"><a href="{{ route('cases.show', $case->slug) }}">{{ $case->title }}</a></h5>
+            @if(($featuredCases ?? collect())->count() === 1)
+                {{-- เลือกคดีเดียว → แสดงเนื้อหาเต็มแบบบทความ --}}
+                @php($case = $featuredCases->first())
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="post">
+                            <div class="post-wrapper">
+                                @if($case->getFirstMediaUrl('cover'))
+                                <div class="post-preview m-b-30">
+                                    <img src="{{ $case->getFirstMediaUrl('cover') }}" alt="{{ $case->title }}" style="width:100%;border-radius:12px;">
+                                </div>
+                                @endif
+                                <div class="post-header">
+                                    <h3 class="post-title">{{ $case->title }}</h3>
+                                    @if($case->client_name)<div class="post-meta"><i class="bi bi-person"></i> {{ $case->client_name }}</div>@endif
+                                </div>
+                                <div class="post-content rich-content">{!! $case->content !!}</div>
                             </div>
-                            <div class="post-content"><p>{{ \Illuminate\Support\Str::limit(strip_tags($case->content), 100) }}</p></div>
-                            <div class="post-more"><a href="{{ route('cases.show', $case->slug) }}">อ่านเพิ่มเติม</a></div>
                         </div>
-                    </article>
+                    </div>
                 </div>
-                @empty
-                <div class="col-md-12 text-center text-muted py-4">ยังไม่มีคดีตัวอย่าง</div>
-                @endforelse
-            </div>
+            @else
+                <div class="row">
+                    @forelse(($featuredCases ?? collect()) as $case)
+                    <div class="col-md-4 mb-4" data-aos="fade-up">
+                        <article class="post h-100">
+                            <div class="post-preview">
+                                <a href="{{ route('cases.show', $case->slug) }}">
+                                    <img src="{{ $case->getFirstMediaUrl('cover') ?: asset('frontend/images/portfolio/default.jpg') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
+                                </a>
+                            </div>
+                            <div class="post-wrapper">
+                                <div class="post-header">
+                                    <h5 class="post-title"><a href="{{ route('cases.show', $case->slug) }}">{{ $case->title }}</a></h5>
+                                </div>
+                                <div class="post-content"><p>{{ \Illuminate\Support\Str::limit(strip_tags($case->content), 100) }}</p></div>
+                                <div class="post-more"><a href="{{ route('cases.show', $case->slug) }}">อ่านเพิ่มเติม</a></div>
+                            </div>
+                        </article>
+                    </div>
+                    @empty
+                    <div class="col-md-12 text-center text-muted py-4">ยังไม่มีคดีตัวอย่าง</div>
+                    @endforelse
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12 text-center m-t-20">
                     <a class="btn btn-circle btn-outline-brand" href="{{ route('cases.index') }}">ดูคดีตัวอย่างทั้งหมด</a>
@@ -339,6 +362,42 @@
     </div>
 </section>
 <!-- Latest News end -->
+
+    <!-- ประชาสัมพันธ์ -->
+    <section class="module bg-gray" id="announcements" style="{{ $hl('announcement') }}" data-aos="fade-up">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 m-auto text-center">
+                    <h1>ประชาสัมพันธ์</h1>
+                    <p class="lead">ข่าวประชาสัมพันธ์และประกาศจากเรา</p>
+                </div>
+            </div>
+            <div class="row"><div class="col-md-12"><div class="space" data-MY="40px"></div></div></div>
+            <div class="row">
+                @forelse(($featuredAnnouncements ?? collect()) as $pr)
+                <div class="col-md-4 mb-4" data-aos="fade-up">
+                    <article class="post h-100">
+                        @if($pr->getFirstMediaUrl('cover'))
+                        <div class="post-preview">
+                            <img src="{{ $pr->getFirstMediaUrl('cover') }}" alt="{{ $pr->title }}" style="aspect-ratio:4/5;object-fit:cover;width:100%;border-radius:10px;">
+                        </div>
+                        @endif
+                        <div class="post-wrapper">
+                            <div class="post-header">
+                                <h5 class="post-title">{{ $pr->title }}</h5>
+                                <div class="post-meta">{{ optional($pr->published_at)->locale('th')->translatedFormat('d F Y') }}</div>
+                            </div>
+                            <div class="post-content"><p>{{ \Illuminate\Support\Str::limit(strip_tags($pr->excerpt ?: $pr->content), 140) }}</p></div>
+                        </div>
+                    </article>
+                </div>
+                @empty
+                <div class="col-md-12 text-center text-muted py-4">ยังไม่มีประชาสัมพันธ์</div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+    <!-- ประชาสัมพันธ์ end -->
 
     <!-- Contact Info / ช่องทางการติดต่อ -->
     <section class="module bg-gray" style="{{ $hl('contact') }}">

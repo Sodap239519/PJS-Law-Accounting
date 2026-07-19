@@ -14,12 +14,13 @@ const show = ref(false);
 
 const compute = () => {
     const el = document.getElementById(props.target);
-    if (!el) {
-        show.value = false;
+    if (el) {
+        // โผล่เมื่อแถบปุ่มบนเลื่อนพ้นจอ (ขอบล่างอยู่เหนือ header ~64px)
+        show.value = el.getBoundingClientRect().bottom < 64;
         return;
     }
-    // โผล่เมื่อแถบปุ่มบนเลื่อนพ้นจอ (ขอบล่างอยู่เหนือ header ~64px)
-    show.value = el.getBoundingClientRect().bottom < 64;
+    // ไม่มีแถบปุ่มบน → โผล่เมื่อเลื่อนหน้าลงพอสมควร (ใช้ได้ทุกหน้า)
+    show.value = window.scrollY > 220;
 };
 
 onMounted(() => {
