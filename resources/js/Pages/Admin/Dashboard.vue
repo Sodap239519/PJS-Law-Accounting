@@ -34,8 +34,6 @@ const tasks = computed(() => [
     { label: 'ข้อความรอตอบ', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope' },
     { label: 'ข่าวฉบับร่าง', value: props.meta.draftNews ?? 0, route: 'admin.news.index', icon: 'bi bi-file-earmark' },
     { label: 'ประชาสัมพันธ์ฉบับร่าง', value: props.meta.draftAnnouncements ?? 0, route: 'admin.announcements.index', icon: 'bi bi-megaphone' },
-    { label: 'คดีฉบับร่าง', value: props.meta.draftCaseStudies ?? 0, route: 'admin.case-studies.index', icon: 'bi bi-bank' },
-    { label: 'แบนเนอร์', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'bi bi-image' },
 ]);
 
 const addPr = (date) => {

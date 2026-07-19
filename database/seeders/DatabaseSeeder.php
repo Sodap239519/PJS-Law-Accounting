@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             TeamMemberSeeder::class,
             NewsSeeder::class,
+            NewsPr1Seeder::class,
             CaseStudySeeder::class,
             DailyStatSeeder::class,
         ]);
