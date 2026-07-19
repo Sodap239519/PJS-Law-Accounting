@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AboutPage;
 use App\Models\Announcement;
 use App\Models\CaseStudy;
 use App\Models\News;
@@ -20,6 +21,17 @@ class HomeLayoutController extends Controller
             'sections' => HomeLayout::items(),
             // รายการที่เลือกได้ต่อ section
             'available' => [
+                'about' => collect(AboutPage::singleton()->sections ?? [])
+                    ->values()
+                    ->map(fn ($s, $i) => [
+                        'id' => $i + 1, // 1-based (กัน save() กรอง 0 ทิ้ง)
+                        'title' => $s['heading'] ?? ('บล็อกที่ '.($i + 1)),
+                        'date' => match ($s['position'] ?? 'left') {
+                            'full' => 'เต็มความกว้าง',
+                            'right' => 'รูปขวา',
+                            default => 'รูปซ้าย',
+                        },
+                    ]),
                 'news' => News::published()
                     ->orderBy('published_at', 'desc')
                     ->get(['id', 'title', 'published_at'])

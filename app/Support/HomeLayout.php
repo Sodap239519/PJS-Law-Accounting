@@ -26,6 +26,7 @@ class HomeLayout
 
     /** section ที่เลือกได้ว่าจะแสดงรายการไหน (คีย์ => จำนวนที่แสดงเริ่มต้น) */
     public const SELECTABLE = [
+        'about' => 2,
         'team' => 8,
         'cases' => 3,
         'news' => 3,
@@ -162,5 +163,32 @@ class HomeLayout
     public static function featuredNews()
     {
         return self::featured('news');
+    }
+
+    /**
+     * บล็อกเนื้อหา "เกี่ยวกับเรา" ที่จะแสดงหน้าแรก
+     * (ใช้ลำดับบล็อกเป็น id แบบ 1-based เพราะ save() กรองค่า 0 ทิ้ง)
+     */
+    public static function aboutSections(\App\Models\AboutPage $about): array
+    {
+        $sections = is_array($about->sections) ? array_values($about->sections) : [];
+        if (empty($sections)) {
+            return [];
+        }
+
+        $cfg = self::config('about');
+        if (($cfg['mode'] ?? 'latest') === 'selected' && ! empty($cfg['items'])) {
+            $picked = [];
+            foreach ($cfg['items'] as $id) {
+                $i = (int) $id - 1; // 1-based → index
+                if (isset($sections[$i])) {
+                    $picked[] = $sections[$i];
+                }
+            }
+
+            return $picked;
+        }
+
+        return array_slice($sections, 0, self::SELECTABLE['about'] ?? 2);
     }
 }

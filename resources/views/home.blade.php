@@ -64,9 +64,10 @@
                 </div>
             </div>
 
-            @if(!empty($about->sections))
-                {{-- ดึงเนื้อหาจากหน้าเกี่ยวกับเรา (2 section แรก) --}}
-                @foreach(array_slice($about->sections, 0, 2) as $idx => $s)
+            @php $aboutBlocks = \App\Support\HomeLayout::aboutSections($about); @endphp
+            @if(!empty($aboutBlocks))
+                {{-- ดึงเนื้อหาจากหน้าเกี่ยวกับเรา (ตามที่เลือกในจัดการหน้าแรก) --}}
+                @foreach($aboutBlocks as $idx => $s)
                     @if(($s['position'] ?? 'left') === 'full')
                         <div class="row align-items-center m-b-80 {{ $idx > 0 ? 'mt-5' : '' }}">
                             <div class="col-lg-10 m-auto">
