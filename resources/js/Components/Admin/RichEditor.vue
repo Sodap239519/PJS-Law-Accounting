@@ -16,7 +16,6 @@ const value = computed({
 // สถานะโหลดตัวแก้ไข (TinyMCE โหลดจาก CDN — ใช้เวลาสักครู่)
 const ready = ref(false);
 const loadPct = ref(0);
-const toolbarExpanded = ref(false); // มือถือ: ย่อเครื่องมือเหลือ 2 แถว
 let trickle = null;
 
 onMounted(() => {
@@ -76,7 +75,7 @@ const init = {
         'link image media table | blockquote code | removeformat | fullscreen',
     // ขนาดฟอนต์ให้เลือก (หน้าเว็บจะแสดงตามที่เลือกจริง)
     fontsize_formats: '12px 14px 16px 18px 20px 24px 28px 32px 36px 42px 48px',
-    toolbar_mode: 'wrap',
+    toolbar_mode: 'scrolling', // แถบเครื่องมือแถวเดียว เลื่อนแนวนอนได้ (ดีบนมือถือ)
     branding: false,
     promotion: false,
     statusbar: true,
@@ -92,13 +91,8 @@ const init = {
 </script>
 
 <template>
-    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200" :class="{ 'tb-collapsed': !toolbarExpanded }">
+    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200">
         <Editor v-model="value" :tinymce-script-src="scriptSrc" :init="init" @init="onReady" />
-
-        <!-- ปุ่มแสดงเครื่องมือเพิ่มเติม (เฉพาะมือถือ) -->
-        <button v-if="ready" type="button" class="tb-more" @click="toolbarExpanded = !toolbarExpanded">
-            {{ toolbarExpanded ? 'ย่อ' : 'เพิ่มเติม' }} <i class="bi" :class="toolbarExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-        </button>
 
         <!-- Loading overlay + percentage -->
         <Transition leave-active-class="transition-opacity duration-300" leave-to-class="opacity-0">
@@ -123,36 +117,10 @@ const init = {
     border-radius: 0 !important;
 }
 
-/* ปุ่ม "เพิ่มเติม" ซ่อนไว้บนจอใหญ่ */
-.tinymce-wrap .tb-more {
-    display: none;
-}
-
-/* จอมือถือ: ซ่อนเมนูบาร์ + ย่อแถบเครื่องมือเหลือ ~2 แถว + ปุ่มเพิ่มเติม */
+/* จอมือถือ: ซ่อนเมนูบาร์ (ประหยัดพื้นที่) — แถบเครื่องมือเลื่อนแนวนอนได้เอง */
 @media (max-width: 640px) {
     .tinymce-wrap .tox-menubar {
         display: none !important;
-    }
-    .tinymce-wrap.tb-collapsed .tox-toolbar__primary {
-        max-height: 84px;
-        overflow: hidden;
-    }
-    .tinymce-wrap .tb-more {
-        position: absolute;
-        top: 5px;
-        right: 6px;
-        z-index: 5;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 11px;
-        font-weight: 500;
-        color: #2563eb;
-        background: #eff6ff;
-        border: 1px solid #dbeafe;
-        border-radius: 999px;
-        padding: 3px 10px;
-        cursor: pointer;
     }
 }
 </style>
