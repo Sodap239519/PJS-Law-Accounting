@@ -78,11 +78,11 @@ const submit = () => {
                 <p v-if="form.errors.file" class="mt-1 text-sm text-red-500">{{ form.errors.file }}</p>
             </div>
 
-            <div class="flex gap-2">
+            <div class="flex justify-end gap-2">
+                <Link :href="route('admin.documents.index')" class="rounded-lg border px-5 py-2.5 text-center text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
                 <button type="submit" :disabled="form.processing" class="rounded-lg bg-pjs-blue px-5 py-2.5 text-sm font-medium text-white hover:bg-pjs-blue-dark disabled:opacity-50">
                     {{ isEdit ? 'บันทึกการแก้ไข' : 'เพิ่มเอกสาร' }}
                 </button>
-                <Link :href="route('admin.documents.index')" class="rounded-lg border px-5 py-2.5 text-center text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
             </div>
         </form>
     </AdminLayout>

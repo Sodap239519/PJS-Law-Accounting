@@ -41,11 +41,11 @@ class DocumentController extends Controller
         $document = Document::where('is_active', true)
             ->findOrFail($id);
 
+        $media = $document->getFirstMedia('file');
+        abort_unless($media, 404);
+
         $document->incrementDownloads();
 
-        return response()->download(
-            storage_path('app/' . $document->file_path),
-            $document->file_name
-        );
+        return response()->download($media->getPath(), $media->file_name);
     }
 }

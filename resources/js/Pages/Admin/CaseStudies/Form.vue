@@ -148,8 +148,11 @@ const submit = () => {
                             <label class="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600">
                                 <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                             </label>
-                            <Link :href="route('admin.case-studies.index')" class="btn-outline ml-auto">ยกเลิก</Link>
-                            <button type="submit" :disabled="form.processing" class="btn-primary">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                            <div class="ml-auto flex flex-wrap items-center justify-end gap-2">
+                                <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+                                <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
+                                <button type="submit" :disabled="form.processing" class="btn-primary btn-sm">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+                            </div>
                         </div>
                     </div>
                 </div>

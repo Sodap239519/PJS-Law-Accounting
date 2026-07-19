@@ -1,219 +1,113 @@
-@extends('layouts.frontend')
+@extends('layouts.boomerang')
+
+@section('title', 'เอกสารดาวน์โหลด - PJS กฎหมายและการบัญชี')
+
+@php
+    function pjsFileIcon($ext) {
+        $ext = strtolower($ext);
+        return match(true) {
+            in_array($ext, ['pdf']) => ['bi bi-file-earmark-pdf', '#e11d48'],
+            in_array($ext, ['doc','docx']) => ['bi bi-file-earmark-word', '#2563eb'],
+            in_array($ext, ['xls','xlsx']) => ['bi bi-file-earmark-excel', '#16a34a'],
+            in_array($ext, ['ppt','pptx']) => ['bi bi-file-earmark-ppt', '#ea580c'],
+            in_array($ext, ['jpg','jpeg','png','gif','webp']) => ['bi bi-file-earmark-image', '#7c3aed'],
+            default => ['bi bi-file-earmark', '#64748b'],
+        };
+    }
+@endphp
 
 @section('content')
-<!-- Page Header -->
-<div class="bg-gradient-to-r from-pjs-blue to-pjs-blue-dark py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ __('common.downloads') }}</h1>
-            <p class="text-xl text-gray-300">
-                @if(app()->getLocale() === 'th')
-                    เอกสารและแบบฟอร์มที่จำเป็นสำหรับคุณ
-                @else
-                    Essential documents and forms for you
-                @endif
-            </p>
+<!-- Hero -->
+<section class="module-cover parallax text-center" data-background="{{ asset('frontend/images/module-17.jpg') }}" data-overlay="0.45" style="padding:120px 0 70px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="m-b-10">เอกสารดาวน์โหลด</h2>
+                <p class="lead">เอกสารและแบบฟอร์มที่จำเป็นสำหรับคุณ</p>
+            </div>
         </div>
     </div>
-</div>
+</section>
+<!-- Hero end -->
 
-<div class="py-12 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Sidebar - Category Filter -->
-            <aside class="lg:w-64 flex-shrink-0">
-                <div class="bg-white rounded-lg shadow-md p-6 sticky top-24">
-                    <h3 class="text-lg font-bold text-pjs-blue mb-4">{{ __('common.category') }}</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="{{ route('documents.index') }}" 
-                               class="block px-4 py-2 rounded {{ !request('category') ? 'bg-pjs-gold text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-                                {{ __('common.all_categories') }}
-                            </a>
-                        </li>
-                        @if(isset($categories))
-                            @foreach($categories as $category)
-                            <li>
-                                <a href="{{ route('documents.index', ['category' => $category->id]) }}" 
-                                   class="block px-4 py-2 rounded {{ request('category') == $category->id ? 'bg-pjs-gold text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-                                    {{ $category->{'name_' . app()->getLocale()} }}
-                                </a>
-                            </li>
-                            @endforeach
-                        @endif
-                    </ul>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="flex-1">
-                @if(isset($documents) && $documents->count() > 0)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <!-- Desktop Table View -->
-                    <div class="hidden lg:block overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-pjs-blue">
-                                <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                        @if(app()->getLocale() === 'th')
-                                            ชื่อเอกสาร
-                                        @else
-                                            Document Name
-                                        @endif
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                        {{ __('common.category') }}
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                        @if(app()->getLocale() === 'th')
-                                            ขนาดไฟล์
-                                        @else
-                                            File Size
-                                        @endif
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                        {{ __('common.downloads_count') }}
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">
-                                        @if(app()->getLocale() === 'th')
-                                            ดาวน์โหลด
-                                        @else
-                                            Download
-                                        @endif
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($documents as $document)
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-start">
-                                            <div class="flex-shrink-0">
-                                                <svg class="w-10 h-10 text-pjs-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                                                </svg>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-bold text-pjs-blue">
-                                                    {{ $document->{'title_' . app()->getLocale()} }}
-                                                </div>
-                                                @if($document->{'description_' . app()->getLocale()})
-                                                <div class="text-sm text-gray-500 mt-1">
-                                                    {{ Str::limit($document->{'description_' . app()->getLocale()}, 100) }}
-                                                </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($document->category)
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-pjs-blue/10 text-pjs-blue">
-                                            {{ $document->category->{'name_' . app()->getLocale()} }}
-                                        </span>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $document->file_size_formatted ?? '-' }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1 text-pjs-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
-                                            </svg>
-                                            {{ $document->downloads }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                        <a href="{{ route('documents.download', $document) }}" 
-                                           class="inline-flex items-center px-4 py-2 bg-pjs-gold hover:bg-pjs-gold-dark text-white font-semibold rounded-md transition duration-150">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3 3m0 0l-3-3m3 3V8"/>
-                                            </svg>
-                                            {{ __('common.download') }}
-                                        </a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Mobile Card View -->
-                    <div class="lg:hidden divide-y divide-gray-200">
-                        @foreach($documents as $document)
-                        <div class="p-6 hover:bg-gray-50 transition">
-                            <div class="flex items-start mb-4">
-                                <svg class="w-10 h-10 text-pjs-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                                </svg>
-                                <div class="ml-4 flex-1">
-                                    <h3 class="text-lg font-bold text-pjs-blue mb-1">
-                                        {{ $document->{'title_' . app()->getLocale()} }}
-                                    </h3>
-                                    @if($document->category)
-                                    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-pjs-blue/10 text-pjs-blue mb-2">
-                                        {{ $document->category->{'name_' . app()->getLocale()} }}
-                                    </span>
-                                    @endif
-                                    @if($document->{'description_' . app()->getLocale()})
-                                    <p class="text-sm text-gray-600 mb-3">
-                                        {{ Str::limit($document->{'description_' . app()->getLocale()}, 150) }}
-                                    </p>
-                                    @endif
-                                    <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                                        <span>{{ $document->file_size_formatted ?? '-' }}</span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
-                                            </svg>
-                                            {{ $document->downloads }}
-                                        </span>
-                                    </div>
-                                    <a href="{{ route('documents.download', $document) }}" 
-                                       class="inline-flex items-center px-4 py-2 bg-pjs-gold hover:bg-pjs-gold-dark text-white font-semibold rounded-md transition duration-150">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3 3m0 0l-3-3m3 3V8"/>
-                                        </svg>
-                                        {{ __('common.download') }}
-                                    </a>
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                @if($documents->count())
+                <div class="pjs-doc-list">
+                    @foreach($documents as $doc)
+                        @php($media = $doc->getFirstMedia('file'))
+                        @php([$ic, $color] = pjsFileIcon($media?->extension ?? ''))
+                        <div class="pjs-doc-item">
+                            <span class="pjs-doc-icon" style="color:{{ $color }}"><i class="{{ $ic }}"></i></span>
+                            <div class="pjs-doc-body">
+                                <h5>{{ $doc->title }}</h5>
+                                @if($doc->description)<p>{{ $doc->description }}</p>@endif
+                                <div class="pjs-doc-meta">
+                                    @if($doc->category)<span><i class="bi bi-tag"></i> {{ $doc->category->name }}</span>@endif
+                                    @if($media)<span><i class="bi bi-hdd"></i> {{ number_format($media->size / 1024, 0) }} KB</span>@endif
+                                    <span><i class="bi bi-download"></i> {{ $doc->downloads }} ครั้ง</span>
                                 </div>
                             </div>
+                            @if($media)
+                            <a href="{{ route('documents.download', $doc->id) }}" class="pjs-doc-btn"><i class="bi bi-download"></i> ดาวน์โหลด</a>
+                            @endif
                         </div>
-                        @endforeach
-                    </div>
+                    @endforeach
                 </div>
 
-                <!-- Pagination -->
                 @if($documents->hasPages())
-                <div class="mt-8">
-                    {{ $documents->links() }}
-                </div>
+                <div class="m-t-30">{{ $documents->links() }}</div>
                 @endif
-
                 @else
-                <!-- Empty State -->
-                <div class="bg-white rounded-lg shadow-md p-12 text-center">
-                    <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">
-                        @if(app()->getLocale() === 'th')
-                            ไม่พบเอกสาร
-                        @else
-                            No documents found
-                        @endif
-                    </h3>
-                    <p class="text-gray-600">
-                        @if(app()->getLocale() === 'th')
-                            กรุณากลับมาตรวจสอบอีกครั้งในภายหลัง
-                        @else
-                            Please check back later
-                        @endif
-                    </p>
+                <div class="text-center p-y-60">
+                    <i class="bi bi-folder2-open" style="font-size:56px;color:#cbd5e1"></i>
+                    <h4 class="m-t-20">ยังไม่มีเอกสาร</h4>
+                    <p class="text-muted">กรุณากลับมาตรวจสอบอีกครั้งในภายหลัง</p>
                 </div>
                 @endif
-            </main>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <aside class="sidebar">
+                    <div class="widget">
+                        <h5 class="widget-title">หมวดหมู่</h5>
+                        <ul class="category-list">
+                            <li><a href="{{ route('documents.index') }}" class="{{ !request('category') ? 'active' : '' }}">ทั้งหมด</a></li>
+                            @foreach($categories as $category)
+                            <li><a href="{{ route('documents.index', ['category' => $category->slug]) }}" class="{{ request('category') == $category->slug ? 'active' : '' }}">{{ $category->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </aside>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+<style>
+    .pjs-doc-list { display: flex; flex-direction: column; gap: 14px; }
+    .pjs-doc-item {
+        display: flex; align-items: center; gap: 16px;
+        background: #fff; border: 1px solid #eef2f7; border-radius: 14px;
+        padding: 16px 18px; transition: all .2s; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .pjs-doc-item:hover { border-color: #d4af37; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+    .pjs-doc-icon { font-size: 40px; flex: 0 0 auto; line-height: 1; }
+    .pjs-doc-body { flex: 1 1 auto; min-width: 0; }
+    .pjs-doc-body h5 { margin: 0 0 4px; font-weight: 600; color: #1f2937; }
+    .pjs-doc-body p { margin: 0 0 6px; color: #6b7280; font-size: .95em; }
+    .pjs-doc-meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: .85em; color: #94a3b8; }
+    .pjs-doc-btn {
+        flex: 0 0 auto; background: linear-gradient(135deg,#d4af37,#b8942f); color: #fff !important;
+        padding: 10px 18px; border-radius: 10px; text-decoration: none; font-weight: 500; white-space: nowrap;
+    }
+    .pjs-doc-btn:hover { filter: brightness(1.05); color: #fff; }
+    @media (max-width: 575px) {
+        .pjs-doc-item { flex-wrap: wrap; }
+        .pjs-doc-btn { width: 100%; text-align: center; }
+    }
+</style>
 @endsection
