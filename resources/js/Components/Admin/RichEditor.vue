@@ -71,9 +71,11 @@ const init = {
     },
     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons',
     toolbar:
-        'undo redo | blocks | bold italic underline forecolor backcolor | ' +
+        'undo redo | blocks fontsize | bold italic underline forecolor backcolor | ' +
         'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
         'link image media table | blockquote code | removeformat | fullscreen',
+    // ขนาดฟอนต์ให้เลือก (หน้าเว็บจะแสดงตามที่เลือกจริง)
+    fontsize_formats: '12px 14px 16px 18px 20px 24px 28px 32px 36px 42px 48px',
     toolbar_mode: 'wrap',
     branding: false,
     promotion: false,
