@@ -109,6 +109,37 @@
 
         @inertia
 
+        <!-- Google Translate (สำหรับปุ่มเปลี่ยนภาษาในเมนูตั้งค่า admin) -->
+        <div id="google_translate_element" style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden"></div>
+        <style>
+            .goog-te-banner-frame, .skiptranslate iframe, #goog-gt-tt, .goog-te-balloon-frame { display:none !important; }
+            body { top:0 !important; position:static !important; }
+            .goog-te-gadget { font-size:0 !important; }
+        </style>
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({ pageLanguage: 'th', includedLanguages: 'th,en,zh-CN', autoDisplay: false }, 'google_translate_element');
+            }
+            window.pjsChangeLanguage = function (lang) {
+                var sel = document.querySelector('select.goog-te-combo');
+                if (sel) {
+                    sel.value = lang;
+                    sel.dispatchEvent(new Event('change'));
+                } else {
+                    setTimeout(function () { window.pjsChangeLanguage(lang); }, 300);
+                }
+            };
+            window.addEventListener('load', function () {
+                setTimeout(function () {
+                    try {
+                        var saved = localStorage.getItem('preferredLanguage');
+                        if (saved && saved !== 'th') window.pjsChangeLanguage(saved);
+                    } catch (e) {}
+                }, 1200);
+            });
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
         <script>
             // ===== Splash: แสดง 3 วิ ต่อการเปิดแอป 1 ครั้ง =====
             (function () {

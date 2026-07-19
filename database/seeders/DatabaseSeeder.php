@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             ContactChannelSeeder::class,
             CategorySeeder::class,
+            ServiceSeeder::class,
             TeamMemberSeeder::class,
             NewsSeeder::class,
             CaseStudySeeder::class,

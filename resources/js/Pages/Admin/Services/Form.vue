@@ -25,6 +25,14 @@ const form = useForm({
     translations: props.service?.translations || null,
 });
 
+// ไอคอนให้เลือก (Bootstrap Icons — เหมาะกับกฎหมาย/บัญชี)
+const iconOptions = [
+    'bi bi-briefcase', 'bi bi-person-check', 'bi bi-file-earmark-text', 'bi bi-building', 'bi bi-shield-check', 'bi bi-search',
+    'bi bi-hammer', 'bi bi-bank', 'bi bi-journal-text', 'bi bi-file-earmark-ruled', 'bi bi-graph-up-arrow', 'bi bi-people',
+    'bi bi-laptop', 'bi bi-clipboard-data', 'bi bi-calculator', 'bi bi-receipt', 'bi bi-cash-coin', 'bi bi-wallet2',
+    'bi bi-piggy-bank', 'bi bi-percent', 'bi bi-book', 'bi bi-award', 'bi bi-pencil-square', 'bi bi-telephone',
+];
+
 const submit = () => {
     if (isEdit.value) {
         form.transform((d) => ({ ...d, _method: 'put' })).post(route('admin.services.update', props.service.id), { forceFormData: true });
@@ -55,32 +63,42 @@ const submit = () => {
                 <!-- LEFT: title + content + icon -->
                 <div class="lg:col-span-2">
                     <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                        <LocalizedContent
-                            v-model:title="form.title"
-                            v-model:content="form.content"
-                            v-model:translations="form.translations"
-                            title-label="ชื่อบริการ"
-                            content-label="รายละเอียด"
-                            :title-error="form.errors.title"
-                            :content-error="form.errors.content"
-                            :content-height="560"
-                        />
+                        <!-- กลุ่มบริการ (บนสุด) -->
+                        <label class="field-label">กลุ่มบริการ (แสดงแยกกลุ่มบนหน้าเว็บ)</label>
+                        <input v-model="form.group" type="text" list="service-groups" placeholder="เช่น ด้านกฎหมาย, ด้านบัญชี" class="field" />
+                        <datalist id="service-groups">
+                            <option value="ด้านกฎหมาย" />
+                            <option value="ด้านบัญชี" />
+                        </datalist>
+                        <p class="mt-1 text-xs text-slate-400">บริการที่กลุ่มเดียวกันจะแสดงรวมกันบนหน้าเว็บ</p>
 
-                        <div class="mt-5 grid gap-4 sm:grid-cols-2">
-                            <div>
-                                <label class="field-label">กลุ่มบริการ (แสดงแยกกลุ่มบนหน้าเว็บ)</label>
-                                <input v-model="form.group" type="text" list="service-groups" placeholder="เช่น ด้านกฎหมาย, ด้านบัญชี" class="field" />
-                                <datalist id="service-groups">
-                                    <option value="ด้านกฎหมาย" />
-                                    <option value="ด้านบัญชี" />
-                                </datalist>
-                                <p class="mt-1 text-xs text-slate-400">บริการที่กลุ่มเดียวกันจะแสดงรวมกันบนหน้าเว็บ</p>
-                            </div>
-                            <div>
-                                <label class="field-label">ไอคอน (Bootstrap Icon) <i v-if="form.icon" :class="form.icon" class="ml-1 text-pjs-blue"></i></label>
-                                <input v-model="form.icon" type="text" placeholder="เช่น bi bi-briefcase" class="field" />
-                                <p class="mt-1 text-xs text-slate-400">ดูไอคอนที่ icons.getbootstrap.com</p>
-                            </div>
+                        <!-- ไอคอน: เลือกจากตาราง -->
+                        <label class="field-label mt-4">เลือกไอคอน <i v-if="form.icon" :class="form.icon" class="ml-1 text-pjs-blue"></i></label>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button
+                                v-for="ic in iconOptions"
+                                :key="ic"
+                                type="button"
+                                class="flex h-9 w-9 items-center justify-center rounded-lg border text-lg transition"
+                                :class="form.icon === ic ? 'border-pjs-blue bg-pjs-blue/10 text-pjs-blue' : 'border-slate-200 text-slate-400 hover:border-pjs-blue/50 hover:text-pjs-blue'"
+                                :title="ic"
+                                @click="form.icon = ic"
+                            >
+                                <i :class="ic"></i>
+                            </button>
+                        </div>
+
+                        <div class="mt-5 border-t border-slate-100 pt-5">
+                            <LocalizedContent
+                                v-model:title="form.title"
+                                v-model:content="form.content"
+                                v-model:translations="form.translations"
+                                title-label="ชื่อบริการ"
+                                content-label="รายละเอียด"
+                                :title-error="form.errors.title"
+                                :content-error="form.errors.content"
+                                :content-height="440"
+                            />
                         </div>
                     </div>
                 </div>

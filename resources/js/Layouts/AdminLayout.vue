@@ -60,6 +60,7 @@ const adminLang = ref('th');
 const setLang = (l) => {
     adminLang.value = l;
     try { localStorage.setItem('preferredLanguage', l); } catch (e) {}
+    if (typeof window !== 'undefined' && window.pjsChangeLanguage) window.pjsChangeLanguage(l);
 };
 
 // ล็อกการเลื่อนพื้นหลังเมื่อเปิดเมนูมือถือ (ให้เลื่อนเฉพาะในเมนู)
@@ -111,7 +112,22 @@ const hasRoute = (name) => name && route().has(name);
 const isActive = (name) => name && (route().current(name) || route().current(name.replace(/\.index$/, '') + '.*'));
 const groupActive = (g) => (g.items ? g.items.some((i) => isActive(i.name)) : isActive(g.name));
 
-const toggleGroup = (label) => (openGroup.value = openGroup.value === label ? null : label);
+// เปิดได้ทีละ dropdown เท่านั้น (ปิดตัวอื่นเมื่อเปิดตัวใหม่)
+const toggleGroup = (label) => {
+    profileOpen.value = false;
+    modeMenuOpen.value = false;
+    openGroup.value = openGroup.value === label ? null : label;
+};
+const toggleMode = () => {
+    openGroup.value = null;
+    profileOpen.value = false;
+    modeMenuOpen.value = !modeMenuOpen.value;
+};
+const toggleProfile = () => {
+    openGroup.value = null;
+    modeMenuOpen.value = false;
+    profileOpen.value = !profileOpen.value;
+};
 
 const logout = () => router.post(route('logout'));
 
@@ -206,7 +222,7 @@ const currentYear = new Date().getFullYear();
                 <div class="ml-auto flex shrink-0 items-center gap-1 lg:ml-0">
                     <!-- ตั้งค่าการแสดงผล (รวม ขนาดอักษร/ภาษา/โหมดสี/ไซต์) -->
                     <div class="relative">
-                        <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" title="ตั้งค่าการแสดงผล" @click="modeMenuOpen = !modeMenuOpen">
+                        <button class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" title="ตั้งค่าการแสดงผล" @click="toggleMode">
                             <i class="bi bi-sliders text-base"></i>
                         </button>
                         <Transition enter-active-class="transition duration-100" enter-from-class="opacity-0 -translate-y-1" leave-active-class="transition duration-100" leave-to-class="opacity-0 -translate-y-1">
@@ -259,7 +275,7 @@ const currentYear = new Date().getFullYear();
 
                     <!-- Profile dropdown -->
                     <div class="relative">
-                        <button class="flex h-9 w-9 items-center justify-center rounded-full transition hover:ring-2 hover:ring-pjs-blue/30" title="โปรไฟล์" @click="profileOpen = !profileOpen">
+                        <button class="flex h-9 w-9 items-center justify-center rounded-full transition hover:ring-2 hover:ring-pjs-blue/30" title="โปรไฟล์" @click="toggleProfile">
                             <img v-if="user?.avatar" :src="user.avatar" class="h-8 w-8 rounded-full object-cover" />
                             <span v-else class="flex h-8 w-8 items-center justify-center rounded-full bg-pjs-blue/10 text-pjs-blue"><i class="bi bi-person text-sm"></i></span>
                         </button>
