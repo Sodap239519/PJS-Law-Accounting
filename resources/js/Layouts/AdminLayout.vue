@@ -38,7 +38,7 @@ const setViewMode = (mode) => {
 const onResize = () => (winWidth.value = window.innerWidth);
 
 // ===== ขนาดตัวอักษร (admin) =====
-const adminFs = ref(0.85); // ค่าเริ่มต้น 85% (พอดีตา โดยเฉพาะ PWA เต็มจอ)
+const adminFs = ref(1); // เริ่มต้น 100% (desktop); PWA เต็มจอจะปรับเป็น 85% ตอน mount
 const applyFs = () => (document.documentElement.style.fontSize = 16 * adminFs.value + 'px');
 const fsStep = (d) => {
     adminFs.value = Math.min(1.35, Math.max(0.7, Math.round((adminFs.value + d * 0.08) * 100) / 100));
@@ -146,7 +146,14 @@ let offStart = null;
 onMounted(() => {
     try {
         const v = localStorage.getItem('pjs-admin-view'); if (v) viewMode.value = v;
-        const fs = parseFloat(localStorage.getItem('pjs-admin-fs')); if (!isNaN(fs)) adminFs.value = fs;
+        const fs = parseFloat(localStorage.getItem('pjs-admin-fs'));
+        if (!isNaN(fs)) {
+            adminFs.value = fs; // เคยตั้งค่าเอง → ใช้ค่านั้น
+        } else {
+            // ยังไม่เคยตั้ง → ค่าเริ่มต้น: PWA (ติดตั้งเต็มจอ) = 85%, เบราว์เซอร์/desktop = 100%
+            const isPwa = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+            adminFs.value = isPwa ? 0.85 : 1;
+        }
         adminTheme.value = localStorage.getItem('pjs-admin-theme') === 'dark' ? 'dark' : 'light';
         adminLang.value = localStorage.getItem('preferredLanguage') || 'th';
     } catch (e) {}
