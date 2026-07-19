@@ -82,11 +82,13 @@
                         @foreach($relatedNews as $related)
                         <div class="col-md-4 m-b-20">
                             <article class="post">
+                                @if($related->getFirstMediaUrl('cover'))
                                 <div class="post-preview">
                                     <a href="{{ route('news.show', $related->slug) }}">
-                                        <img src="{{ $related->getFirstMediaUrl('cover') ?: asset('frontend/images/blog/default.jpg') }}" alt="{{ $related->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:8px;">
+                                        <img src="{{ $related->getFirstMediaUrl('cover') }}" alt="{{ $related->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:8px;">
                                     </a>
                                 </div>
+                                @endif
                                 <div class="post-wrapper">
                                     <div class="post-header">
                                         <h6 class="post-title"><a href="{{ route('news.show', $related->slug) }}">{{ $related->title }}</a></h6>

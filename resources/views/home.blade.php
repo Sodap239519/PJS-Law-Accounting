@@ -271,11 +271,13 @@
                     @forelse(($featuredCases ?? collect()) as $case)
                     <div class="col-md-4 mb-4" data-aos="fade-up">
                         <article class="post h-100">
+                            @if($case->getFirstMediaUrl('cover'))
                             <div class="post-preview">
                                 <a href="{{ route('cases.show', $case->slug) }}">
-                                    <img src="{{ $case->getFirstMediaUrl('cover') ?: asset('frontend/images/portfolio/default.jpg') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
+                                    <img src="{{ $case->getFirstMediaUrl('cover') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
                                 </a>
                             </div>
+                            @endif
                             <div class="post-wrapper">
                                 <div class="post-header">
                                     <h5 class="post-title"><a href="{{ route('cases.show', $case->slug) }}">{{ $case->title }}</a></h5>
@@ -317,11 +319,13 @@
             @forelse(($latestNews ?? []) as $news)
             <div class="col-4 post-item">
                 <article class="post">
+                    @if($news->getFirstMediaUrl('cover'))
                     <div class="post-preview">
                         <a href="{{ route('news.show', $news->slug) }}">
-                            <img src="{{ $news->getFirstMediaUrl('cover') ?: asset('frontend/images/blog/News-PR1/Photo_380_0.jpg') }}" alt="{{ $news->title }}">
+                            <img src="{{ $news->getFirstMediaUrl('cover') }}" alt="{{ $news->title }}">
                         </a>
                     </div>
+                    @endif
                     <div class="post-wrapper">
                         <div class="post-header">
                             <h2 class="post-title"><a href="{{ route('news.show', $news->slug) }}">{{ $news->title }}</a></h2>

@@ -25,11 +25,13 @@
                     @foreach($cases as $case)
                     <div class="col-md-6 m-b-30">
                         <article class="post h-100">
+                            @if($case->getFirstMediaUrl('cover'))
                             <div class="post-preview">
                                 <a href="{{ route('cases.show', $case->slug) }}">
-                                    <img src="{{ $case->getFirstMediaUrl('cover') ?: asset('frontend/images/portfolio/default.jpg') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
+                                    <img src="{{ $case->getFirstMediaUrl('cover') }}" alt="{{ $case->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;border-radius:10px;">
                                 </a>
                             </div>
+                            @endif
                             <div class="post-wrapper">
                                 <div class="post-header">
                                     <ul class="post-meta">
