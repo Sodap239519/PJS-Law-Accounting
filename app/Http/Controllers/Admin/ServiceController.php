@@ -20,6 +20,7 @@ class ServiceController extends Controller
             ->map(fn (Service $s) => [
                 'id' => $s->id,
                 'title' => $s->title,
+                'group' => $s->group,
                 'icon' => $s->icon,
                 'sort_order' => $s->sort_order,
                 'is_active' => $s->is_active,

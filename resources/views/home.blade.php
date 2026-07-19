@@ -322,7 +322,7 @@
                     @if($news->getFirstMediaUrl('cover'))
                     <div class="post-preview">
                         <a href="{{ route('news.show', $news->slug) }}">
-                            <img src="{{ $news->getFirstMediaUrl('cover') }}" alt="{{ $news->title }}">
+                            <img src="{{ $news->getFirstMediaUrl('cover') }}" alt="{{ $news->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;display:block;">
                         </a>
                     </div>
                     @endif
