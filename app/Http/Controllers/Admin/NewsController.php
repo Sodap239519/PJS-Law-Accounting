@@ -99,6 +99,13 @@ class NewsController extends Controller
         return redirect()->route('admin.news.index')->with('success', 'ลบข่าวเรียบร้อยแล้ว');
     }
 
+    public function togglePublish(News $news)
+    {
+        $news->update(['is_published' => ! $news->is_published]);
+
+        return back(status: 303);
+    }
+
     private function data(NewsRequest $request): array
     {
         $existing = $request->route('news');

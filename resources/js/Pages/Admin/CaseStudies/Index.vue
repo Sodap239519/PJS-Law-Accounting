@@ -28,6 +28,16 @@ watch([search, status, perPage], () => {
     }, 300);
 });
 
+const togglePublish = (item) => {
+    item.is_published = !item.is_published;
+    window.__pjsSilentNav = true;
+    router.patch(route('admin.case-studies.toggle', item.id), {}, {
+        preserveScroll: true,
+        preserveState: true,
+        onError: () => (item.is_published = !item.is_published),
+    });
+};
+
 const destroy = (id) => {
     if (confirm('ยืนยันการลบคดีนี้?')) router.delete(route('admin.case-studies.destroy', id));
 };
@@ -74,7 +84,17 @@ const destroy = (id) => {
                 <div class="min-w-0 flex-1">
                     <p class="line-clamp-1 text-sm font-medium text-slate-800">{{ item.title }}</p>
                     <div class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-slate-500">
-                        <span :class="item.is_published ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'" class="rounded-full px-1.5 py-0.5">{{ item.is_published ? 'เผยแพร่' : 'ร่าง' }}</span>
+                        <button
+                            type="button"
+                            class="flex items-center gap-1"
+                            :title="item.is_published ? 'กำลังเผยแพร่ — คลิกเพื่อเปลี่ยนเป็นร่าง' : 'ฉบับร่าง — คลิกเพื่อเผยแพร่'"
+                            @click="togglePublish(item)"
+                        >
+                            <span :class="item.is_published ? 'bg-green-500' : 'bg-slate-300'" class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors">
+                                <span :class="item.is_published ? 'translate-x-3.5' : 'translate-x-0.5'" class="inline-block h-3 w-3 rounded-full bg-white shadow transition-transform"></span>
+                            </span>
+                            <span :class="item.is_published ? 'text-green-700' : 'text-slate-400'" class="font-medium">{{ item.is_published ? 'เผยแพร่' : 'ร่าง' }}</span>
+                        </button>
                         <span v-if="item.client_name" class="hidden sm:inline">{{ item.client_name }}</span>
                         <span>{{ item.category || '-' }}</span>
                         <span>· <i class="bi bi-eye"></i> {{ item.views }}</span>

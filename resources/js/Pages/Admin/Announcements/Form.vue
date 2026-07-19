@@ -30,7 +30,7 @@ const form = useForm({
     category_id: props.announcement?.category_id || null,
     excerpt: props.announcement?.excerpt || '', // คงค่าเดิม (ไม่มีช่องกรอกแล้ว)
     content: props.announcement?.content || '',
-    is_published: props.announcement?.is_published ?? false,
+    is_published: props.announcement?.is_published ?? true, // เพิ่มใหม่: เผยแพร่ไว้ก่อน
     published_at: props.announcement?.published_at || (props.prefillDate ? props.prefillDate + 'T09:00' : nowLocal()),
     cover: null,
     remove_cover: false,
@@ -77,7 +77,7 @@ const submit = () => {
                         <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันเวลาที่เผยแพร่" />
                     </div>
                     <div class="pjs-card flex items-center gap-2 p-2">
-                        <label class="flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+                        <label v-if="isEdit" class="flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                             <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                         </label>
                         <Link :href="route('admin.announcements.index')" class="btn-outline btn-sm">ยกเลิก</Link>
@@ -153,7 +153,7 @@ const submit = () => {
                 <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
             <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันเวลาที่เผยแพร่" />
-            <label class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+            <label v-if="isEdit" class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                 <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
             </label>
             <Link :href="route('admin.announcements.index')" class="btn-outline btn-sm">ยกเลิก</Link>

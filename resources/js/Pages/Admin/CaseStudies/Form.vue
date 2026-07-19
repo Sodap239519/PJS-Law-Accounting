@@ -23,7 +23,7 @@ const form = useForm({
     client_name: props.caseStudy?.client_name || '',
     category_id: props.caseStudy?.category_id || null,
     content: props.caseStudy?.content || '',
-    is_published: props.caseStudy?.is_published ?? false,
+    is_published: props.caseStudy?.is_published ?? true, // เพิ่มใหม่: เผยแพร่ไว้ก่อน
     cover: null,
     remove_cover: false,
     gallery: [],
@@ -66,7 +66,7 @@ const submit = () => {
                         </select>
                     </div>
                     <div class="pjs-card flex items-center gap-2 p-2">
-                        <label class="flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+                        <label v-if="isEdit" class="flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                             <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                         </label>
                         <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>
@@ -140,7 +140,7 @@ const submit = () => {
                 <option :value="null">— หมวดหมู่ —</option>
                 <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
-            <label class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+            <label v-if="isEdit" class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                 <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
             </label>
             <Link :href="route('admin.case-studies.index')" class="btn-outline btn-sm">ยกเลิก</Link>

@@ -34,6 +34,7 @@ class AnnouncementController extends Controller
                 'title' => $a->title,
                 'category' => $a->category?->name,
                 'status' => $a->status,
+                'is_published' => $a->is_published,
                 'published_at' => $a->published_at?->format('d/m/Y H:i'),
                 'views' => $a->views,
                 'cover' => $a->getFirstMediaUrl('cover'),
@@ -136,6 +137,13 @@ class AnnouncementController extends Controller
         $announcement->delete();
 
         return redirect()->route('admin.announcements.index')->with('success', 'ลบประชาสัมพันธ์เรียบร้อยแล้ว');
+    }
+
+    public function togglePublish(Announcement $announcement)
+    {
+        $announcement->update(['is_published' => ! $announcement->is_published]);
+
+        return back(status: 303);
     }
 
     private function data(AnnouncementRequest $request): array

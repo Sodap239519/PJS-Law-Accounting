@@ -32,6 +32,16 @@ const destroy = (id) => {
     if (confirm('ยืนยันการลบรายการนี้?')) router.delete(route('admin.announcements.destroy', id));
 };
 
+const togglePublish = (item) => {
+    item.is_published = !item.is_published;
+    window.__pjsSilentNav = true;
+    router.patch(route('admin.announcements.toggle', item.id), {}, {
+        preserveScroll: true,
+        preserveState: false, // reload เพื่อคำนวณสถานะ (เผยแพร่/ตั้งเวลา/ร่าง) ใหม่
+        onError: () => (item.is_published = !item.is_published),
+    });
+};
+
 const statusMeta = {
     published: { label: 'เผยแพร่', class: 'bg-pjs-blue/10 text-pjs-blue-dark' },
     scheduled: { label: 'ตั้งเวลา', class: 'bg-amber-100 text-amber-700' },
@@ -82,7 +92,17 @@ const statusMeta = {
                 <div class="min-w-0 flex-1">
                     <p class="line-clamp-1 text-sm font-medium text-slate-800">{{ item.title }}</p>
                     <div class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-slate-500">
-                        <span :class="(statusMeta[item.status] || statusMeta.draft).class" class="rounded-full px-1.5 py-0.5">{{ (statusMeta[item.status] || statusMeta.draft).label }}</span>
+                        <button
+                            type="button"
+                            class="flex items-center gap-1"
+                            :title="item.is_published ? 'กำลังเผยแพร่ — คลิกเพื่อเปลี่ยนเป็นร่าง' : 'ฉบับร่าง — คลิกเพื่อเผยแพร่'"
+                            @click="togglePublish(item)"
+                        >
+                            <span :class="item.is_published ? 'bg-green-500' : 'bg-slate-300'" class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors">
+                                <span :class="item.is_published ? 'translate-x-3.5' : 'translate-x-0.5'" class="inline-block h-3 w-3 rounded-full bg-white shadow transition-transform"></span>
+                            </span>
+                            <span :class="(statusMeta[item.status] || statusMeta.draft).class" class="rounded-full px-1.5 py-0.5">{{ (statusMeta[item.status] || statusMeta.draft).label }}</span>
+                        </button>
                         <span>{{ item.category || '-' }}</span>
                         <span class="hidden sm:inline">· {{ item.published_at || '-' }}</span>
                         <span>· <i class="bi bi-eye"></i> {{ item.views }}</span>

@@ -98,6 +98,13 @@ class CaseStudyController extends Controller
         return redirect()->route('admin.case-studies.index')->with('success', 'ลบคดีตัวอย่างเรียบร้อยแล้ว');
     }
 
+    public function togglePublish(CaseStudy $caseStudy)
+    {
+        $caseStudy->update(['is_published' => ! $caseStudy->is_published]);
+
+        return back(status: 303);
+    }
+
     private function data(CaseStudyRequest $request): array
     {
         $existing = $request->route('case_study');

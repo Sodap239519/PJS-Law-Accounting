@@ -69,9 +69,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('editor/image', [\App\Http\Controllers\Admin\EditorController::class, 'uploadImage'])->name('editor.image');
 
     // Phase 1 — โมดูลเนื้อหาหลัก
+    Route::patch('news/{news}/toggle', [\App\Http\Controllers\Admin\NewsController::class, 'togglePublish'])->name('news.toggle');
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->except(['show']);
     Route::get('announcements/calendar', [\App\Http\Controllers\Admin\AnnouncementController::class, 'calendar'])->name('announcements.calendar');
+    Route::patch('announcements/{announcement}/toggle', [\App\Http\Controllers\Admin\AnnouncementController::class, 'togglePublish'])->name('announcements.toggle');
     Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class)->except(['show']);
+    Route::patch('case-studies/{case_study}/toggle', [\App\Http\Controllers\Admin\CaseStudyController::class, 'togglePublish'])->name('case-studies.toggle');
     Route::resource('case-studies', \App\Http\Controllers\Admin\CaseStudyController::class)->except(['show']);
     Route::post('services/reorder', [\App\Http\Controllers\Admin\ServiceController::class, 'reorder'])->name('services.reorder');
     Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->except(['show']);
