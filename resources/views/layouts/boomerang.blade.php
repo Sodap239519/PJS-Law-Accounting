@@ -879,13 +879,6 @@ body {
                             <button type="button" onclick="pjsSetTheme('dark')" id="pjsThemeDark"><i class="bi bi-moon-stars"></i> มืด</button>
                         </div>
                     </div>
-                    <div class="pjs-ctrl-row">
-                        <div class="lbl"><i class="bi bi-display"></i> ไซต์แสดงผล</div>
-                        <div class="pjs-seg">
-                            <button type="button" onclick="pjsSetView('auto')" id="pjsViewAuto" class="on">อัตโนมัติ</button>
-                            <button type="button" onclick="pjsSetView('desktop')" id="pjsViewDesktop">เดสก์ท็อป</button>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -1195,7 +1188,6 @@ body {
                 if (a) a.classList.toggle('on', mode !== 'desktop');
                 if (d) d.classList.toggle('on', mode === 'desktop');
             };
-            if (localStorage.getItem('pjs-view') === 'desktop') pjsSetView('desktop');
         })();
     </script>
 @stack('scripts')
