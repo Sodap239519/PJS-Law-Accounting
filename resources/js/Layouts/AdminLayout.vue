@@ -38,10 +38,10 @@ const setViewMode = (mode) => {
 const onResize = () => (winWidth.value = window.innerWidth);
 
 // ===== ขนาดตัวอักษร (admin) =====
-const adminFs = ref(1);
+const adminFs = ref(0.85); // ค่าเริ่มต้น 85% (พอดีตา โดยเฉพาะ PWA เต็มจอ)
 const applyFs = () => (document.documentElement.style.fontSize = 16 * adminFs.value + 'px');
 const fsStep = (d) => {
-    adminFs.value = Math.min(1.35, Math.max(0.85, Math.round((adminFs.value + d * 0.08) * 100) / 100));
+    adminFs.value = Math.min(1.35, Math.max(0.7, Math.round((adminFs.value + d * 0.08) * 100) / 100));
     try { localStorage.setItem('pjs-admin-fs', adminFs.value); } catch (e) {}
     applyFs();
 };
