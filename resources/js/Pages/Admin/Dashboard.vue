@@ -34,6 +34,7 @@ const tasks = computed(() => [
     { label: 'ข้อความรอตอบ', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope' },
     { label: 'ข่าวฉบับร่าง', value: props.meta.draftNews ?? 0, route: 'admin.news.index', icon: 'bi bi-file-earmark' },
     { label: 'ประชาสัมพันธ์ฉบับร่าง', value: props.meta.draftAnnouncements ?? 0, route: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+    { label: 'เอกสารดาวน์โหลด', value: props.stats.documents ?? 0, route: 'admin.documents.index', icon: 'bi bi-file-earmark-arrow-down' },
 ]);
 
 const addPr = (date) => {

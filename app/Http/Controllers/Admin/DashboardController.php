@@ -53,6 +53,7 @@ class DashboardController extends Controller
                 ['label' => 'คดีตัวอย่าง', 'value' => $stats['caseStudies'], 'route' => 'admin.case-studies.index'],
                 ['label' => 'บริการ', 'value' => $stats['services'], 'route' => 'admin.services.index'],
                 ['label' => 'เอกสาร', 'value' => $stats['documents'], 'route' => 'admin.documents.index'],
+                ['label' => 'บุคลากร', 'value' => $stats['team'], 'route' => 'admin.team-members.index'],
             ],
             'recentNews' => News::latest()->take(5)->get()->map(fn (News $n) => [
                 'id' => $n->id,
