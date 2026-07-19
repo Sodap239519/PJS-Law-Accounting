@@ -359,7 +359,7 @@ const currentYear = new Date().getFullYear();
 
         <!-- Bottom nav (มือถือ — ถนัดขวา เอื้อมนิ้วโป้งถึง) -->
         <Transition enter-active-class="transition duration-200" enter-from-class="translate-y-full" leave-active-class="transition duration-150" leave-to-class="translate-y-full">
-            <nav v-if="isMobileUI" class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/70 bg-white/95 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.15)] backdrop-blur" style="padding-bottom: env(safe-area-inset-bottom)">
+            <nav v-if="isMobileUI" class="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200/70 bg-white/95 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.15)] backdrop-blur" style="padding-bottom: env(safe-area-inset-bottom)">
                 <div class="mx-auto flex max-w-lg items-end justify-around px-1">
                     <!-- ซ้าย -->
                     <Link
