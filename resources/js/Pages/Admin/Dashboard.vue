@@ -73,8 +73,8 @@ const quickActions = [
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <!-- Profile (photo prominent) — มือถือแสดงเต็มภาพไม่ตัด, จอใหญ่ครอบเต็มการ์ด -->
             <div class="relative overflow-hidden rounded-2xl shadow-sm sm:min-h-[15rem]">
-                <img v-if="user.avatar" :src="user.avatar" class="block w-full sm:absolute sm:inset-0 sm:h-full sm:w-full sm:object-cover" />
-                <div v-else class="flex min-h-[15rem] items-center justify-center bg-gradient-to-br from-pjs-blue to-pjs-blue-light sm:absolute sm:inset-0">
+                <img v-if="user.avatar" :src="user.avatar" class="aspect-square w-full object-cover sm:absolute sm:inset-0 sm:aspect-auto sm:h-full sm:w-full" />
+                <div v-else class="flex aspect-square items-center justify-center bg-gradient-to-br from-pjs-blue to-pjs-blue-light sm:absolute sm:inset-0 sm:aspect-auto sm:min-h-[15rem]">
                     <span class="text-6xl font-bold text-white/90">{{ initials }}</span>
                 </div>
                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 pt-10 text-white">
