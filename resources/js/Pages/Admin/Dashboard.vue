@@ -61,10 +61,10 @@ const quickActions = [
                 <h2 class="text-xl font-bold text-slate-800">ยินดีต้อนรับ, {{ user.name }}</h2>
                 <p class="text-xs text-slate-400">ภาพรวมการจัดการเว็บไซต์</p>
             </div>
-            <div class="flex flex-wrap justify-end gap-x-5 gap-y-1">
-                <div v-for="s in bigStats" :key="s.label" class="min-w-[64px] text-center">
-                    <p class="text-2xl font-bold text-pjs-navy">{{ s.value }}</p>
-                    <p class="text-[11px] text-slate-400">{{ s.label }}</p>
+            <div class="grid w-full grid-cols-6 gap-1 sm:flex sm:w-auto sm:justify-end sm:gap-x-5">
+                <div v-for="s in bigStats" :key="s.label" class="min-w-0 text-center">
+                    <p class="text-base font-bold leading-tight text-pjs-navy sm:text-2xl">{{ s.value }}</p>
+                    <p class="text-[9px] leading-tight text-slate-400 sm:text-[11px]">{{ s.label }}</p>
                 </div>
             </div>
         </div>
