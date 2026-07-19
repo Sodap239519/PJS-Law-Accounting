@@ -30,7 +30,7 @@
 
 @if($services->count())
 <!-- Services from database (grouped) -->
-@php($grouped = $services->groupBy(fn ($s) => $s->group ?: 'บริการของเรา'))
+@php $grouped = $services->groupBy(fn ($s) => $s->group ?: 'บริการของเรา'); @endphp
 @foreach($grouped as $groupName => $items)
 <section class="module {{ $loop->odd ? 'bg-light' : '' }}">
     <div class="container">

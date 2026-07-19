@@ -10,7 +10,7 @@
     @endphp
     <div class="home-sections" style="display:flex; flex-direction:column;">
     <!-- Hero Section -->
-    @php($hero = ($banners ?? collect())->first())
+    @php $hero = ($banners ?? collect())->first(); @endphp
     <section class="module-cover parallax text-center fullscreen" style="{{ $hl('hero') }}" data-background="{{ $hero && $hero->getFirstMediaUrl('image') ? $hero->getFirstMediaUrl('image') : asset('frontend/images/Banner.png') }}" data-overlay="0.6">
         <div class="container">
             <div class="row">
