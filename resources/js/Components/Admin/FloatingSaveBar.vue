@@ -11,26 +11,35 @@ const props = defineProps({
 const emit = defineEmits(['save', 'cancel']);
 
 const show = ref(false);
+let observer = null;
 
-const compute = () => {
-    const el = document.getElementById(props.target);
-    if (el) {
-        // โผล่เมื่อแถบปุ่มบนเลื่อนพ้นจอ (ขอบล่างอยู่เหนือ header ~64px)
-        show.value = el.getBoundingClientRect().bottom < 64;
-        return;
-    }
-    // ไม่มีแถบปุ่มบน → โผล่เมื่อเลื่อนหน้าลงพอสมควร (ใช้ได้ทุกหน้า)
+// fallback: หน้าที่ไม่มีแถบปุ่มบน (sentinel) — โผล่เมื่อเลื่อนหน้าลงพอสมควร
+const computeScroll = () => {
     show.value = window.scrollY > 220;
 };
 
 onMounted(() => {
-    compute();
-    window.addEventListener('scroll', compute, { passive: true });
-    window.addEventListener('resize', compute, { passive: true });
+    const el = document.getElementById(props.target);
+    if (el && 'IntersectionObserver' in window) {
+        // โผล่เมื่อแถบปุ่มบนหลุดจอ (เผื่อ header sticky ~64px) — ทำงานไม่ว่าจะ scroll ที่ container ไหน
+        observer = new IntersectionObserver(
+            ([entry]) => {
+                show.value = !entry.isIntersecting;
+            },
+            { root: null, rootMargin: '-64px 0px 0px 0px', threshold: 0 },
+        );
+        observer.observe(el);
+        return;
+    }
+    // ไม่มี sentinel → ใช้ scroll ของ window
+    computeScroll();
+    window.addEventListener('scroll', computeScroll, { passive: true });
+    window.addEventListener('resize', computeScroll, { passive: true });
 });
 onBeforeUnmount(() => {
-    window.removeEventListener('scroll', compute);
-    window.removeEventListener('resize', compute);
+    if (observer) observer.disconnect();
+    window.removeEventListener('scroll', computeScroll);
+    window.removeEventListener('resize', computeScroll);
 });
 </script>
 
@@ -42,7 +51,7 @@ onBeforeUnmount(() => {
             leave-active-class="transition duration-150 ease-in"
             leave-to-class="translate-y-4 opacity-0"
         >
-            <div v-if="show" class="fixed inset-x-0 bottom-20 z-50 flex justify-center px-4 lg:bottom-4">
+            <div v-if="show" class="fixed inset-x-0 bottom-24 z-[9999] flex justify-center px-4">
                 <div class="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/95 px-3 py-2 shadow-[0_8px_30px_-8px_rgba(37,99,235,0.35)] backdrop-blur">
                     <span class="hidden pl-2 pr-1 text-xs text-slate-400 sm:inline">มีการแก้ไข —</span>
                     <button type="button" class="btn-outline btn-sm" @click="emit('cancel')">{{ cancelLabel }}</button>
