@@ -23,6 +23,7 @@ class NewsSeeder extends Seeder
                 'is_published' => true,
                 'published_at' => now()->subDays(5),
                 'views' => 120,
+                'cover' => '1.jpg',
             ],
             [
                 'title' => 'สัมมนาความรู้ทางกฎหมายสำหรับผู้ประกอบการ SME',
@@ -33,6 +34,7 @@ class NewsSeeder extends Seeder
                 'is_published' => true,
                 'published_at' => now()->subDays(10),
                 'views' => 85,
+                'cover' => '2.jpg',
             ],
             [
                 'title' => 'บริการดูแลบัญชีและภาษีสำหรับธุรกิจออนไลน์',
@@ -43,11 +45,19 @@ class NewsSeeder extends Seeder
                 'is_published' => true,
                 'published_at' => now()->subDays(15),
                 'views' => 95,
+                'cover' => '3.jpg',
             ],
         ];
 
-        foreach ($articles as $article) {
-            News::create($article);
+        foreach ($articles as $data) {
+            $cover = $data['cover'] ?? null;
+            unset($data['cover']);
+            $news = News::firstOrCreate(['slug' => $data['slug']], $data);
+
+            $path = public_path('frontend/images/blog/'.$cover);
+            if ($cover && file_exists($path) && ! $news->getFirstMedia('cover')) {
+                $news->addMedia($path)->preservingOriginal()->toMediaCollection('cover');
+            }
         }
     }
 }
