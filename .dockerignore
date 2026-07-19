@@ -12,3 +12,6 @@
 /storage/framework/views/*
 /tests
 /.github
+/docs
+# รูปต้นฉบับก้อนใหญ่ ~366MB (ใช้แค่ตอน seed รูปข่าว "เปิดบริษัท") — ตัดออกให้ build เร็ว/ไม่ล่ม
+/public/frontend/images/blog/News-PR1
