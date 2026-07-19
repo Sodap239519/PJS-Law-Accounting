@@ -94,7 +94,7 @@ const submit = () => {
                 </div>
             </div>
 
-            <div>
+            <div class="flex justify-end">
                 <button type="submit" :disabled="form.processing" class="rounded-lg bg-pjs-blue px-5 py-2.5 text-sm font-medium text-white hover:bg-pjs-blue-dark disabled:opacity-50">
                     บันทึกการตั้งค่า
                 </button>

@@ -138,7 +138,9 @@ const submit = () => {
                     </div>
                 </div>
 
-                <button type="submit" :disabled="form.processing" class="btn-primary">บันทึกเมนู</button>
+                <div class="flex justify-end">
+                    <button type="submit" :disabled="form.processing" class="btn-primary">บันทึกเมนู</button>
+                </div>
             </form>
         </div>
     </AdminLayout>

@@ -95,11 +95,11 @@ const submit = () => {
                             <input v-model="form.is_active" type="checkbox" class="rounded" /> แสดงบนหน้าเว็บ
                         </label>
                     </div>
-                    <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-end gap-2">
+                        <Link :href="route('admin.team-members.index')" class="rounded-lg border px-4 py-2.5 text-center text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
                         <button type="submit" :disabled="form.processing" class="rounded-lg bg-pjs-blue px-4 py-2.5 text-sm font-medium text-white hover:bg-pjs-blue-dark disabled:opacity-50">
                             {{ isEdit ? 'บันทึกการแก้ไข' : 'เพิ่มบุคลากร' }}
                         </button>
-                        <Link :href="route('admin.team-members.index')" class="rounded-lg border px-4 py-2.5 text-center text-sm text-slate-600 hover:bg-slate-50">ยกเลิก</Link>
                     </div>
                 </div>
             </div>
