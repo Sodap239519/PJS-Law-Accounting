@@ -132,12 +132,6 @@ const toggleMobile = () => {
     modeMenuOpen.value = false;
     mobileOpen.value = !mobileOpen.value;
 };
-const openMobile = () => {
-    openGroup.value = null;
-    profileOpen.value = false;
-    modeMenuOpen.value = false;
-    mobileOpen.value = true;
-};
 const toggleProfile = () => {
     openGroup.value = null;
     modeMenuOpen.value = false;
@@ -398,7 +392,7 @@ const currentYear = new Date().getFullYear();
                         <i :class="b.icon" class="text-lg"></i>
                         <span>{{ b.label }}</span>
                     </Link>
-                    <button type="button" class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] text-slate-400 transition hover:text-slate-600" @click="openMobile">
+                    <button type="button" class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] transition" :class="mobileOpen ? 'text-pjs-blue' : 'text-slate-400 hover:text-slate-600'" @click="toggleMobile">
                         <i class="bi bi-grid-3x3-gap text-lg"></i>
                         <span>เมนู</span>
                     </button>
