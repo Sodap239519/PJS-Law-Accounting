@@ -29,12 +29,14 @@ const submit = () => {
 
         <div class="overflow-hidden rounded-3xl bg-white shadow-soft">
             <!-- Brand header -->
-            <div class="bg-gradient-to-br from-pjs-navy to-pjs-blue px-8 py-9 text-center text-white">
-                <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
-                    <i class="bi bi-briefcase text-2xl leading-none"></i>
+            <div class="relative bg-gradient-to-br from-pjs-navy via-pjs-blue-dark to-pjs-blue px-8 py-10 text-center text-white">
+                <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg ring-4 ring-white/25">
+                    <img src="/frontend/images/PJS-Law-and-Accounting_Logo.png" alt="PJS Law and Accounting" class="h-16 w-16 object-contain" />
                 </div>
-                <h1 class="text-lg font-bold tracking-wide">PJS Law &amp; Accounting</h1>
-                <p class="mt-1 text-sm text-blue-100/80">เข้าสู่ระบบจัดการเว็บไซต์</p>
+                <h1 class="text-xl font-bold tracking-wide">PJS Law &amp; Accounting</h1>
+                <p class="mt-1 text-sm text-blue-100/80">บริษัท พีเจเอส กฎหมายและการบัญชี จำกัด</p>
+                <div class="mx-auto mt-3 h-0.5 w-12 rounded-full bg-amber-300/80"></div>
+                <p class="mt-3 text-xs uppercase tracking-[0.2em] text-blue-100/60">ระบบจัดการเว็บไซต์</p>
             </div>
 
             <form class="space-y-5 px-8 py-8" @submit.prevent="submit">
