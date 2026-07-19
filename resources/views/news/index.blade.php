@@ -80,4 +80,9 @@
         </div>
     </div>
 </section>
+<style>
+    /* จำกัดจำนวนบรรทัดให้การ์ดสูงเท่ากัน — ระยะห่างจะสม่ำเสมอ */
+    .post .post-title { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em; }
+    .post .post-content p { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+</style>
 @endsection
