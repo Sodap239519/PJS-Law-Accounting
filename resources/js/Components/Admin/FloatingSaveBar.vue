@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
             leave-to-class="translate-y-4 opacity-0"
         >
             <div v-if="show" class="fixed inset-x-0 bottom-24 z-[9999] flex justify-center px-4">
-                <div class="flex max-w-full flex-wrap items-center justify-center gap-2 rounded-2xl border border-slate-200/80 bg-white/95 px-3 py-2 shadow-[0_8px_30px_-8px_rgba(37,99,235,0.35)] backdrop-blur">
+                <div class="flex max-w-full flex-col items-stretch gap-1.5 rounded-2xl border border-slate-200/80 bg-white/95 px-3 py-2 shadow-[0_8px_30px_-8px_rgba(37,99,235,0.35)] backdrop-blur sm:flex-row sm:items-center sm:gap-2">
                     <!-- แต่ละฟอร์มส่งชุดปุ่มของตัวเองมา (ให้ตรงกับแถบบน); ถ้าไม่ส่งใช้ค่าเริ่มต้น ยกเลิก/บันทึก -->
                     <slot>
                         <button type="button" class="btn-outline btn-sm" @click="emit('cancel')">{{ cancelLabel }}</button>

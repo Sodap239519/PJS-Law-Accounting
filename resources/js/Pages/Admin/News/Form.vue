@@ -70,17 +70,17 @@ const submit = () => {
             <!-- Title + save (same row) -->
             <div id="form-actions-top" class="flex flex-wrap items-center gap-3">
                 <h1 class="text-lg font-semibold text-slate-800">{{ isEdit ? 'แก้ไขข่าว' : 'เพิ่มข่าว' }}</h1>
-                <div class="ml-auto flex flex-wrap items-center gap-2">
+                <div class="flex w-full flex-col gap-2 sm:ml-auto sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
                     <!-- การ์ด: หมวดหมู่ + วันที่ -->
-                    <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
+                    <div class="pjs-card flex w-full flex-wrap items-center gap-2 p-2 sm:w-auto">
                         <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
                             <option :value="null">— หมวดหมู่ —</option>
                             <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
                         </select>
                         <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันที่เผยแพร่" />
                     </div>
-                    <!-- การ์ด: เผยแพร่ + ปุ่มบันทึก (แถวเดียว) -->
-                    <div class="pjs-card flex items-center gap-2 p-2">
+                    <!-- การ์ด: เผยแพร่ + ปุ่มบันทึก -->
+                    <div class="pjs-card flex w-full items-center justify-end gap-2 p-2 sm:w-auto sm:justify-start">
                         <label v-if="isEdit" class="flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                             <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                         </label>
@@ -165,17 +165,23 @@ const submit = () => {
         </form>
 
         <FloatingSaveBar :processing="form.processing">
-            <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
-                <option :value="null">— หมวดหมู่ —</option>
-                <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
-            </select>
-            <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันที่เผยแพร่" />
-            <label v-if="isEdit" class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
-                <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
-            </label>
-            <Link :href="route('admin.news.index')" class="btn-outline btn-sm">ยกเลิก</Link>
-            <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
-            <button type="button" :disabled="form.processing" class="btn-primary btn-sm" @click="submit">{{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}</button>
+            <!-- แถวบน: หมวดหมู่ + วันที่ -->
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <select v-model="form.category_id" class="field w-auto" title="หมวดหมู่">
+                    <option :value="null">— หมวดหมู่ —</option>
+                    <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+                </select>
+                <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันที่เผยแพร่" />
+            </div>
+            <!-- แถวล่าง: เผยแพร่ + ปุ่ม -->
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <label v-if="isEdit" class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+                    <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
+                </label>
+                <Link :href="route('admin.news.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+                <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
+                <button type="button" :disabled="form.processing" class="btn-primary btn-sm" @click="submit">{{ isEdit ? 'บันทึก' : 'สร้างข่าว' }}</button>
+            </div>
         </FloatingSaveBar>
     </AdminLayout>
 </template>

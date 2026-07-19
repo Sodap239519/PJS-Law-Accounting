@@ -82,7 +82,7 @@ const init = {
     statusbar: true,
     content_style:
         "@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');" +
-        "body{font-family:'Prompt',sans-serif;font-size:15px;line-height:1.7;color:#334155;padding:8px 12px;}" +
+        "body{font-family:'Prompt',sans-serif;font-size:14px;line-height:1.7;color:#334155;padding:8px 12px;}" +
         'h1,h2,h3{color:#1e293b;font-weight:700;}' +
         'a{color:#2563eb;}' +
         'blockquote{border-left:3px solid #2563eb;margin:0;padding-left:14px;color:#64748b;}' +
@@ -149,15 +149,18 @@ const init = {
     .tinymce-wrap .tox .tox-toolbar__group {
         padding: 0 3px;
     }
-    /* เว้นที่มุมขวาบนให้ปุ่มเปิด/ปิด ไม่ให้เครื่องมือทับ */
-    .tinymce-wrap .tox .tox-toolbar__primary {
+    /* บังคับให้แถบเครื่องมือขึ้นบรรทัดใหม่ (ไม่เลื่อนแนวนอน) + เว้นที่มุมขวาให้ปุ่มเปิด/ปิด */
+    .tinymce-wrap .tox .tox-toolbar__primary,
+    .tinymce-wrap .tox .tox-toolbar__overflow {
+        flex-wrap: wrap !important;
         padding-right: 40px;
     }
 
     /* ค่าเริ่มต้น: ย่อเหลือ ~2 แถว (เนื้อหาจะเลื่อนขึ้น) */
-    .tinymce-wrap.tb-collapsed .tox-toolbar__primary {
+    .tinymce-wrap.tb-collapsed .tox-toolbar__primary,
+    .tinymce-wrap.tb-collapsed .tox-toolbar__overflow {
         max-height: 66px;
-        overflow: hidden;
+        overflow: hidden !important;
     }
 
     /* ปุ่มเปิด/ปิดเครื่องมือ — มุมขวาบน ในพื้นที่ที่เว้นไว้ */

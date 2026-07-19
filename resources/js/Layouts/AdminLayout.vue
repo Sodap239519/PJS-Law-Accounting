@@ -116,16 +116,32 @@ const groupActive = (g) => (g.items ? g.items.some((i) => isActive(i.name)) : is
 const toggleGroup = (label) => {
     profileOpen.value = false;
     modeMenuOpen.value = false;
+    mobileOpen.value = false;
     openGroup.value = openGroup.value === label ? null : label;
 };
 const toggleMode = () => {
     openGroup.value = null;
     profileOpen.value = false;
+    mobileOpen.value = false;
     modeMenuOpen.value = !modeMenuOpen.value;
+};
+// เปิด/ปิดเมนูมือถือ — ปิด dropdown อื่นเสมอ (แสดงทีละอัน)
+const toggleMobile = () => {
+    openGroup.value = null;
+    profileOpen.value = false;
+    modeMenuOpen.value = false;
+    mobileOpen.value = !mobileOpen.value;
+};
+const openMobile = () => {
+    openGroup.value = null;
+    profileOpen.value = false;
+    modeMenuOpen.value = false;
+    mobileOpen.value = true;
 };
 const toggleProfile = () => {
     openGroup.value = null;
     modeMenuOpen.value = false;
+    mobileOpen.value = false;
     profileOpen.value = !profileOpen.value;
 };
 
@@ -298,7 +314,7 @@ const currentYear = new Date().getFullYear();
                             </div>
                         </Transition>
                     </div>
-                    <button v-if="isMobileUI" class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" @click="mobileOpen = !mobileOpen">
+                    <button v-if="isMobileUI" class="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100" @click="toggleMobile">
                         <i class="bi bi-list text-lg"></i>
                     </button>
                 </div>
@@ -319,7 +335,7 @@ const currentYear = new Date().getFullYear();
             >
                 <nav
                     v-if="mobileOpen"
-                    class="fixed inset-x-3 top-[76px] z-50 max-h-[calc(100vh-92px)] overflow-y-auto overscroll-contain rounded-2xl border border-slate-100 bg-white p-3 shadow-soft"
+                    class="fixed inset-x-3 top-[76px] z-50 max-h-[calc(100dvh-170px)] overflow-y-auto overscroll-contain rounded-2xl border border-slate-100 bg-white p-3 pb-4 shadow-soft"
                 >
                     <div v-for="g in visibleNav" :key="g.label" class="mb-2">
                         <p class="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ g.label }}</p>
@@ -382,7 +398,7 @@ const currentYear = new Date().getFullYear();
                         <i :class="b.icon" class="text-lg"></i>
                         <span>{{ b.label }}</span>
                     </Link>
-                    <button type="button" class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] text-slate-400 transition hover:text-slate-600" @click="mobileOpen = true">
+                    <button type="button" class="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] text-slate-400 transition hover:text-slate-600" @click="openMobile">
                         <i class="bi bi-grid-3x3-gap text-lg"></i>
                         <span>เมนู</span>
                     </button>
