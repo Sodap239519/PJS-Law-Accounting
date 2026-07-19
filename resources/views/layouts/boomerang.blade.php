@@ -1154,7 +1154,7 @@ body {
         })();
     </script>
 
-    <!-- เมนูปรับการแสดงผล: เปิด/ปิด + โหมดสี + ไซต์แสดงผล -->
+    <!-- เมนูปรับการแสดงผล: โหมดสี -->
     <script>
         (function () {
             var ctrl = document.getElementById('pjsCtrl');
@@ -1178,16 +1178,6 @@ body {
                 if (l) l.classList.toggle('on', mode !== 'dark');
             };
             pjsSetTheme(localStorage.getItem('pjs-theme') === 'dark' ? 'dark' : 'light');
-
-            // ไซต์แสดงผล (อัตโนมัติ/เดสก์ท็อป)
-            window.pjsSetView = function (mode) {
-                var m = document.querySelector('meta[name="viewport"]');
-                if (m) m.setAttribute('content', mode === 'desktop' ? 'width=1200' : 'width=device-width, initial-scale=1.0');
-                try { localStorage.setItem('pjs-view', mode); } catch (e) {}
-                var a = document.getElementById('pjsViewAuto'), d = document.getElementById('pjsViewDesktop');
-                if (a) a.classList.toggle('on', mode !== 'desktop');
-                if (d) d.classList.toggle('on', mode === 'desktop');
-            };
         })();
     </script>
 @stack('scripts')
