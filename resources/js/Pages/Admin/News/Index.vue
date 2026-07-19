@@ -87,22 +87,25 @@ const togglePublish = (item) => {
                 <div class="min-w-0 flex-1">
                     <p class="line-clamp-1 text-sm font-medium text-slate-800">{{ item.title }}</p>
                     <div class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-slate-500">
-                        <button
-                            type="button"
-                            class="flex items-center gap-1"
-                            :title="item.is_published ? 'กำลังเผยแพร่ — คลิกเพื่อเปลี่ยนเป็นร่าง' : 'ฉบับร่าง — คลิกเพื่อเผยแพร่'"
-                            @click="togglePublish(item)"
-                        >
-                            <span :class="item.is_published ? 'bg-green-500' : 'bg-slate-300'" class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors">
-                                <span :class="item.is_published ? 'translate-x-3.5' : 'translate-x-0.5'" class="inline-block h-3 w-3 rounded-full bg-white shadow transition-transform"></span>
-                            </span>
-                            <span :class="item.is_published ? 'text-green-700' : 'text-slate-400'" class="font-medium">{{ item.is_published ? 'เผยแพร่' : 'ร่าง' }}</span>
-                        </button>
                         <span>{{ item.category || '-' }}</span>
                         <span class="hidden sm:inline">· {{ item.published_at || '-' }}</span>
                         <span>· <i class="bi bi-eye"></i> {{ item.views }}</span>
                     </div>
                 </div>
+
+                <!-- สวิตช์เผยแพร่ (ก่อนปุ่มแก้ไข) -->
+                <button
+                    type="button"
+                    class="flex shrink-0 items-center gap-1.5 text-[11px] font-medium"
+                    :class="item.is_published ? 'text-green-700' : 'text-slate-400'"
+                    :title="item.is_published ? 'กำลังเผยแพร่ — คลิกเพื่อเปลี่ยนเป็นฉบับร่าง' : 'ฉบับร่าง — คลิกเพื่อเผยแพร่'"
+                    @click="togglePublish(item)"
+                >
+                    <span :class="item.is_published ? 'bg-green-500' : 'bg-slate-300'" class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors">
+                        <span :class="item.is_published ? 'translate-x-3.5' : 'translate-x-0.5'" class="inline-block h-3 w-3 rounded-full bg-white shadow transition-transform"></span>
+                    </span>
+                    <span class="hidden sm:inline">{{ item.is_published ? 'เผยแพร่' : 'ฉบับร่าง' }}</span>
+                </button>
 
                 <!-- การ์ดปุ่มจัดการ (แยกออกมา) -->
                 <div class="flex shrink-0 items-center gap-0.5 rounded-lg border border-slate-100 bg-slate-50/60 p-0.5">

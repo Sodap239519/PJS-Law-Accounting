@@ -45,7 +45,7 @@ const togglePublish = (item) => {
 const statusMeta = {
     published: { label: 'เผยแพร่', class: 'bg-pjs-blue/10 text-pjs-blue-dark' },
     scheduled: { label: 'ตั้งเวลา', class: 'bg-amber-100 text-amber-700' },
-    draft: { label: 'ร่าง', class: 'bg-slate-100 text-slate-500' },
+    draft: { label: 'ฉบับร่าง', class: 'bg-slate-100 text-slate-500' },
 };
 </script>
 
@@ -92,22 +92,24 @@ const statusMeta = {
                 <div class="min-w-0 flex-1">
                     <p class="line-clamp-1 text-sm font-medium text-slate-800">{{ item.title }}</p>
                     <div class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-slate-500">
-                        <button
-                            type="button"
-                            class="flex items-center gap-1"
-                            :title="item.is_published ? 'กำลังเผยแพร่ — คลิกเพื่อเปลี่ยนเป็นร่าง' : 'ฉบับร่าง — คลิกเพื่อเผยแพร่'"
-                            @click="togglePublish(item)"
-                        >
-                            <span :class="item.is_published ? 'bg-green-500' : 'bg-slate-300'" class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors">
-                                <span :class="item.is_published ? 'translate-x-3.5' : 'translate-x-0.5'" class="inline-block h-3 w-3 rounded-full bg-white shadow transition-transform"></span>
-                            </span>
-                            <span :class="(statusMeta[item.status] || statusMeta.draft).class" class="rounded-full px-1.5 py-0.5">{{ (statusMeta[item.status] || statusMeta.draft).label }}</span>
-                        </button>
                         <span>{{ item.category || '-' }}</span>
                         <span class="hidden sm:inline">· {{ item.published_at || '-' }}</span>
                         <span>· <i class="bi bi-eye"></i> {{ item.views }}</span>
                     </div>
                 </div>
+
+                <!-- สวิตช์เผยแพร่ (ก่อนปุ่มแก้ไข) -->
+                <button
+                    type="button"
+                    class="flex shrink-0 items-center gap-1.5"
+                    :title="item.is_published ? 'กำลังเผยแพร่ — คลิกเพื่อเปลี่ยนเป็นฉบับร่าง' : 'ฉบับร่าง — คลิกเพื่อเผยแพร่'"
+                    @click="togglePublish(item)"
+                >
+                    <span :class="item.is_published ? 'bg-green-500' : 'bg-slate-300'" class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors">
+                        <span :class="item.is_published ? 'translate-x-3.5' : 'translate-x-0.5'" class="inline-block h-3 w-3 rounded-full bg-white shadow transition-transform"></span>
+                    </span>
+                    <span :class="(statusMeta[item.status] || statusMeta.draft).class" class="hidden rounded-full px-1.5 py-0.5 text-[11px] font-medium sm:inline">{{ (statusMeta[item.status] || statusMeta.draft).label }}</span>
+                </button>
 
                 <div class="flex shrink-0 items-center gap-0.5 rounded-lg border border-slate-100 bg-slate-50/60 p-0.5">
                     <Link :href="route('admin.announcements.edit', item.id)" class="flex h-8 w-8 items-center justify-center rounded-md text-pjs-blue hover:bg-white" title="แก้ไข"><i class="bi bi-pencil"></i></Link>
