@@ -12,15 +12,17 @@ COPY . .
 RUN npm run build
 
 # ---- 2) PHP application ----
-# ล็อก Debian 12 (bookworm) — เสถียรกว่า tag ล่าสุด (Debian 13/Trixie ที่ build extension มีปัญหา)
+# ล็อก Debian 12 (bookworm) — เสถียรกว่า tag ล่าสุด (Debian 13/Trixie)
 FROM php:8.2-cli-bookworm
 
-# ติดตั้ง PHP extensions แบบชัวร์ด้วย docker-php-extension-installer
-# (จัดการ system lib: gd(png/jpeg/freetype), zip ให้อัตโนมัติ — เลี่ยงปัญหา compile ข้ามเวอร์ชัน Debian)
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions \
- && install-php-extensions gd pdo_mysql zip exif bcmath \
- && apt-get update && apt-get install -y --no-install-recommends unzip git \
+# บังคับ compile ทีละ job กัน OOM (exit 137) บน builder RAM น้อย (Railway trial)
+ENV MAKEFLAGS="-j1"
+
+# ส่วนขยาย PHP ที่โปรเจกต์ต้องใช้ (gd=thumbnail, pdo_mysql=DB, exif/zip/bcmath)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libpng-dev libjpeg-dev libfreetype6-dev libzip-dev libonig-dev unzip git \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j1 pdo_mysql gd zip exif bcmath \
  && rm -rf /var/lib/apt/lists/*
 
 # composer
