@@ -87,9 +87,11 @@ const quickActions = [
             </div>
 
             <!-- Column chart: ผู้เข้าชม -->
-            <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+            <div class="flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
                 <h3 class="mb-1 text-sm font-semibold text-slate-700">จำนวนผู้เข้าชม (14 วัน)</h3>
-                <ColumnChart :labels="chart.labels" :data="chart.views || []" name="ผู้เข้าชม" />
+                <div class="min-h-0 flex-1">
+                    <ColumnChart :labels="chart.labels" :data="chart.views || []" name="ผู้เข้าชม" height="100%" />
+                </div>
             </div>
 
             <!-- Content bars -->

@@ -7,6 +7,7 @@ const props = defineProps({
     data: { type: Array, default: () => [] },
     name: { type: String, default: 'ผู้เข้าชม' },
     color: { type: String, default: '#2563eb' },
+    height: { type: [String, Number], default: 190 },
 });
 
 const chartSeries = computed(() => [{ name: props.name, data: props.data }]);
@@ -15,7 +16,7 @@ const chartSeries = computed(() => [{ name: props.name, data: props.data }]);
 const chartOptions = computed(() => ({
     chart: {
         type: 'bar',
-        height: 190,
+        height: props.height,
         fontFamily: 'Prompt, sans-serif',
         toolbar: { show: false },
         animations: { easing: 'easeinout', speed: 600 },
@@ -48,5 +49,5 @@ const chartOptions = computed(() => ({
 </script>
 
 <template>
-    <VueApexCharts type="bar" height="190" :options="chartOptions" :series="chartSeries" />
+    <VueApexCharts type="bar" :height="height" :options="chartOptions" :series="chartSeries" />
 </template>
