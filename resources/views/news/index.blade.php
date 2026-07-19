@@ -81,8 +81,12 @@
     </div>
 </section>
 <style>
-    /* จำกัดจำนวนบรรทัดให้การ์ดสูงเท่ากัน — ระยะห่างจะสม่ำเสมอ */
+    /* การ์ดรายการ: ตัดระยะห่าง/เส้นขีดที่มากเกินของ .post เดิม */
+    .post { padding-bottom: 0 !important; margin-bottom: 0 !important; border-bottom: 0 !important; }
+    .post-header { margin-bottom: 12px !important; }
+    .post-content { margin-bottom: 12px; }
+    /* จำกัดจำนวนบรรทัดให้การ์ดสูงเท่ากัน */
     .post .post-title { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em; }
-    .post .post-content p { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    .post .post-content p { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom: 0; }
 </style>
 @endsection
