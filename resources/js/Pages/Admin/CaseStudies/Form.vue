@@ -76,7 +76,7 @@ const submit = () => {
                 </div>
             </div>
 
-            <DraftManager :form="form" :fields="['title', 'content', 'client_name', 'translations']" :storage-key="'case-' + (caseStudy?.id || 'new')" />
+            <DraftManager :form="form" :fields="['title', 'content', 'client_name', 'translations']" :storage-key="'case-' + (caseStudy?.id || 'new')" :enabled="!isEdit" />
 
             <div class="grid gap-6 lg:grid-cols-3">
                 <!-- LEFT: title + content -->
