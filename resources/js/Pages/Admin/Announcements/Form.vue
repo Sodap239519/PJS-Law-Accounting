@@ -76,8 +76,8 @@ const submit = () => {
                         </select>
                         <input v-model="form.published_at" type="datetime-local" class="field w-auto" title="วันเวลาที่เผยแพร่" />
                     </div>
-                    <div class="pjs-card flex flex-wrap items-center gap-2 p-2">
-                        <label class="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-600">
+                    <div class="pjs-card flex items-center gap-2 p-2">
+                        <label class="flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
                             <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
                         </label>
                         <Link :href="route('admin.announcements.index')" class="btn-outline btn-sm">ยกเลิก</Link>
