@@ -28,18 +28,23 @@ class DashboardController extends Controller
             'documents' => Document::count(),
             'team' => TeamMember::count(),
             'banners' => Banner::count(),
+            'contacts' => Contact::count(),
             'unreadContacts' => Contact::where('is_read', false)->count(),
         ];
 
         $totalViews = News::sum('views') + Announcement::sum('views') + CaseStudy::sum('views');
+        $totalDownloads = (int) Document::sum('downloads');
         $publishedNews = News::where('is_published', true)->count();
 
         return Inertia::render('Admin/Dashboard', [
             'stats' => $stats,
             'meta' => [
                 'totalViews' => (int) $totalViews,
+                'totalDownloads' => $totalDownloads,
                 'publishedNews' => $publishedNews,
                 'draftNews' => max(0, $stats['news'] - $publishedNews),
+                'draftAnnouncements' => Announcement::where('is_published', false)->count(),
+                'draftCaseStudies' => CaseStudy::where('is_published', false)->count(),
                 'totalContent' => $stats['news'] + $stats['announcements'] + $stats['caseStudies'] + $stats['services'],
             ],
             'contentByType' => [

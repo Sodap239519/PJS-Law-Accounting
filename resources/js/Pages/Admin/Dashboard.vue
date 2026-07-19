@@ -22,8 +22,11 @@ const maxCount = computed(() => Math.max(...props.contentByType.map((c) => c.val
 const hasRoute = (n) => route().has(n);
 
 const bigStats = computed(() => [
-    { label: 'เนื้อหาทั้งหมด', value: props.meta.totalContent ?? 0 },
     { label: 'ยอดเข้าชม', value: (props.meta.totalViews ?? 0).toLocaleString() },
+    { label: 'ดาวน์โหลด', value: (props.meta.totalDownloads ?? 0).toLocaleString() },
+    { label: 'ข่าว', value: props.stats.news ?? 0 },
+    { label: 'ประชาสัมพันธ์', value: props.stats.announcements ?? 0 },
+    { label: 'ข้อความติดต่อ', value: props.stats.contacts ?? 0 },
     { label: 'บุคลากร', value: props.stats.team ?? 0 },
 ]);
 
@@ -35,6 +38,8 @@ const chartSeries = computed(() => [
 const tasks = computed(() => [
     { label: 'ข้อความรอตอบ', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope' },
     { label: 'ข่าวฉบับร่าง', value: props.meta.draftNews ?? 0, route: 'admin.news.index', icon: 'bi bi-file-earmark' },
+    { label: 'ประชาสัมพันธ์ฉบับร่าง', value: props.meta.draftAnnouncements ?? 0, route: 'admin.announcements.index', icon: 'bi bi-megaphone' },
+    { label: 'คดีฉบับร่าง', value: props.meta.draftCaseStudies ?? 0, route: 'admin.case-studies.index', icon: 'bi bi-bank' },
     { label: 'แบนเนอร์', value: props.stats.banners ?? 0, route: 'admin.banners.index', icon: 'bi bi-image' },
 ]);
 
@@ -48,6 +53,9 @@ const quickActions = [
     { label: 'เพิ่มข่าว', route: 'admin.news.create', icon: 'bi bi-newspaper' },
     { label: 'เพิ่มประชาสัมพันธ์', route: 'admin.announcements.create', icon: 'bi bi-megaphone' },
     { label: 'เพิ่มคดีตัวอย่าง', route: 'admin.case-studies.create', icon: 'bi bi-bank' },
+    { label: 'เพิ่มบริการ', route: 'admin.services.create', icon: 'bi bi-briefcase' },
+    { label: 'เพิ่มเอกสารดาวน์โหลด', route: 'admin.documents.create', icon: 'bi bi-file-earmark-arrow-down' },
+    { label: 'เพิ่มบุคลากร', route: 'admin.team-members.create', icon: 'bi bi-person-plus' },
 ];
 </script>
 
@@ -60,8 +68,8 @@ const quickActions = [
                 <h2 class="text-xl font-bold text-slate-800">ยินดีต้อนรับ, {{ user.name }}</h2>
                 <p class="text-xs text-slate-400">ภาพรวมการจัดการเว็บไซต์</p>
             </div>
-            <div class="flex gap-6">
-                <div v-for="s in bigStats" :key="s.label" class="text-center">
+            <div class="flex flex-wrap justify-end gap-x-5 gap-y-1">
+                <div v-for="s in bigStats" :key="s.label" class="min-w-[64px] text-center">
                     <p class="text-2xl font-bold text-pjs-navy">{{ s.value }}</p>
                     <p class="text-[11px] text-slate-400">{{ s.label }}</p>
                 </div>
