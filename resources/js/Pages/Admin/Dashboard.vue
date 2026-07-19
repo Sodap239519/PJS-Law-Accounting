@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import LineChart from '@/Components/Admin/LineChart.vue';
+import ColumnChart from '@/Components/Admin/ColumnChart.vue';
 import MiniCalendar from '@/Components/Admin/MiniCalendar.vue';
 
 const props = defineProps({
@@ -30,11 +30,6 @@ const bigStats = computed(() => [
     { label: 'บุคลากร', value: props.stats.team ?? 0 },
 ]);
 
-const chartSeries = computed(() => [
-    { name: 'ผู้เข้าชม', color: '#2563eb', data: props.chart.views || [] },
-    { name: 'ข้อความ', color: '#f59e0b', data: props.chart.messages || [] },
-]);
-
 const tasks = computed(() => [
     { label: 'ข้อความรอตอบ', value: props.stats.unreadContacts ?? 0, route: 'admin.contacts.index', icon: 'bi bi-envelope' },
     { label: 'ข่าวฉบับร่าง', value: props.meta.draftNews ?? 0, route: 'admin.news.index', icon: 'bi bi-file-earmark' },
@@ -55,7 +50,6 @@ const quickActions = [
     { label: 'เพิ่มคดีตัวอย่าง', route: 'admin.case-studies.create', icon: 'bi bi-bank' },
     { label: 'เพิ่มบริการ', route: 'admin.services.create', icon: 'bi bi-briefcase' },
     { label: 'เพิ่มเอกสารดาวน์โหลด', route: 'admin.documents.create', icon: 'bi bi-file-earmark-arrow-down' },
-    { label: 'เพิ่มบุคลากร', route: 'admin.team-members.create', icon: 'bi bi-person-plus' },
 ];
 </script>
 
@@ -93,10 +87,10 @@ const quickActions = [
                 </div>
             </div>
 
-            <!-- Line chart -->
+            <!-- Column chart: ผู้เข้าชม -->
             <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-                <h3 class="mb-1 text-sm font-semibold text-slate-700">ผู้เข้าชม &amp; ข้อความ (14 วัน)</h3>
-                <LineChart :labels="chart.labels" :series="chartSeries" />
+                <h3 class="mb-1 text-sm font-semibold text-slate-700">จำนวนผู้เข้าชม (14 วัน)</h3>
+                <ColumnChart :labels="chart.labels" :data="chart.views || []" name="ผู้เข้าชม" />
             </div>
 
             <!-- Content bars -->
