@@ -20,12 +20,16 @@ git push
 - ในโปรเจกต์ กด **+ New → Database → Add MySQL**
 
 ### 4) ตั้งค่า Environment Variables (ที่ service ของแอป → Variables)
+
+> ⚠️ **APP_KEY ต้องสร้างเองใหม่ ห้าม commit ลงโค้ด** — รันในเครื่อง `php artisan key:generate --show`
+> จะได้ค่า `base64:....` แล้วเอาไปวางในช่อง `APP_KEY` บน Railway (เก็บเป็นความลับ ไม่ต้องใส่ในไฟล์)
+
 วางตัวแปรเหล่านี้ (ค่า DB ใช้ **reference** ชี้ไป plugin MySQL):
 
 ```
 APP_NAME=PJS
 APP_ENV=production
-APP_KEY=base64:Ws/XTEuhqidgwQxHCdSsHJKWylBDOZJUEFTjBsRHb7c=
+APP_KEY=<< วางคีย์จาก php artisan key:generate --show >>
 APP_DEBUG=false
 APP_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
 
