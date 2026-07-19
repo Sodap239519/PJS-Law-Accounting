@@ -54,10 +54,13 @@ onBeforeUnmount(() => {
             <div v-if="show" class="fixed inset-x-0 bottom-24 z-[9999] flex justify-center px-4">
                 <div class="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/95 px-3 py-2 shadow-[0_8px_30px_-8px_rgba(37,99,235,0.35)] backdrop-blur">
                     <span class="hidden pl-2 pr-1 text-xs text-slate-400 sm:inline">มีการแก้ไข —</span>
-                    <button type="button" class="btn-outline btn-sm" @click="emit('cancel')">{{ cancelLabel }}</button>
-                    <button type="button" :disabled="processing" class="btn-primary btn-sm" @click="emit('save')">
-                        <i class="bi bi-check-lg"></i> {{ saveLabel }}
-                    </button>
+                    <!-- แต่ละฟอร์มส่งชุดปุ่มของตัวเองมา (ให้ตรงกับแถบบน); ถ้าไม่ส่งใช้ค่าเริ่มต้น ยกเลิก/บันทึก -->
+                    <slot>
+                        <button type="button" class="btn-outline btn-sm" @click="emit('cancel')">{{ cancelLabel }}</button>
+                        <button type="button" :disabled="processing" class="btn-primary btn-sm" @click="emit('save')">
+                            <i class="bi bi-check-lg"></i> {{ saveLabel }}
+                        </button>
+                    </slot>
                 </div>
             </div>
         </Transition>

@@ -147,6 +147,13 @@ const submit = () => {
             </div>
         </form>
 
-        <FloatingSaveBar :processing="form.processing" :save-label="isEdit ? 'บันทึก' : 'สร้าง'" @save="submit" @cancel="router.visit(route('admin.announcements.index'))" />
+        <FloatingSaveBar :processing="form.processing">
+            <label class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+                <input v-model="form.is_published" type="checkbox" class="rounded" /> เผยแพร่
+            </label>
+            <Link :href="route('admin.announcements.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+            <button type="button" :disabled="form.processing" class="btn-soft btn-sm" @click="submitDraft"><i class="bi bi-file-earmark"></i> บันทึกร่าง</button>
+            <button type="button" :disabled="form.processing" class="btn-primary btn-sm" @click="submit">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+        </FloatingSaveBar>
     </AdminLayout>
 </template>

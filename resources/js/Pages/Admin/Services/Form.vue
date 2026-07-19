@@ -131,6 +131,12 @@ const submit = () => {
             </div>
         </form>
 
-        <FloatingSaveBar :processing="form.processing" :save-label="isEdit ? 'บันทึก' : 'สร้าง'" @save="submit" @cancel="router.visit(route('admin.services.index'))" />
+        <FloatingSaveBar :processing="form.processing">
+            <label class="flex items-center gap-1.5 whitespace-nowrap px-1 text-sm font-medium text-slate-600">
+                <input v-model="form.is_active" type="checkbox" class="rounded" /> เปิดใช้งาน
+            </label>
+            <Link :href="route('admin.services.index')" class="btn-outline btn-sm">ยกเลิก</Link>
+            <button type="button" :disabled="form.processing" class="btn-primary btn-sm" @click="submit">{{ isEdit ? 'บันทึก' : 'สร้าง' }}</button>
+        </FloatingSaveBar>
     </AdminLayout>
 </template>
