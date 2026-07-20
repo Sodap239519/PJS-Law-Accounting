@@ -69,10 +69,11 @@ const init = {
         input.click();
     },
     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons',
-    // 2 แถวชัดเจน (array = แต่ละ string คือ 1 แถว) — เชื่อถือได้กว่าพึ่ง CSS wrap
+    // 3 แถวสั้น ๆ (array = แต่ละ string คือ 1 แถว) — พอดีจอมือถือ ไม่เลื่อนแนวนอน
     toolbar: [
-        'undo redo | blocks fontsize | bold italic underline | forecolor backcolor | removeformat',
-        'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | blockquote code | fullscreen',
+        'undo redo | blocks fontsize | bold italic underline',
+        'forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist',
+        'outdent indent | link image media table | blockquote code removeformat | fullscreen',
     ],
     // ขนาดฟอนต์ให้เลือก (หน้าเว็บจะแสดงตามที่เลือกจริง)
     fontsize_formats: '12px 14px 16px 18px 20px 24px 28px 32px 36px 42px 48px',
@@ -124,18 +125,22 @@ const init = {
         display: none !important;
     }
     .tinymce-wrap .tox .tox-tbtn {
-        height: 30px;
+        height: 28px;
         margin: 1px 0;
     }
     .tinymce-wrap .tox .tox-tbtn:not(.tox-tbtn--select) {
-        width: 30px;
+        width: 26px;
     }
     .tinymce-wrap .tox .tox-tbtn__icon-wrap svg,
     .tinymce-wrap .tox .tox-tbtn svg {
-        transform: scale(0.85);
+        transform: scale(0.8);
     }
     .tinymce-wrap .tox .tox-toolbar__group {
-        padding: 0 3px;
+        padding: 0 2px;
+    }
+    /* กันแถวใดล้น → ตกบรรทัดต่อ (ไม่เลื่อนแนวนอน) */
+    .tinymce-wrap .tox .tox-toolbar__primary {
+        flex-wrap: wrap !important;
     }
 }
 </style>
