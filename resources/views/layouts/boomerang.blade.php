@@ -633,6 +633,15 @@ body {
                 order: 2;
                 margin-left: auto;
                 margin-right: 6px;
+                z-index: 2000;
+            }
+            /* มือถือ: panel เป็น fixed หลุดจาก overflow ของ header (กันโดนตัด/บัง) */
+            .pjs-ctrl-panel {
+                position: fixed;
+                top: 62px;
+                right: 10px;
+                left: auto;
+                z-index: 2000;
             }
             .nav-toggle {
                 display: flex !important;
