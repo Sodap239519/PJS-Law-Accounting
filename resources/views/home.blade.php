@@ -305,17 +305,19 @@
     <!-- Latest News / ข่าวสารและกิจกรรม -->
 <section class="module" id="latest-news" style="{{ $hl('news') }}" data-aos="fade-up">
     <style>
-        /* จำกัดเนื้อหาตัวอย่างข่าวไม่เกิน 3 บรรทัด */
+        /* ข่าวแบบ carousel เลื่อนขวา — การ์ดสูงเท่ากัน */
+        #latest-news .news-swiper { padding-bottom: 36px; }
+        #latest-news .news-swiper .swiper-slide { height: auto; }
+        #latest-news .news-swiper .post { height: 100%; display: flex; flex-direction: column; }
+        #latest-news .news-swiper .post-title { font-size: 1.15rem; }
+        /* จำกัดหัวข้อ 2 บรรทัด + เนื้อหา 3 บรรทัด (การ์ดเท่ากัน) */
+        #latest-news .post-title a {
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
         #latest-news .post-content p {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
         }
-        /* มือถือ: ข่าว 2 อันวางเต็มความกว้างทีละอัน (ใหญ่ อ่านง่าย) */
-        @media (max-width: 767px) {
-            #latest-news .post-item { margin-bottom: 28px; }
-        }
+        #latest-news .news-pagination .swiper-pagination-bullet-active { background: #b8942f; }
     </style>
     <div class="container">
         <div class="row">
@@ -329,47 +331,49 @@
                 <div class="space" data-MY="40px"></div>
             </div>
         </div>
-        <div class="row row-post-masonry">
-            @forelse(($latestNews ?? []) as $news)
-            <div class="col-md-6 post-item">
-                <article class="post">
-                    @if($news->getFirstMediaUrl('cover'))
-                    <div class="post-preview">
-                        <a href="{{ route('news.show', $news->slug) }}">
-                            <img src="{{ $news->getFirstMediaUrl('cover') }}" alt="{{ $news->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;display:block;">
-                        </a>
-                    </div>
-                    @endif
-                    <div class="post-wrapper">
-                        <div class="post-header">
-                            <h2 class="post-title"><a href="{{ route('news.show', $news->slug) }}">{{ $news->title }}</a></h2>
-                            <div class="post-meta">{{ optional($news->published_at)->locale('th')->translatedFormat('d F Y') }}</div>
+        <div class="swiper news-swiper">
+            <div class="swiper-wrapper">
+                @forelse(($latestNews ?? []) as $news)
+                <div class="swiper-slide">
+                    <article class="post">
+                        @if($news->getFirstMediaUrl('cover'))
+                        <div class="post-preview">
+                            <a href="{{ route('news.show', $news->slug) }}">
+                                <img src="{{ $news->getFirstMediaUrl('cover') }}" alt="{{ $news->title }}" style="aspect-ratio:16/9;object-fit:cover;width:100%;display:block;">
+                            </a>
                         </div>
-                        <div class="post-content">
-                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($news->excerpt ?: $news->content), 120) }}</p>
+                        @endif
+                        <div class="post-wrapper">
+                            <div class="post-header">
+                                <h2 class="post-title"><a href="{{ route('news.show', $news->slug) }}">{{ $news->title }}</a></h2>
+                                <div class="post-meta">{{ optional($news->published_at)->locale('th')->translatedFormat('d F Y') }}</div>
+                            </div>
+                            <div class="post-content">
+                                <p>{{ \Illuminate\Support\Str::limit(strip_tags($news->excerpt ?: $news->content), 120) }}</p>
+                            </div>
+                            <div class="post-more"><a href="{{ route('news.show', $news->slug) }}">อ่านเพิ่มเติม</a></div>
                         </div>
-                        <div class="post-more"><a href="{{ route('news.show', $news->slug) }}">อ่านเพิ่มเติม</a></div>
-                    </div>
-                </article>
+                    </article>
+                </div>
+                @empty
+                <div class="swiper-slide">
+                    <article class="post post-placeholder">
+                        <div class="post-preview" style="background: #f7f7f7; display: flex; align-items: center; justify-content: center; aspect-ratio:16/9;">
+                            <i class="bi bi-clock-history" style="font-size: 48px; color: #ccc;"></i>
+                        </div>
+                        <div class="post-wrapper">
+                            <div class="post-header text-center">
+                                <h2 class="post-title text-muted">กำลังอัพเดตเร็ว ๆ นี้...</h2>
+                            </div>
+                            <div class="post-content text-center">
+                                <p class="text-muted">รอข่าวสารและกิจกรรมเพิ่มเติมในอนาคต</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                @endforelse
             </div>
-            @empty
-            <div class="col-md-6 post-item">
-                <article class="post post-placeholder">
-                    <div class="post-preview" style="background: #f7f7f7; display: flex; align-items: center; justify-content: center; height: 233px;">
-                        <i class="bi bi-clock-history" style="font-size: 48px; color: #ccc;"></i>
-                    </div>
-                    <div class="post-wrapper">
-                        <div class="post-header text-center">
-                            <h2 class="post-title text-muted">กำลังอัพเดตเร็ว ๆ นี้...</h2>
-                        </div>
-                        <div class="post-content text-center">
-                            <p class="text-muted">รอข่าวสารและกิจกรรมเพิ่มเติมในอนาคต</p>
-                        </div>
-                        <div class="post-more"></div>
-                    </div>
-                </article>
-            </div>
-            @endforelse
+            <div class="swiper-pagination news-pagination"></div>
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
@@ -695,6 +699,19 @@ function showContactModal(type, title, message) {
         0:   { slidesPerView: 2, spaceBetween: 12 },
         576: { slidesPerView: 2 },
         992: { slidesPerView: 4 }
+      }
+    });
+
+    // ข่าว: carousel เลื่อนขวา (มือถือเห็น ~1 ใบครึ่ง, จอใหญ่ 4 ใบ/แถว)
+    new Swiper('.news-swiper', {
+      slidesPerView: 1.15,
+      spaceBetween: 16,
+      grabCursor: true,
+      pagination: { el: '.news-pagination', clickable: true },
+      breakpoints: {
+        576: { slidesPerView: 2, spaceBetween: 20 },
+        768: { slidesPerView: 3, spaceBetween: 22 },
+        992: { slidesPerView: 4, spaceBetween: 24 }
       }
     });
   });

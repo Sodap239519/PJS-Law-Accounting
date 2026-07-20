@@ -29,7 +29,7 @@ class HomeLayout
         'about' => 2,
         'team' => 8,
         'cases' => 3,
-        'news' => 2,
+        'news' => 8,
         'announcement' => 3,
     ];
 
