@@ -937,6 +937,7 @@ body {
             
             <div class="col-12 col-lg-4 mb-4">
                 <h6 class="footer-title">ติดต่อเรา</h6>
+                <p class="mb-2"><strong>{{ $site['name'] ?? 'บริษัท พีเจเอส กฎหมายและการบัญชี จำกัด' }}</strong></p>
                 <ul class="list-unstyled footer-list mb-3">
                     @forelse($footerChannels as $ch)
                         <li>
