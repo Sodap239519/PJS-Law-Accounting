@@ -47,6 +47,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // ไปหน้า login (หน้า Inertia) — ห้าม redirect ไป '/' ที่เป็น Blade เพราะ Inertia จะเด้ง modal
+        return redirect()->route('login');
     }
 }
