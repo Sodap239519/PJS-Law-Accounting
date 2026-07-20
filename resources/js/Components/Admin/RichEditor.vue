@@ -16,7 +16,6 @@ const value = computed({
 // สถานะโหลดตัวแก้ไข (TinyMCE โหลดจาก CDN — ใช้เวลาสักครู่)
 const ready = ref(false);
 const loadPct = ref(0);
-const toolbarExpanded = ref(false); // มือถือ: ค่าเริ่มต้นย่อเหลือ 2 แถว
 let trickle = null;
 
 onMounted(() => {
@@ -70,13 +69,14 @@ const init = {
         input.click();
     },
     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons',
-    toolbar:
-        'undo redo | blocks fontsize | bold italic underline forecolor backcolor | ' +
-        'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
-        'link image media table | blockquote code | removeformat | fullscreen',
+    // 2 แถวชัดเจน (array = แต่ละ string คือ 1 แถว) — เชื่อถือได้กว่าพึ่ง CSS wrap
+    toolbar: [
+        'undo redo | blocks fontsize | bold italic underline | forecolor backcolor | removeformat',
+        'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | blockquote code | fullscreen',
+    ],
     // ขนาดฟอนต์ให้เลือก (หน้าเว็บจะแสดงตามที่เลือกจริง)
     fontsize_formats: '12px 14px 16px 18px 20px 24px 28px 32px 36px 42px 48px',
-    toolbar_mode: 'wrap', // แถบเครื่องมือขึ้นบรรทัดใหม่ (มือถือย่อเหลือ 2 แถว + ปุ่มเพิ่มเติม)
+    toolbar_mode: 'wrap', // ถ้าแถวยาวเกินจอแคบ ให้ตกบรรทัดต่อ (ไม่เลื่อนแนวนอน)
     branding: false,
     promotion: false,
     statusbar: true,
@@ -92,13 +92,8 @@ const init = {
 </script>
 
 <template>
-    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200" :class="{ 'tb-collapsed': !toolbarExpanded }">
+    <div class="tinymce-wrap relative overflow-hidden rounded-xl border border-slate-200">
         <Editor v-model="value" :tinymce-script-src="scriptSrc" :init="init" @init="onReady" />
-
-        <!-- ปุ่มเปิด/ปิดเครื่องมือเพิ่มเติม (เฉพาะมือถือ) — วางในพื้นที่ที่เว้นไว้ ไม่ทับเครื่องมือ -->
-        <button v-if="ready" type="button" class="tb-more" @click="toolbarExpanded = !toolbarExpanded">
-            <i class="bi" :class="toolbarExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-        </button>
 
         <!-- Loading overlay + percentage -->
         <Transition leave-active-class="transition-opacity duration-300" leave-to-class="opacity-0">
@@ -123,63 +118,24 @@ const init = {
     border-radius: 0 !important;
 }
 
-/* ปุ่มเพิ่มเติมซ่อนบนจอใหญ่ */
-.tinymce-wrap .tb-more {
-    display: none;
-}
-
-/* จอมือถือ: ซ่อนเมนูบาร์ + ปุ่มกระชับเล็กลง + ย่อเหลือ 2 แถว + ปุ่มเปิด/ปิดเพิ่มเติม */
+/* จอมือถือ: ซ่อนเมนูบาร์ + ปุ่มเครื่องมือกระชับเล็กลง (toolbar 2 แถวจาก array อยู่แล้ว) */
 @media (max-width: 640px) {
     .tinymce-wrap .tox-menubar {
         display: none !important;
     }
-
-    /* ปุ่มเครื่องมือกระชับเล็กลง → พอดีต่อแถวมากขึ้น */
     .tinymce-wrap .tox .tox-tbtn {
-        height: 28px;
+        height: 30px;
         margin: 1px 0;
     }
     .tinymce-wrap .tox .tox-tbtn:not(.tox-tbtn--select) {
-        width: 28px;
+        width: 30px;
     }
     .tinymce-wrap .tox .tox-tbtn__icon-wrap svg,
     .tinymce-wrap .tox .tox-tbtn svg {
-        transform: scale(0.82);
+        transform: scale(0.85);
     }
     .tinymce-wrap .tox .tox-toolbar__group {
         padding: 0 3px;
-    }
-    /* บังคับให้แถบเครื่องมือขึ้นบรรทัดใหม่ (ไม่เลื่อนแนวนอน) + เว้นที่มุมขวาให้ปุ่มเปิด/ปิด */
-    .tinymce-wrap .tox .tox-toolbar__primary,
-    .tinymce-wrap .tox .tox-toolbar__overflow {
-        flex-wrap: wrap !important;
-        padding-right: 40px;
-    }
-
-    /* ค่าเริ่มต้น: ย่อเหลือ ~2 แถว (เนื้อหาจะเลื่อนขึ้น) */
-    .tinymce-wrap.tb-collapsed .tox-toolbar__primary,
-    .tinymce-wrap.tb-collapsed .tox-toolbar__overflow {
-        max-height: 66px;
-        overflow: hidden !important;
-    }
-
-    /* ปุ่มเปิด/ปิดเครื่องมือ — มุมขวาบน ในพื้นที่ที่เว้นไว้ */
-    .tinymce-wrap .tb-more {
-        position: absolute;
-        top: 4px;
-        right: 5px;
-        z-index: 5;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 28px;
-        width: 30px;
-        font-size: 13px;
-        color: #2563eb;
-        background: #eff6ff;
-        border: 1px solid #dbeafe;
-        border-radius: 8px;
-        cursor: pointer;
     }
 }
 </style>

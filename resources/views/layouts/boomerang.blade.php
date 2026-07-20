@@ -907,16 +907,16 @@ body {
 <footer class="footer footer-1 bg-dark" style="padding: 80px 0 40px 0;">
     <div class="container">
         <div class="row" style="margin-bottom: 40px;">
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-12 col-lg-3 mb-4 text-center text-lg-start">
                 <img src="{{ $site['logo'] ?? asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="{{ $site['name'] ?? 'PJS' }}">
             </div>
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-6 col-lg-3 mb-4">
                 <h6 class="footer-title">เกี่ยวกับเรา</h6>
                 <p><strong>{{ $site['name'] ?? 'บริษัท PJS กฎหมายและการบัญชี จำกัด' }}</strong></p>
                 <p>{{ $site['tagline'] ?: 'ที่ปรึกษากฎหมายและบัญชีมืออาชีพ พร้อมให้บริการธุรกิจของคุณด้วยความเชี่ยวชาญและประสบการณ์' }}</p>
             </div>
 
-            <div class="col-lg-2 col-md-6 mb-4">
+            <div class="col-6 col-lg-2 mb-4">
                 <h6 class="footer-title">แผนผังเว็บไซต์</h6>
                 <ul class="list-unstyled footer-list">
                     @foreach($publicMenu as $item)
@@ -925,7 +925,7 @@ body {
                 </ul>
             </div>
             
-            <div class="col-lg-4 col-md-6 mb-4">
+            <div class="col-12 col-lg-4 mb-4">
                 <h6 class="footer-title">ติดต่อเรา</h6>
                 <ul class="list-unstyled footer-list mb-3">
                     @forelse($footerChannels as $ch)

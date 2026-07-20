@@ -304,6 +304,19 @@
 
     <!-- Latest News / ข่าวสารและกิจกรรม -->
 <section class="module" id="latest-news" style="{{ $hl('news') }}" data-aos="fade-up">
+    <style>
+        /* จำกัดเนื้อหาตัวอย่างข่าวไม่เกิน 3 บรรทัด */
+        #latest-news .post-content p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        /* มือถือ: ข่าว 2 อันวางเต็มความกว้างทีละอัน (ใหญ่ อ่านง่าย) */
+        @media (max-width: 767px) {
+            #latest-news .post-item { margin-bottom: 28px; }
+        }
+    </style>
     <div class="container">
         <div class="row">
             <div class="col-md-6 m-auto text-center">
@@ -318,7 +331,7 @@
         </div>
         <div class="row row-post-masonry">
             @forelse(($latestNews ?? []) as $news)
-            <div class="col-4 post-item">
+            <div class="col-md-6 post-item">
                 <article class="post">
                     @if($news->getFirstMediaUrl('cover'))
                     <div class="post-preview">
@@ -340,7 +353,7 @@
                 </article>
             </div>
             @empty
-            <div class="col-4 post-item">
+            <div class="col-md-6 post-item">
                 <article class="post post-placeholder">
                     <div class="post-preview" style="background: #f7f7f7; display: flex; align-items: center; justify-content: center; height: 233px;">
                         <i class="bi bi-clock-history" style="font-size: 48px; color: #ccc;"></i>
@@ -679,7 +692,7 @@ function showContactModal(type, title, message) {
         prevEl: '.team-prev'
       },
       breakpoints: {
-        0:   { slidesPerView: 1 },
+        0:   { slidesPerView: 2, spaceBetween: 12 },
         576: { slidesPerView: 2 },
         992: { slidesPerView: 4 }
       }
