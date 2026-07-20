@@ -905,18 +905,28 @@ body {
 
     <!-- Footer -->
 <footer class="footer footer-1 bg-dark" style="padding: 80px 0 40px 0;">
+    <style>
+        /* มือถือ: โลโก้ + เกี่ยวกับเรา + แผนผังเว็บไซต์ 3 คอลัมน์แถวเดียว — ย่อให้พอดี */
+        @media (max-width: 767px) {
+            .footer-1 { padding: 48px 0 28px 0 !important; }
+            .footer-1 .footer-title { font-size: 12px; margin-bottom: 8px; }
+            .footer-1 p, .footer-1 .footer-list a, .footer-1 .footer-list li { font-size: 10.5px; line-height: 1.5; }
+            .footer-1 img { max-width: 100%; height: auto; }
+            .footer-1 .footer-list { padding-left: 0; }
+        }
+    </style>
     <div class="container">
         <div class="row" style="margin-bottom: 40px;">
-            <div class="col-12 col-lg-3 mb-4 text-center text-lg-start">
+            <div class="col-4 col-lg-3 mb-4 text-center text-lg-start">
                 <img src="{{ $site['logo'] ?? asset('frontend/images/PJS-Law-and-Accounting_Logo.png') }}" alt="{{ $site['name'] ?? 'PJS' }}">
             </div>
-            <div class="col-6 col-lg-3 mb-4">
+            <div class="col-4 col-lg-3 mb-4">
                 <h6 class="footer-title">เกี่ยวกับเรา</h6>
                 <p><strong>{{ $site['name'] ?? 'บริษัท PJS กฎหมายและการบัญชี จำกัด' }}</strong></p>
                 <p>{{ $site['tagline'] ?: 'ที่ปรึกษากฎหมายและบัญชีมืออาชีพ พร้อมให้บริการธุรกิจของคุณด้วยความเชี่ยวชาญและประสบการณ์' }}</p>
             </div>
 
-            <div class="col-6 col-lg-2 mb-4">
+            <div class="col-4 col-lg-2 mb-4">
                 <h6 class="footer-title">แผนผังเว็บไซต์</h6>
                 <ul class="list-unstyled footer-list">
                     @foreach($publicMenu as $item)
