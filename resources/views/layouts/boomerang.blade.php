@@ -7,12 +7,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', $site['name'] ?? 'PJS Law & Accounting')</title>
 
-    <!-- ตั้งขนาดตัวอักษรทันที (กันจอกระพริบ) — มือถือ default ~12pt -->
+    <!-- ตั้งขนาดตัวอักษรทันที (กันจอกระพริบ) — default 100% ทุกจอ, เก็บเฉพาะเครื่อง (localStorage) -->
     <script>
         (function () {
             try {
                 var s = parseFloat(localStorage.getItem('pjs-font-scale'));
-                if (isNaN(s)) s = window.matchMedia('(max-width: 991px)').matches ? 1.14 : 1;
+                if (isNaN(s)) s = 1;
                 s = Math.min(1.5, Math.max(0.86, s));
                 document.documentElement.style.setProperty('--pjs-fs-scale', s);
                 if (localStorage.getItem('pjs-theme') === 'dark') document.documentElement.classList.add('pjs-dark');
@@ -1140,7 +1140,7 @@ body {
         (function () {
             var KEY = 'pjs-font-scale', MIN = 0.86, MAX = 1.5, STEP = 0.09;
             var isMobile = window.matchMedia('(max-width: 991px)').matches;
-            function defaultScale() { return isMobile ? 1.14 : 1; } // มือถือ ~12pt
+            function defaultScale() { return 1; } // เริ่มต้น 100% ทุกจอ (ปรับเองได้ เก็บเฉพาะเครื่อง)
             function clamp(v) { return Math.min(MAX, Math.max(MIN, v)); }
             function current() {
                 var s = parseFloat(localStorage.getItem(KEY));
